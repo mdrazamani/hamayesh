@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "app.mjs",
   "scripts": {
-    "start": "node app.mjs",
+    "start": "nodemon app.mjs",
     "seed": "node seeders/user.seeder.mjs"
   },
   "dependencies": {
@@ -14,5 +14,8 @@
     "mongoose": "^5.12.3",
     "nodemailer": "^6.6.0",
     "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
