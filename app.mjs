@@ -5,7 +5,7 @@ import errorHandler from "./app/middlewares/error.middleware.mjs";
 const app = express();
 
 app.use(express.json());
-app.use("/api", routes);
+app.use("/api/v1", routes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
