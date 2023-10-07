@@ -5,14 +5,12 @@
   "main": "app.mjs",
   "scripts": {
     "start": "node app.mjs",
-    "migrate": "node migrations/user.migration.mjs",
     "seed": "node seeders/user.seeder.mjs"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "joi": "^17.4.0",
-    "migrate-mongo": "^11.0.0",
     "mongoose": "^5.12.3",
     "nodemailer": "^6.6.0",
     "pug": "^3.0.2"

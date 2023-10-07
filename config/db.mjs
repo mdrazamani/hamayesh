@@ -1,4 +1,16 @@
 import mongoose from "mongoose";
 import { dbURI } from "./index.mjs";
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+export default () => {
+    mongoose
+        .connect(dbURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+        .then(() => {
+            console.log("Connected to MongoDB");
+        })
+        .catch((error) => {
+            console.error("Error connecting to MongoDB:", error);
+        });
+};

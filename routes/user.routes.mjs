@@ -1,15 +1,10 @@
 import express from "express";
-import * as userController from "../controllers/user.controller.mjs";
-import validationMiddleware from "../middleware/validation.middleware.mjs";
-import userValidation from "../validations/user.validation.mjs";
+import { createUser } from "../app/controllers/user/create.controller.mjs";
+import validationMiddleware from "../app/middlewares/validation.middleware.mjs";
+import userValidation from "../app/validations/user.validation.mjs";
 
 const router = express.Router();
 
-router.get("/", userController.getAllUsers);
-router.post(
-    "/",
-    validationMiddleware(userValidation),
-    userController.createUser
-);
+router.post("/", validationMiddleware(userValidation), createUser);
 
 export default router;
