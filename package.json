@@ -5,15 +5,26 @@
   "main": "app.mjs",
   "scripts": {
     "start": "nodemon app.mjs",
-    "seed": "node seeders/user.seeder.mjs"
+    "seed": "node databases/seeders/database.seeder.mjs"
   },
   "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.1.0",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
     "joi": "^17.4.0",
     "mongoose": "^5.12.3",
+    "morgan": "^1.10.0",
     "nodemailer": "^6.6.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

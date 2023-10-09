@@ -5,6 +5,16 @@ import userValidation from "../app/validations/user.validation.mjs";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     description: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 router.post("/", validationMiddleware(userValidation), createUser);
 
 export default router;

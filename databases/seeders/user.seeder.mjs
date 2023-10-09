@@ -1,7 +1,7 @@
-import User from "../models/user.model.mjs";
+import User from "../../app/models/user.model.mjs";
 
 export const seedUsers = async () => {
-    const users = [
+    const user = [
         {
             username: "JohnDoe",
             password: "password123",
@@ -10,5 +10,10 @@ export const seedUsers = async () => {
         // Add more users as needed
     ];
 
-    await User.insertMany(users);
+    try {
+        await User.insertMany(user);
+        console.log("Users seeded successfully!");
+    } catch (error) {
+        console.error("Error seeding users:", error);
+    }
 };
