@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { User } from "../../models/user.model.mjs";
-import { Token } from "../../models/token.model.mjs";
+import User from "../../models/user.model.mjs";
+import Token from "../../models/token.model.mjs";
 import constants from "../../../utils/constants.mjs";
-import { AuthenticationError } from "../../middlewares";
-import { authResource } from "../../resources";
+import { AuthenticationError } from "../../middlewares/error.middleware.mjs";
+import { authResource } from "../../resources/auth.resource.mjs";
 
 const SECRET_KEY = "YOUR_SECRET_KEY"; // Use a strong secret key
 

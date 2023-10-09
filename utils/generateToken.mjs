@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import Token from "../app/models/token.model.mjs";
-import { checkToken } from "./checkToken.mjs";
 
 const checkToken = async (user) => {
     await Token.deleteMany({
@@ -17,7 +16,7 @@ const checkToken = async (user) => {
 
 export const generateTokens = async (user) => {
     //check token
-    checkToken(user);
+    await checkToken(user);
 
     const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, {
         expiresIn: "1h",
