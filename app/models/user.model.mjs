@@ -1,25 +1,41 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         username: {
-            type: String, // اضافه کردن نوع داده
+            type: String,
             required: true,
             unique: true,
+            trim: true,
             lowercase: true,
         },
         password: {
-            type: String, // اضافه کردن نوع داده
+            type: String,
             required: true,
         },
         email: {
-            type: String, // اضافه کردن نوع داده
+            type: String,
             required: true,
             unique: true,
             lowercase: true,
+        },
+        role: {
+            type: String,
+            enum: ["user", "admin"],
+            default: "user",
         },
     },
     { timestamps: true }
 );
 
-export default mongoose.model("User", UserSchema);
+// Hash the password before saving
+userSchema.pre("save", async function (next) {
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+
+const User = mongoose.model("User", userSchema);
+export default User;

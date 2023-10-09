@@ -6,6 +6,7 @@ export const seedUsers = async () => {
             username: "JohnDoe",
             password: "password123",
             email: "john@example.com",
+            role: "admin",
         },
         // Add more users as needed
     ];

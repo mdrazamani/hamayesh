@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { dbURI } from "./index.mjs";
-import User from "../app/models/user.model.mjs";
-import fs from "fs";
+// import User from "../app/models/user.model.mjs";
+// import fs from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 

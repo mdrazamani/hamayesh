@@ -2,7 +2,14 @@ import express from "express";
 import routes from "./routes/index.mjs";
 import dbconnect from "./config/db.mjs";
 import { PORT } from "./config/index.mjs";
-import errorHandler from "./app/middlewares/error.middleware.mjs";
+
+import {
+    ErrorHandler,
+    ConvertError,
+    NotFound,
+    AuthenticationError,
+} from "./app/middlewares/error.middleware.mjs";
+
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./config/swagger.mjs";
 import cookieParser from "cookie-parser";
@@ -69,7 +76,17 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.json());
 app.use("/api/v1", routes);
-app.use(errorHandler);
+
+// If error is not an instanceOf APIError, convert it.
+app.use(ConvertError);
+
+// Catch 404 and forward to error handler
+app.use(NotFound);
+
+app.use(AuthenticationError);
+
+// Error handler, send stacktrace only during development
+app.use(ErrorHandler);
 
 const port = PORT || 8000;
 app.listen(port, () => {
