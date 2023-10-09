@@ -13,6 +13,7 @@ import {
 } from "../app/middlewares/auth.middleware.mjs";
 import { verifyTokenController } from "../app/controllers/Auth/verifytoken.controller.mjs";
 
+
 const router = express.Router();
 
 /**
@@ -33,6 +34,7 @@ router.post(
   authenticateJWT,
   authorizeRole("admin", "user"),
   verifyTokenController
+
 );
 
 export default router;
