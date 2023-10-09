@@ -24,6 +24,9 @@ import cors from "cors";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
+//run jobs:
+import "./jobs/token.task.mjs"; // Import the token manager
+
 const app = express();
 dbconnect();
 
