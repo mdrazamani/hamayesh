@@ -4,14 +4,14 @@ import {
   loginSchema,
   verifyToeknSchema,
 } from "../app/validations/auth.validation.mjs";
-import { loginController } from "../app/controllers/Auth/login.controller.mjs";
-import { registerController } from "../app/controllers/Auth/register.controller.mjs";
+import { loginController } from "../app/controllers/auth/login.controller.mjs";
+import { registerController } from "../app/controllers/auth/register.controller.mjs";
 import { validate } from "express-validation";
 import {
   authenticateJWT,
   authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
-import { verifyTokenController } from "../app/controllers/Auth/verifytoken.controller.mjs";
+import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
 
 /**
  * @swagger
