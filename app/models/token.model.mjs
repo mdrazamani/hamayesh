@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ForbiddenError } from "../middlewares/error.middleware.mjs";
 
 const tokenSchema = new mongoose.Schema(
     {
@@ -24,5 +25,21 @@ const tokenSchema = new mongoose.Schema(
         timestamps: true, // Automatically creates 'createdAt' and 'updatedAt' fields
     }
 );
+
+tokenSchema.pre("save", async function (next, { req, res }) {
+  const userId = this.userId; // 'this' refers to the token instance
+
+  if ((await this.model("Token").countDocuments({ userId: userId })) >= 3) {
+    // Throw the ForbiddenError if the user has 3 or more active tokens
+    return ForbiddenError(
+      req,
+      res,
+      next,
+      "You cannot have more than 3 active tokens"
+    );
+  }
+
+  next(); // Move on to the next middleware or save the document
+});
 
 export default mongoose.model("Token", tokenSchema);
