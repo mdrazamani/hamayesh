@@ -4,10 +4,10 @@ import dbconnect from "./config/db.mjs";
 import { PORT } from "./config/index.mjs";
 
 import {
-  ErrorHandler,
-  ConvertError,
-  NotFound,
-  AuthenticationError,
+    ErrorHandler,
+    ConvertError,
+    NotFound,
+    AuthenticationError,
 } from "./app/middlewares/error.middleware.mjs";
 
 import swaggerUi from "swagger-ui-express";
@@ -25,7 +25,7 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
 //run jobs:
-import "./jobs/token.task.mjs"; // Import the token manager
+// import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
 dbconnect();
@@ -47,15 +47,15 @@ app.use(helmet());
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+    app.use(morgan("dev"));
 }
 
 // Limit requests from same API
 const limiter = rateLimit({
-  trustProxy: false,
-  max: 100,
-  windowMs: 60 * 60 * 1000,
-  message: "Too many requests from this IP, please try again in an hour!",
+    trustProxy: false,
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use("/api", limiter);
 
@@ -94,7 +94,7 @@ app.use(ErrorHandler);
 
 const port = PORT || 8000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
 
 //export default app;
