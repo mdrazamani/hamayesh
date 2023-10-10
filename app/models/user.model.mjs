@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import Role from "./role.model.mjs";
 
 const userSchema = new mongoose.Schema(
     {
@@ -21,13 +22,34 @@ const userSchema = new mongoose.Schema(
             lowercase: true,
         },
         role: {
-            type: String,
-            enum: ["user", "admin"],
-            default: "user",
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Role",
+            },
+            name: {
+                type: String,
+                required: true,
+            },
+        },
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: {
+            type: Date,
+            expires: 3600,
         },
     },
     { timestamps: true }
 );
+
+// Ensure the provided role name exists in the Role collection
+userSchema.pre("validate", async function (next) {
+    if (this.isModified("role")) {
+        const role = await Role.findOne({ name: this.role.name });
+        if (!role) {
+            throw new Error("Invalid role name provided");
+        }
+    }
+    next();
+});
 
 // Hash the password before saving
 userSchema.pre("save", async function (next) {

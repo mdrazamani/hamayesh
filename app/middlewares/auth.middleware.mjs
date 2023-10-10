@@ -1,29 +1,47 @@
 import jwt from "jsonwebtoken";
+import { secret } from "../../config/index.mjs";
+import User from "../models/user.model.mjs";
+import {
+  AuthenticationError,
+  ForbiddenError,
+  InternalServerError,
+} from "./error.middleware.mjs";
 
-const SECRET_KEY = "YOUR_SECRET_KEY"; // Use a strong secret key
+// Middleware for JWT Authentication
+export const authenticateJWT = async (req, res, next) => {
+  try {
+    const apiToken = req.headers.authorization;
 
-export const authenticateJWT = (req, res, next) => {
-  const token = req.headers.authorization;
+    if (!apiToken) {
+      return AuthenticationError(req, res, next);
+    }
 
-  if (token) {
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
+    const decoded = jwt.verify(apiToken, secret);
+    const user = await User.findById(decoded.id).populate("role");
+
+    if (!user) {
+      return AuthenticationError(req, res, next);
+    }
+
+    req.user = user; // Attach the user object to the request for further processing
+    next();
+  } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return AuthenticationError(req, res, next);
+    }
+    return InternalServerError(req, res, next);
   }
 };
 
-export const authorizeRole = (...roles) => {
+// Middleware for Role-based Authorization
+export const authorizeRole = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Access denied" });
+    if (req.user && !allowedRoles.includes(req.user.role.name)) {
+      return ForbiddenError(req, res, next);
     }
     next();
   };
-
 };

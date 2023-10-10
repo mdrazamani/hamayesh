@@ -1,6 +1,7 @@
 import { ValidationError } from "express-validation";
 import APIError from "../../utils/errors.mjs";
 import { Debug_mode } from "../../config/index.mjs";
+import constants from "../../utils/constants.mjs";
 
 /**
  * Error Handler Sends Stack Trace only during Development Environment
@@ -57,10 +58,36 @@ export const ConvertError = (err, req, res, next) => {
  * Catch 404 and forward to error handler
  * @public
  */
-export const NotFound = (req, res, next) => {
+export const NotFound = (req, res, next, message) => {
     const err = new APIError({
-        message: "Resource Not Found",
-        status: 404,
+        message: message || "Resource Not Found",
+        status: constants.NOT_FOUND,
+    });
+    return Handler(err, req, res, next);
+};
+
+export const BadRequestError = (req, res, next, message) => {
+    const err = new APIError({
+        message: message || "Bad Request",
+        status: constants.BAD_REQUEST,
+    });
+    return Handler(err, req, res, next);
+};
+
+export const InternalServerError = (req, res, next, message) => {
+    const err = new APIError({
+        message: message || "Internal Server Error",
+        status: constants.INTERNAL_SERVER_ERROR,
+    });
+    return Handler(err, req, res, next);
+};
+
+export const ForbiddenError = (req, res, next, message) => {
+    const err = new APIError({
+        message:
+            message ||
+            "Forbidden: You don't have the necessary permissions to access this resource.",
+        status: constants.FORBIDDEN,
     });
     return Handler(err, req, res, next);
 };
@@ -69,10 +96,12 @@ export const NotFound = (req, res, next) => {
  * Catch 404 and forward to error handler
  * @public
  */
-export const AuthenticationError = (req, res, next) => {
+export const AuthenticationError = (req, res, next, message) => {
     const err = new APIError({
-        message: "Unauthorized: Access is denied due to invalid credentials.",
-        status: 401,
+        message:
+            message ||
+            "Unauthorized: Access is denied due to invalid credentials.",
+        status: constants.UNAUTHORIZED,
     });
     return Handler(err, req, res, next);
 };
@@ -81,10 +110,11 @@ export const AuthenticationError = (req, res, next) => {
  * Catch 429 ratelimit exceeded
  * @public
  */
-export const RateLimitHandler = (req, res, next) => {
+export const RateLimitHandler = (req, res, next, message) => {
     const err = new APIError({
-        message: "Rate limt exceeded, please try again later some time.",
-        status: 429,
+        message:
+            message || "Rate limt exceeded, please try again later some time.",
+        status: constants.TOO_MANY_REQUESTS,
     });
     return Handler(err, req, res, next);
 };
