@@ -21,9 +21,7 @@ import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-
+import { createFilePath } from "./config/tools.mjs";
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
 
@@ -34,8 +32,7 @@ app.enable("trust proxy");
 
 app.set("view engine", "pug");
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-app.set("views", path.join(`file://${path.join(__dirname, "../app/models")}`));
+app.set("views", createFilePath("./views"));
 
 // GLOBAL MIDDLEWARES
 app.use(cors());

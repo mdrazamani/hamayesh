@@ -9,13 +9,9 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendEmail = (to, subject, text) => {
-    const mailOptions = {
-        from: gmailUser,
-        to,
-        subject,
-        text,
-    };
+export const sendEmail = async (mailOptions) => {
+    mailOptions.from = gmailUser;
 
-    transporter.sendMail(mailOptions);
+    if (await transporter.sendMail(mailOptions)) return true;
+    return false;
 };
