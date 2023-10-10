@@ -1,18 +1,14 @@
 import Role from "../../app/models/role.model.mjs";
-import Permission from "../../app/models/permission.model.mjs";
 
 export const seedRoles = async () => {
-  const adminPermission = await Permission.findOne({ name: "admin" });
-  const userPermission = await Permission.findOne({ name: "user" });
-
   const roles = [
     {
       name: "admin",
-      permissions: [adminPermission._id, userPermission._id],
+      permissions: ["create", "update", "read", "delete"],
     },
     {
       name: "user",
-      permissions: [userPermission._id],
+      permissions: ["read"],
     },
   ];
 
