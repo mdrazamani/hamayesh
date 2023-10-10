@@ -10,7 +10,10 @@ export const seedUsers = async () => {
       username: "JohnDoe",
       password: await bcrypt.hash("Password123@", 10),
       email: "john@example.com",
-      role: adminRole.name, // Use the role name directly
+      role: {
+        id: adminRole._id,
+        name: adminRole.name,
+      }, // Store both ObjectId and name
     },
     // Add more users as needed
   ];

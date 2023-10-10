@@ -42,5 +42,4 @@ export const verifyToeknSchema = {
   body: Joi.object({
     api_token: Joi.string().required(),
   }).options({ abortEarly: false }),
-
 };

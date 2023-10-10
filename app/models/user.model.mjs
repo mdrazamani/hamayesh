@@ -22,10 +22,14 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     role: {
-      type: String, // Change this to String
-      ref: "Role", // Reference to the Role model
-      lowercase: true,
-      trim: true,
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
+      },
+      name: {
+        type: String,
+        required: true,
+      },
     },
   },
   { timestamps: true }
@@ -34,7 +38,7 @@ const userSchema = new mongoose.Schema(
 // Ensure the provided role name exists in the Role collection
 userSchema.pre("validate", async function (next) {
   if (this.isModified("role")) {
-    const role = await Role.findOne({ name: this.role });
+    const role = await Role.findOne({ name: this.role.name });
     if (!role) {
       throw new Error("Invalid role name provided");
     }

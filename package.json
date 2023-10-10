@@ -5,7 +5,8 @@
   "main": "app.mjs",
   "scripts": {
     "start": "nodemon app.mjs",
-    "seed": "node databases/seeders/database.seeder.mjs"
+    "seed": "node databases/seeders/database.seeder.mjs",
+    "debug": "nodemon --inspect app.mjs"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

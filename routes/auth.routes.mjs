@@ -1,17 +1,17 @@
 import express from "express";
 import {
-    registrationSchema,
-    loginSchema,
-    verifyToeknSchema,
+  registrationSchema,
+  loginSchema,
+  verifyToeknSchema,
 } from "../app/validations/auth.validation.mjs";
-import { loginController } from "../app/controllers/auth/login.controller.mjs";
-import { registerController } from "../app/controllers/auth/register.controller.mjs";
+import { loginController } from "../app/controllers/Auth/login.controller.mjs";
+import { registerController } from "../app/controllers/Auth/register.controller.mjs";
 import { validate } from "express-validation";
 import {
-    authenticateJWT,
-    authorizeRole,
+  authenticateJWT,
+  authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
-import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
+import { verifyTokenController } from "../app/controllers/Auth/verifytoken.controller.mjs";
 
 /**
  * @swagger
@@ -113,10 +113,10 @@ router.post("/login", validate(loginSchema), loginController);
  */
 
 router.post(
-    "/verify-token",
-    authenticateJWT,
-    authorizeRole("admin", "user"),
-    verifyTokenController
+  "/verify-token",
+  authenticateJWT,
+  authorizeRole("admin", "user"),
+  verifyTokenController
 );
 
 export default router;
