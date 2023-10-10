@@ -1,23 +1,25 @@
 import express from "express";
 import {
-    registrationSchema,
-    loginSchema,
-    verifyToeknSchema,
-    forgetPasswordValidation,
-    resetPasswordValidation,
+  registrationSchema,
+  loginSchema,
+  verifyToeknSchema,
+  forgetPasswordValidation,
+  resetPasswordValidation,
 } from "../app/validations/auth.validation.mjs";
 import { loginController } from "../app/controllers/auth/login.controller.mjs";
 import { registerController } from "../app/controllers/auth/register.controller.mjs";
 import { validate } from "express-validation";
 import {
-    authenticateJWT,
-    authorizeRole,
+  authenticateJWT,
+  authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
 import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
+
+import { logoutController } from "../app/controllers/auth/logout.contorller.mjs";
 import {
-    forgetPassword,
-    resetPassword,
-} from "../app/controllers/auth/forgetpassword.controller.mjs";
+  forgetPasswordController,
+  resetPasswordController,
+} from "../app/controllers/auth/forgetPassword.controller.mjs";
 
 /**
  * @swagger
@@ -95,6 +97,35 @@ router.post("/login", validate(loginSchema), loginController);
 
 /**
  * @swagger
+ * /login:
+ *   post:
+ *     tags: [Authentication]
+ *     description: Login a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *     responses:
+ *       200:
+ *         description: Successfully logged in
+ */
+
+router.post("/logout", authenticateJWT, logoutController);
+
+/**
+ * @swagger
  * /verify-token:
  *   post:
  *     tags: [Authentication]
@@ -119,10 +150,10 @@ router.post("/login", validate(loginSchema), loginController);
  */
 
 router.post(
-    "/verify-token",
-    authenticateJWT,
-    authorizeRole("admin", "user"),
-    verifyTokenController
+  "/verify-token",
+  authenticateJWT,
+  authorizeRole("admin", "user"),
+  verifyTokenController
 );
 
 /**
@@ -153,9 +184,9 @@ router.post(
  */
 
 router.post(
-    "/forget-password",
-    validate(forgetPasswordValidation),
-    forgetPassword
+  "/forget-password",
+  validate(forgetPasswordValidation),
+  forgetPasswordController
 );
 
 /**
@@ -193,9 +224,9 @@ router.post(
  */
 
 router.post(
-    "/reset-password",
-    validate(resetPasswordValidation),
-    resetPassword
+  "/reset-password",
+  validate(resetPasswordValidation),
+  resetPasswordController
 );
 
 export default router;
