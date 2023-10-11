@@ -1,39 +1,47 @@
 import jwt from "jsonwebtoken";
 import User from "../../models/user.model.mjs";
 import Token from "../../models/token.model.mjs";
-import constants from "../../../utils/constants.mjs";
-import { AuthenticationError } from "../../middlewares/error.middleware.mjs";
-import { authResource } from "../../resources/auth.resource.mjs";
 import { secret } from "../../../config/index.mjs";
+import constants from "../../../utils/constants.mjs";
+import { getMessage } from "../../../config/i18nConfig.mjs";
 
 export const verifyTokenController = async (req, res, next) => {
-    
   try {
     const apiToken = req.body.api_token;
 
     if (!apiToken) {
-      return AuthenticationError(req, res, next);
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      ); // 401 Unauthorized
     }
 
     jwt.verify(apiToken, secret, async (err, decoded) => {
       if (err || !(await Token.exists({ token: apiToken }))) {
-        return AuthenticationError(req, res, next);
+        return res.respond(
+          constants.UNAUTHORIZED,
+          getMessage("errors.unauthorized", req)
+        ); // 401 Unauthorized
       }
 
       const user = await User.findById(decoded.id);
       if (!user) {
-        return AuthenticationError(req, res, next);
+        return res.respond(
+          constants.UNAUTHORIZED,
+          getMessage("errors.unauthorized", req)
+        ); // 401 Unauthorized
       }
 
-      return res.status(constants.OK).json(
-        authResource({
-          user,
-          api_token: apiToken,
-          status: "SUCCESS",
-        })
-      );
+      return res.respond(constants.OK, getMessage("success.success", req), {
+        user,
+        api_token: apiToken,
+        status: "SUCCESS",
+      });
     });
   } catch (error) {
-    next(error);
+    return res.respond(
+      constants.INTERNAL_SERVER_ERROR,
+      getMessage("errors.something_went_wrong", req)
+    ); // 500 Internal Server Error
   }
 };

@@ -1,11 +1,8 @@
 import jwt from "jsonwebtoken";
+import { getMessage } from "../../config/i18nConfig.mjs";
 import { secret } from "../../config/index.mjs";
+import constants from "../../utils/constants.mjs";
 import User from "../models/user.model.mjs";
-import {
-  AuthenticationError,
-  ForbiddenError,
-  InternalServerError,
-} from "./error.middleware.mjs";
 
 // Middleware for JWT Authentication
 export const authenticateJWT = async (req, res, next) => {
@@ -13,14 +10,20 @@ export const authenticateJWT = async (req, res, next) => {
     const apiToken = req.headers.authorization;
 
     if (!apiToken) {
-      return AuthenticationError(req, res, next);
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      ); // 401 Unauthorized
     }
 
     const decoded = jwt.verify(apiToken, secret);
     const user = await User.findById(decoded.id).populate("role");
 
     if (!user) {
-      return AuthenticationError(req, res, next);
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      ); // 401 Unauthorized
     }
 
     req.user = user; // Attach the user object to the request for further processing
@@ -30,9 +33,15 @@ export const authenticateJWT = async (req, res, next) => {
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return AuthenticationError(req, res, next);
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      ); // 401 Unauthorized
     }
-    return InternalServerError(req, res, next);
+    return res.respond(
+      constants.INTERNAL_SERVER_ERROR,
+      getMessage("errors.something_went_wrong", req)
+    ); // 500 Internal Server Error
   }
 };
 
@@ -40,7 +49,10 @@ export const authenticateJWT = async (req, res, next) => {
 export const authorizeRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (req.user && !allowedRoles.includes(req.user.role.name)) {
-      return ForbiddenError(req, res, next);
+      return res.respond(
+        constants.FORBIDDEN,
+        getMessage("errors.forbidden", req)
+      ); // 403 Forbidden
     }
     next();
   };
