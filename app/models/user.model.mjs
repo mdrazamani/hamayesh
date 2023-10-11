@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import Role from "./role.model.mjs";
 
 const userSchema = new mongoose.Schema(
@@ -39,6 +40,30 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+// user data resource
+userSchema.methods.toResource = function () {
+    // another method
+    // const userObject = this.toObject();
+    // delete userObject.password;
+    // return userObject;
+
+    return {
+        username: this.username,
+        email: this.email,
+        role: this.role,
+        // Other fields...
+    };
+};
+
+// auth data resource
+userSchema.methods.toAuthResource = function (api_token) {
+    return {
+        data: this.toResource(),
+        api_token,
+        // Other fields...
+    };
+};
 
 // Ensure the provided role name exists in the Role collection
 userSchema.pre("validate", async function (next) {
