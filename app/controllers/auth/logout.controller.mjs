@@ -1,4 +1,5 @@
-import { AuthenticationError } from "../../middlewares/error.middleware.mjs";
+import { getMessage } from "../../../config/i18nConfig.mjs";
+import constants from "../../../utils/constants.mjs";
 import Token from "../../models/token.model.mjs";
 
 export const logoutController = async (req, res, next) => {
@@ -6,23 +7,26 @@ export const logoutController = async (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.error(
-        AuthenticationError(req, res, next, "No token provided"),
-        401
-      ); // Unauthorized
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      );
     }
 
     const result = await Token.findOneAndDelete({ token: token });
 
     if (!result) {
-      return res.error(
-        AuthenticationError(req, res, next, "Invalid token"),
-        401
-      ); // Unauthorized
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      );
     }
 
-    return res.success(null, "Successfully logged out");
+    return res.respond(constants.OK, getMessage("success.logout.success", req));
   } catch (error) {
-    next(error);
+    res.respond(
+      500,
+      error.message || getMessage("errors.something_went_wrong", req)
+    );
   }
 };

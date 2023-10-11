@@ -1,25 +1,25 @@
 import express from "express";
 import {
-  registrationSchema,
-  loginSchema,
-  verifyToeknSchema,
-  forgetPasswordValidation,
-  resetPasswordValidation,
+  getRegistrationSchema,
+  getLoginSchema,
+  getVerifyTokenSchema,
+  getForgetPasswordValidation,
+  getResetPasswordValidation,
 } from "../app/validations/auth.validation.mjs";
 import { loginController } from "../app/controllers/auth/login.controller.mjs";
 import { registerController } from "../app/controllers/auth/register.controller.mjs";
-import { validate } from "express-validation";
 import {
   authenticateJWT,
   authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
 import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
 
-import { logoutController } from "../app/controllers/auth/logout.contorller.mjs";
 import {
   forgetPasswordController,
   resetPasswordController,
 } from "../app/controllers/auth/forgetPassword.controller.mjs";
+import { logoutController } from "../app/controllers/auth/logout.controller.mjs";
+import { dynamicValidate } from "../utils/validate.mjs";
 
 /**
  * @swagger
@@ -64,7 +64,11 @@ const router = express.Router();
  *         description: Successfully registered
  */
 
-router.post("/register", validate(registrationSchema), registerController);
+router.post(
+  "/register",
+  dynamicValidate(getRegistrationSchema),
+  registerController
+);
 
 /**
  * @swagger
@@ -93,7 +97,7 @@ router.post("/register", validate(registrationSchema), registerController);
  *         description: Successfully logged in
  */
 
-router.post("/login", validate(loginSchema), loginController);
+router.post("/login", dynamicValidate(getLoginSchema), loginController);
 
 /**
  * @swagger
@@ -153,6 +157,7 @@ router.post(
   "/verify-token",
   authenticateJWT,
   authorizeRole("admin", "user"),
+  dynamicValidate(getVerifyTokenSchema),
   verifyTokenController
 );
 
@@ -185,7 +190,7 @@ router.post(
 
 router.post(
   "/forget-password",
-  validate(forgetPasswordValidation),
+  dynamicValidate(getForgetPasswordValidation),
   forgetPasswordController
 );
 
@@ -225,7 +230,7 @@ router.post(
 
 router.post(
   "/reset-password",
-  validate(resetPasswordValidation),
+  dynamicValidate(getResetPasswordValidation),
   resetPasswordController
 );
 

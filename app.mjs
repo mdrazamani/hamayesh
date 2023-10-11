@@ -2,14 +2,6 @@ import express from "express";
 import routes from "./routes/index.mjs";
 import dbconnect from "./config/db.mjs";
 import { PORT } from "./config/index.mjs";
-
-import {
-  ErrorHandler,
-  ConvertError,
-  NotFound,
-  AuthenticationError,
-} from "./app/middlewares/error.middleware.mjs";
-
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./config/swagger.mjs";
 import cookieParser from "cookie-parser";
@@ -21,16 +13,23 @@ import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
-
 import { createFilePath } from "./config/tools.mjs";
-
-import { responseHandler } from "./app/middlewares/response.middleware.mjs";
+import {
+  ErrorHandler,
+  unifiedResponseHandler,
+} from "./app/middlewares/response.middleware.mjs";
+import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
 
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
 dbconnect();
+
+app.use(express.static("public"));
+
+app.use(i18n.init);
+app.use(setLocaleMiddleware);
 
 app.enable("trust proxy");
 
@@ -80,20 +79,16 @@ app.use(compression());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.json());
-app.use("/api/v1", routes);
 
-app.use(responseHandler);
+app.use(unifiedResponseHandler);
+app.use("/api/v1", routes);
 app.use(ErrorHandler);
 
-// If error is not an instanceOf APIError, convert it.
+// app.use(responseHandler);
+// app.use(ErrorHandler);
 // app.use(ConvertError);
-
-// // Catch 404 and forward to error handler
 // app.use(NotFound);
-
 // app.use(AuthenticationError);
-
-// Error handler, send stacktrace only during development
 
 const port = PORT || 8000;
 app.listen(port, () => {

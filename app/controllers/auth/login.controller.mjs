@@ -1,13 +1,10 @@
 import bcrypt from "bcrypt";
 import User from "../../models/user.model.mjs";
-import constants from "../../../utils/constants.mjs";
-import {
-  AuthenticationError,
-  ForbiddenError,
-} from "../../middlewares/error.middleware.mjs";
 import { authResource } from "../../resources/auth.resource.mjs";
 import { generateTokens } from "../../../utils/generateToken.mjs";
 import Token from "../../models/token.model.mjs";
+import constants from "../../../utils/constants.mjs";
+import { getMessage } from "../../../config/i18nConfig.mjs";
 
 export const loginController = async (req, res, next) => {
   try {
@@ -15,13 +12,21 @@ export const loginController = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return AuthenticationError(req, res, next);
+      // Using the unified response handler for error
+      return res.respond(
+        constants.UNAUTHORIZED,
+        getMessage("errors.unauthorized", req)
+      ); // 401 Unauthorized
     }
 
     const { token } = await generateTokens(user, Token, req, res);
-    return res
-      .status(constants.CREATED)
-      .json(authResource({ user, api_token: token, status: "SUCCESS" }));
+
+    // Using the unified response handler for success
+    res.respond(
+      constants.OK,
+      getMessage("success.login.success", req),
+      authResource({ user, api_token: token })
+    );
   } catch (error) {
     next(error);
   }
