@@ -1,79 +1,113 @@
 import Joi from "joi";
+import { getMessage } from "../../config/i18nConfig.mjs";
 
-export const registrationSchema = {
-    body: Joi.object({
-        username: Joi.string().alphanum().min(3).max(30).required().messages({
-            "string.min": "Username must be at least 3 characters long.",
-            "string.alphanum":
-                "Username must only contain alphanumeric characters.",
-        }),
-        password: Joi.string()
-            .min(8)
-            .required()
-            .pattern(/(?=.*[a-z])/)
-            .message("lowercase letter.")
-            .pattern(/(?=.*[A-Z])/)
-            .message("uppercase letter.")
-            .pattern(/(?=.*\d)/)
-            .message("digit.")
-            .pattern(/(?=.*[@$!%*?&#])/)
-            .message("special character.")
-            .messages({
-                "string.min": "8 characters.",
-            })
-            .required(),
-        email: Joi.string().email().required().messages({
-            "string.email": "Email must be a valid email address.",
-        }),
-        role: Joi.string().valid("user", "admin").optional().messages({
-            "any.only": 'Role must be either "user" or "admin".',
-        }),
-    }).options({ abortEarly: false }),
-};
+export const getRegistrationSchema = (req) => ({
+  body: Joi.object({
+    username: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required()
+      .messages({
+        "string.min": getMessage("validation.username_min", req),
+        "string.alphanum": getMessage("validation.username_alphanum", req),
+      }),
+    password: Joi.string()
+      .min(8)
+      .required()
+      .pattern(/(?=.*[a-z])/)
+      .message(getMessage("validation.password_lowercase", req))
+      .pattern(/(?=.*[A-Z])/)
+      .message(getMessage("validation.password_uppercase", req))
+      .pattern(/(?=.*\d)/)
+      .message(getMessage("validation.password_digit", req))
+      .pattern(/(?=.*[@$!%*?&#])/)
+      .message(getMessage("validation.password_special", req))
+      .messages({
+        "string.min": getMessage("validation.password_min", req),
+      })
+      .required(),
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({
+        "string.email": getMessage("validation.email_valid", req),
+      }),
+    role: Joi.string()
+      .valid("user", "admin")
+      .optional()
+      .messages({
+        "any.only": getMessage("validation.role_valid", req),
+      }),
+    // passwordConfirmation: Joi.string()
+    //   .valid(Joi.ref("password"))
+    //   .required()
+    //   .messages({
+    //     "any.only": getMessage("auth.registration.password_confirmation_match"),
+    //   }),
+  }).options({ abortEarly: false }),
+});
 
-export const loginSchema = {
-    body: Joi.object({
-        email: Joi.string().email().required().messages({
-            "string.email": "Email must be a valid email address.",
-        }),
-        password: Joi.string().required(),
-    }).options({ abortEarly: false }),
-};
+export const getLoginSchema = (req) => ({
+  body: Joi.object({
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({
+        "string.email": getMessage("validation.email_valid", req),
+      }),
+    password: Joi.string()
+      .required()
+      .messages({
+        "string.base": getMessage("validation.password_required", req),
+      }),
+  }).options({ abortEarly: false }),
+});
 
-export const verifyToeknSchema = {
-    body: Joi.object({
-        api_token: Joi.string().required(),
-    }).options({ abortEarly: false }),
-};
+export const getVerifyTokenSchema = (req) => ({
+  body: Joi.object({
+    api_token: Joi.string().required(),
+  }).options({ abortEarly: false }),
+});
 
-export const forgetPasswordValidation = {
-    body: Joi.object({
-        email: Joi.string().email().required(),
-    }),
-};
-export const resetPasswordValidation = {
-    body: Joi.object({
-        token: Joi.string().required(),
-        password: Joi.string()
-            .min(8)
-            .required()
-            .pattern(/(?=.*[a-z])/)
-            .message("lowercase letter.")
-            .pattern(/(?=.*[A-Z])/)
-            .message("uppercase letter.")
-            .pattern(/(?=.*\d)/)
-            .message("digit.")
-            .pattern(/(?=.*[@$!%*?&#])/)
-            .message("special character.")
-            .messages({
-                "string.min": "8 characters.",
-            })
-            .required(),
-        passwordConfirmation: Joi.string()
-            .valid(Joi.ref("password"))
-            .required()
-            .messages({
-                "any.only": "passwordConfirmation does not match with password",
-            }),
-    }),
-};
+export const getForgetPasswordValidation = (req) => ({
+  body: Joi.object({
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({
+        "string.email": getMessage("validation.email_valid", req),
+      }),
+  }),
+});
+
+export const getResetPasswordValidation = (req) => ({
+  body: Joi.object({
+    token: Joi.string()
+      .required()
+      .messages({
+        "string.base": getMessage("validation.token_required", req),
+      }),
+    password: Joi.string()
+      .min(8)
+      .required()
+      .pattern(/(?=.*[a-z])/)
+      .message(getMessage("validation.password_lowercase", req))
+      .pattern(/(?=.*[A-Z])/)
+      .message(getMessage("validation.password_uppercase", req))
+      .pattern(/(?=.*\d)/)
+      .message(getMessage("validation.password_digit", req))
+      .pattern(/(?=.*[@$!%*?&#])/)
+      .message(getMessage("validation.password_special", req))
+      .messages({
+        "string.min": getMessage("validation.password_min", req),
+      })
+      .required(),
+    passwordConfirmation: Joi.string()
+      .valid(Joi.ref("password"))
+      .required()
+      .messages({
+        "any.only": getMessage("validation.password_confirmation_match", req),
+      }),
+  }),
+});

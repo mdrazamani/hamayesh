@@ -4,30 +4,37 @@ import { authResource } from "../../resources/auth.resource.mjs";
 import { generateTokens } from "../../../utils/generateToken.mjs";
 import Role from "../../models/role.model.mjs";
 import Token from "../../models/token.model.mjs";
-import { BadRequestError } from "../../middlewares/error.middleware.mjs";
+import { getMessage } from "../../../config/i18nConfig.mjs";
 
 export const registerController = async (req, res, next) => {
-    try {
-        const role = await Role.findOne({ name: req.body.role });
-        if (!role) {
-            return BadRequestError(req, res, next);
-        }
-
-        const user = new User({
-            ...req.body,
-            role: {
-                id: role._id,
-                name: role.name,
-            },
-        });
-        await user.save();
-
-        const { token } = await generateTokens(user, Token);
-
-        return res
-            .status(constants.CREATED)
-            .json(authResource({ user, api_token: token, status: "SUCCESS" }));
-    } catch (error) {
-        next(error);
+  try {
+    const role = await Role.findOne({ name: req.body.role });
+    if (!role) {
+      // Using the unified response handler to send error response
+      return res.respond(
+        constants.BAD_REQUEST,
+        getMessage("errors.invalidRole", req)
+      );
     }
+
+    const user = new User({
+      ...req.body,
+      role: {
+        id: role._id,
+        name: role.name,
+      },
+    });
+    await user.save();
+
+    const { token } = await generateTokens(user, Token);
+
+    // Using the unified response handler to send success response
+    return res.respond(
+      constants.CREATED,
+      getMessage("success.registration.success", req),
+      authResource({ user, api_token: token })
+    );
+  } catch (error) {
+    next(error);
+  }
 };
