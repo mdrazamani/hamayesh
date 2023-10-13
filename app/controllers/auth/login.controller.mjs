@@ -24,7 +24,7 @@ export const loginController = async (req, res, next) => {
         res.respond(
             constants.OK,
             getMessage("success.login.success", req),
-            user.toAuthResource(token)
+            user.toResource(token)
         );
     } catch (error) {
         next(error);

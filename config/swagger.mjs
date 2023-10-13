@@ -1,10 +1,11 @@
 import swaggerJsDoc from "swagger-jsdoc";
+import { createPath } from "./tools.mjs";
 
 const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Your API",
+            title: "hamayesh",
             version: "1.0.0",
             description: "Your API Description",
         },
@@ -14,7 +15,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ["../routes/*.routes.mjs"], // path to your route files
+    apis: [createPath("../routes/*.routes.mjs")], // path to your route files
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
