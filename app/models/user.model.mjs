@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // user data resource
-userSchema.methods.toResource = function () {
+userSchema.methods.toResource = function (api_token = null) {
     // another method
     // const userObject = this.toObject();
     // delete userObject.password;
@@ -51,15 +51,7 @@ userSchema.methods.toResource = function () {
     return {
         username: this.username,
         email: this.email,
-        role: this.role,
-        // Other fields...
-    };
-};
-
-// auth data resource
-userSchema.methods.toAuthResource = function (api_token) {
-    return {
-        data: this.toResource(),
+        role: this.role.name,
         api_token,
         // Other fields...
     };
