@@ -1,45 +1,73 @@
 import express from "express";
 import {
-  getRegistrationSchema,
-  getLoginSchema,
-  getVerifyTokenSchema,
-  getForgetPasswordValidation,
-  getResetPasswordValidation,
+    getRegistrationSchema,
+    getLoginSchema,
+    getVerifyTokenSchema,
+    getForgetPasswordValidation,
+    getResetPasswordValidation,
 } from "../app/validations/auth.validation.mjs";
 import { loginController } from "../app/controllers/auth/login.controller.mjs";
 import { registerController } from "../app/controllers/auth/register.controller.mjs";
 import {
-  authenticateJWT,
-  authorizeRole,
+    authenticateJWT,
+    authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
 import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
 
 import {
-  forgetPasswordController,
-  resetPasswordController,
+    forgetPasswordController,
+    resetPasswordController,
 } from "../app/controllers/auth/forgetPassword.controller.mjs";
 import { logoutController } from "../app/controllers/auth/logout.controller.mjs";
 import { dynamicValidate } from "../utils/validate.mjs";
+import multer from "multer";
+
+// Set up multer to parse multipart/form-data requests
+const upload = multer();
+
+// routes/auth.routes.mjs
 
 /**
  * @swagger
  * tags:
  *   name: Authentication
  *   description: Authentication related routes
+ * components:
+ *   parameters:
+ *     AcceptLanguage:
+ *       in: header
+ *       name: Accept-Language
+ *       schema:
+ *         type: string
+ *         example: fa
+ *         default: fa
+ *       required: true
+ *       description: Client language preference
+ *     AuthorizationHeader:
+ *       in: header
+ *       name: Authorization
+ *       schema:
+ *         type: string
+ *         example: Bearer YOUR_TOKEN
+ *         default: Bearer YOUR_TOKEN
+ *       required: true
+ *       description: Bearer token for API authorization
  */
 
 const router = express.Router();
 
 /**
  * @swagger
- * /register:
+ * /api/v1/auth/register:
  *   post:
  *     tags: [Authentication]
  *     description: Register a new user
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -59,27 +87,27 @@ const router = express.Router();
  *               role:
  *                 type: string
  *                 description: The user's role (optional)
- *     responses:
- *       200:
- *         description: Successfully registered
  */
 
 router.post(
-  "/register",
-  dynamicValidate(getRegistrationSchema),
-  registerController
+    "/register",
+    upload.none(), // multer parses the form data
+    dynamicValidate(getRegistrationSchema),
+    registerController
 );
 
 /**
  * @swagger
- * /login:
+ * /api/v1/auth/login:
  *   post:
  *     tags: [Authentication]
  *     description: Login a user
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -92,52 +120,40 @@ router.post(
  *               password:
  *                 type: string
  *                 description: The user's password
- *     responses:
- *       200:
- *         description: Successfully logged in
  */
 
-router.post("/login", dynamicValidate(getLoginSchema), loginController);
+router.post(
+    "/login",
+    upload.none(), // multer parses the form data
+    dynamicValidate(getLoginSchema),
+    loginController
+);
 
 /**
  * @swagger
- * /login:
+ * /api/v1/auth/logout:
  *   post:
  *     tags: [Authentication]
- *     description: Login a user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 description: The user's email
- *               password:
- *                 type: string
- *                 description: The user's password
- *     responses:
- *       200:
- *         description: Successfully logged in
+ *     description: Logout a user
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
  */
 
 router.post("/logout", authenticateJWT, logoutController);
 
 /**
  * @swagger
- * /verify-token:
+ * /api/v1/auth/verify-token:
  *   post:
  *     tags: [Authentication]
  *     description: Verify a user's token
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -146,31 +162,29 @@ router.post("/logout", authenticateJWT, logoutController);
  *               api_token:
  *                 type: string
  *                 description: The token to verify
- *     responses:
- *       200:
- *         description: Token is valid
- *       403:
- *         description: Token is invalid or expired
  */
 
 router.post(
-  "/verify-token",
-  authenticateJWT,
-  authorizeRole("admin", "user"),
-  dynamicValidate(getVerifyTokenSchema),
-  verifyTokenController
+    "/verify-token",
+    upload.none(), // multer parses the form data
+    authenticateJWT,
+    authorizeRole("admin", "user"),
+    dynamicValidate(getVerifyTokenSchema),
+    verifyTokenController
 );
 
 /**
  * @swagger
- * /forget-password:
+ * /api/v1/auth/forget-password:
  *   post:
  *     tags: [Authentication]
  *     description: Request a password reset
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -179,31 +193,27 @@ router.post(
  *               email:
  *                 type: string
  *                 description: The user's email
- *     responses:
- *       200:
- *         description: Password reset token sent successfully
- *       400:
- *         description: Bad request
- *       500:
- *         description: Internal server error
  */
 
 router.post(
-  "/forget-password",
-  dynamicValidate(getForgetPasswordValidation),
-  forgetPasswordController
+    "/forget-password",
+    upload.none(), // multer parses the form data
+    dynamicValidate(getForgetPasswordValidation),
+    forgetPasswordController
 );
 
 /**
  * @swagger
- * /reset-password:
+ * /api/v1/auth/reset-password:
  *   post:
  *     tags: [Authentication]
  *     description: Reset the user password
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -219,19 +229,13 @@ router.post(
  *               passwordConfirmation:
  *                 type: string
  *                 description: The password Confirmed
- *     responses:
- *       200:
- *         description: Password reset successfully
- *       400:
- *         description: Bad request or invalid token
- *       500:
- *         description: Internal server error
  */
 
 router.post(
-  "/reset-password",
-  dynamicValidate(getResetPasswordValidation),
-  resetPasswordController
+    "/reset-password",
+    upload.none(), // multer parses the form data
+    dynamicValidate(getResetPasswordValidation),
+    resetPasswordController
 );
 
 export default router;

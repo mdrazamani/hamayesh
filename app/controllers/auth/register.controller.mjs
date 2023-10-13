@@ -31,7 +31,7 @@ export const registerController = async (req, res, next) => {
         return res.respond(
             constants.CREATED,
             getMessage("success.registration.success", req),
-            user.toAuthResource(token)
+            user.toResource(token)
         );
     } catch (error) {
         next(error);

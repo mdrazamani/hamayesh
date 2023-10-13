@@ -6,42 +6,42 @@ import constants from "../../../utils/constants.mjs";
 import { getMessage } from "../../../config/i18nConfig.mjs";
 
 export const verifyTokenController = async (req, res, next) => {
-  try {
-    const apiToken = req.body.api_token;
+    try {
+        const apiToken = req.body.api_token;
 
-    if (!apiToken) {
-      return res.respond(
-        constants.UNAUTHORIZED,
-        getMessage("errors.unauthorized", req)
-      ); // 401 Unauthorized
+        if (!apiToken) {
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("errors.unauthorized", req)
+            ); // 401 Unauthorized
+        }
+
+        jwt.verify(apiToken, secret, async (err, decoded) => {
+            if (err || !(await Token.exists({ token: apiToken }))) {
+                return res.respond(
+                    constants.UNAUTHORIZED,
+                    getMessage("errors.unauthorized", req)
+                ); // 401 Unauthorized
+            }
+
+            const user = await User.findById(decoded.id);
+            if (!user) {
+                return res.respond(
+                    constants.UNAUTHORIZED,
+                    getMessage("errors.unauthorized", req)
+                ); // 401 Unauthorized
+            }
+
+            return res.respond(
+                constants.OK,
+                getMessage("success.success", req),
+                user.toResource(apiToken)
+            );
+        });
+    } catch (error) {
+        return res.respond(
+            constants.INTERNAL_SERVER_ERROR,
+            getMessage("errors.something_went_wrong", req)
+        ); // 500 Internal Server Error
     }
-
-    jwt.verify(apiToken, secret, async (err, decoded) => {
-      if (err || !(await Token.exists({ token: apiToken }))) {
-        return res.respond(
-          constants.UNAUTHORIZED,
-          getMessage("errors.unauthorized", req)
-        ); // 401 Unauthorized
-      }
-
-      const user = await User.findById(decoded.id);
-      if (!user) {
-        return res.respond(
-          constants.UNAUTHORIZED,
-          getMessage("errors.unauthorized", req)
-        ); // 401 Unauthorized
-      }
-
-      return res.respond(constants.OK, getMessage("success.success", req), {
-        user,
-        api_token: apiToken,
-        status: "SUCCESS",
-      });
-    });
-  } catch (error) {
-    return res.respond(
-      constants.INTERNAL_SERVER_ERROR,
-      getMessage("errors.something_went_wrong", req)
-    ); // 500 Internal Server Error
-  }
 };

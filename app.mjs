@@ -15,8 +15,8 @@ import helmet from "helmet";
 import cors from "cors";
 import { createFilePath } from "./config/tools.mjs";
 import {
-  ErrorHandler,
-  unifiedResponseHandler,
+    ErrorHandler,
+    unifiedResponseHandler,
 } from "./app/middlewares/response.middleware.mjs";
 import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
 
@@ -47,15 +47,15 @@ app.use(helmet());
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+    app.use(morgan("dev"));
 }
 
 // Limit requests from same API
 const limiter = rateLimit({
-  trustProxy: false,
-  max: 100,
-  windowMs: 60 * 60 * 1000,
-  message: "Too many requests from this IP, please try again in an hour!",
+    trustProxy: false,
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use("/api", limiter);
 
@@ -77,6 +77,12 @@ app.use(compression());
 
 // Swagger setup
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// New route to serve Swagger JSON
+app.get("/api-docs.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Disposition", "attachment; filename=swagger.json");
+    res.send(swaggerDocs);
+});
 
 app.use(express.json());
 
@@ -92,7 +98,7 @@ app.use(ErrorHandler);
 
 const port = PORT || 8000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
 
 //export default app;
