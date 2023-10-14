@@ -26,6 +26,22 @@ export const authenticateJWT = async (req, res, next) => {
       ); // 401 Unauthorized
     }
 
+    // Check email verification status for non-exception routes
+    if (
+      !user.emailVerifiedAt &&
+      ![
+        "/email-verified-send",
+        "/email-verified-check",
+        "/verify-token",
+        "/logout",
+      ].includes(req.path)
+    ) {
+      return res.respond(
+        constants.EMAIL_VERIFICATION,
+        getMessage("errors.email_not_verified", req)
+      ); // 403 Forbidden
+    }
+
     req.user = user; // Attach the user object to the request for further processing
     next();
   } catch (error) {
@@ -38,10 +54,7 @@ export const authenticateJWT = async (req, res, next) => {
         getMessage("errors.unauthorized", req)
       ); // 401 Unauthorized
     }
-    return res.respond(
-      constants.INTERNAL_SERVER_ERROR,
-      getMessage("errors.something_went_wrong", req)
-    ); // 500 Internal Server Error
+    next(error);
   }
 };
 

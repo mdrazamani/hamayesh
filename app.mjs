@@ -15,16 +15,19 @@ import helmet from "helmet";
 import cors from "cors";
 import { createFilePath } from "./config/tools.mjs";
 import {
-    ErrorHandler,
-    unifiedResponseHandler,
+  ConvertError,
+  ErrorHandler,
+  unifiedResponseHandler,
 } from "./app/middlewares/response.middleware.mjs";
 import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
+import sessionMiddleware from "./config/session.mjs";
 
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
 dbconnect();
+app.use(sessionMiddleware); 
 
 app.use(express.static("public"));
 
@@ -47,7 +50,7 @@ app.use(helmet());
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
+  app.use(morgan("dev"));
 }
 
 // Limit requests from same API
@@ -97,26 +100,21 @@ app.use(compression());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // New route to serve Swagger JSON
 app.get("/api-docs.json", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Content-Disposition", "attachment; filename=swagger.json");
-    res.send(swaggerDocs);
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Content-Disposition", "attachment; filename=swagger.json");
+  res.send(swaggerDocs);
 });
 
 app.use(express.json());
 
 app.use(unifiedResponseHandler);
 app.use("/api/v1", routes);
+app.use(ConvertError); // Make sure to use ConvertError before ErrorHandler in middleware stack
 app.use(ErrorHandler);
-
-// app.use(responseHandler);
-// app.use(ErrorHandler);
-// app.use(ConvertError);
-// app.use(NotFound);
-// app.use(AuthenticationError);
 
 const port = PORT || 8000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
 //export default app;

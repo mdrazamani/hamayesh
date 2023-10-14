@@ -1,31 +1,31 @@
 import express from "express";
 import {
-    getRegistrationSchema,
-    getLoginSchema,
-    getVerifyTokenSchema,
-    getForgetPasswordValidation,
-    getResetPasswordValidation,
-    checkEmailValidation,
+  getRegistrationSchema,
+  getLoginSchema,
+  getVerifyTokenSchema,
+  getForgetPasswordValidation,
+  getResetPasswordValidation,
+  checkEmailValidation,
 } from "../app/validations/auth.validation.mjs";
 import { loginController } from "../app/controllers/auth/login.controller.mjs";
 import { registerController } from "../app/controllers/auth/register.controller.mjs";
 import {
-    authenticateJWT,
-    authorizeRole,
+  authenticateJWT,
+  authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
 import { verifyTokenController } from "../app/controllers/auth/verifytoken.controller.mjs";
 
 import {
-    forgetPasswordController,
-    resetPasswordController,
+  forgetPasswordController,
+  resetPasswordController,
 } from "../app/controllers/auth/forgetPassword.controller.mjs";
 import { logoutController } from "../app/controllers/auth/logout.controller.mjs";
 import { dynamicValidate } from "../utils/validate.mjs";
 import multer from "multer";
 
 import {
-    emailVerifiedCheckController,
-    emailVerifiedSendController,
+  emailVerifiedCheckController,
+  emailVerifiedSendController,
 } from "../app/controllers/auth/emailVerified.controller.mjs";
 
 // Set up multer to parse multipart/form-data requests
@@ -96,10 +96,10 @@ const router = express.Router();
  */
 
 router.post(
-    "/register",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getRegistrationSchema),
-    registerController
+  "/register",
+  upload.none(), // multer parses the form data
+  dynamicValidate(getRegistrationSchema),
+  registerController
 );
 
 /**
@@ -129,10 +129,10 @@ router.post(
  */
 
 router.post(
-    "/login",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getLoginSchema),
-    loginController
+  "/login",
+  upload.none(), // multer parses the form data
+  dynamicValidate(getLoginSchema),
+  loginController
 );
 
 /**
@@ -171,12 +171,12 @@ router.post("/logout", authenticateJWT, logoutController);
  */
 
 router.post(
-    "/verify-token",
-    upload.none(), // multer parses the form data
-    authenticateJWT,
-    authorizeRole("admin", "user"),
-    dynamicValidate(getVerifyTokenSchema),
-    verifyTokenController
+  "/verify-token",
+  upload.none(), // multer parses the form data
+  authenticateJWT,
+  authorizeRole("admin", "user"),
+  dynamicValidate(getVerifyTokenSchema),
+  verifyTokenController
 );
 
 /**
@@ -202,10 +202,10 @@ router.post(
  */
 
 router.post(
-    "/forget-password",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getForgetPasswordValidation),
-    forgetPasswordController
+  "/forget-password",
+  upload.none(), // multer parses the form data
+  dynamicValidate(getForgetPasswordValidation),
+  forgetPasswordController
 );
 
 /**
@@ -238,10 +238,10 @@ router.post(
  */
 
 router.post(
-    "/reset-password",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getResetPasswordValidation),
-    resetPasswordController
+  "/reset-password",
+  upload.none(), // multer parses the form data
+  dynamicValidate(getResetPasswordValidation),
+  resetPasswordController
 );
 
 /**
@@ -255,7 +255,11 @@ router.post(
  *       - $ref: '#/components/parameters/AuthorizationHeader'
  */
 
-router.post("/email-verified-send", emailVerifiedSendController);
+router.post(
+  "/email-verified-send",
+  authenticateJWT,
+  emailVerifiedSendController
+);
 
 /**
  * @swagger
@@ -281,9 +285,11 @@ router.post("/email-verified-send", emailVerifiedSendController);
  */
 
 router.post(
-    "/email-verified-check",
-    dynamicValidate(checkEmailValidation),
-    emailVerifiedCheckController
+  "/email-verified-check",
+  authenticateJWT,
+  upload.none(), // multer parses the form data
+  dynamicValidate(checkEmailValidation),
+  emailVerifiedCheckController
 );
 
 export default router;
