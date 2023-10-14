@@ -77,13 +77,10 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - username
+
  *               - password
  *               - email
  *             properties:
- *               username:
- *                 type: string
- *                 description: The user's username
  *               password:
  *                 type: string
  *                 description: The user's password

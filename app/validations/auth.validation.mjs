@@ -3,18 +3,6 @@ import { getMessage } from "../../config/i18nConfig.mjs";
 
 export const getRegistrationSchema = (req) => ({
     body: Joi.object({
-        username: Joi.string()
-            .alphanum()
-            .min(3)
-            .max(30)
-            .required()
-            .messages({
-                "string.min": getMessage("validation.username_min", req),
-                "string.alphanum": getMessage(
-                    "validation.username_alphanum",
-                    req
-                ),
-            }),
         password: Joi.string()
             .min(8)
             .required()

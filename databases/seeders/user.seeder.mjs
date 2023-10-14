@@ -7,14 +7,18 @@ export const seedUsers = async () => {
     console.log("Fetched Role:", adminRole);
     const users = [
         {
-            username: "JohnDoe",
+            fisrtName: "mohammadreza",
+            lastName: "zamani",
+            phoneNumber: "+989035631126",
             password: await bcrypt.hash("Password123@", 10),
             email: "john@example.com",
-            emailVerifiedAt: "",
+            emailVerifiedAt: null,
             role: {
                 id: adminRole._id,
                 name: adminRole.name,
             }, // Store both ObjectId and name
+            profileImage: null,
+            lastLoginAt: null,
         },
         // Add more users as needed
     ];
