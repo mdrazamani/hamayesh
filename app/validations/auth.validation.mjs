@@ -117,3 +117,14 @@ export const getResetPasswordValidation = (req) => ({
             }),
     }),
 });
+
+export const checkEmailValidation = (req) => ({
+    body: Joi.object({
+        token: Joi.string()
+            .required()
+            .min(6)
+            .messages({
+                "string.base": getMessage("validation.token_required", req),
+            }),
+    }),
+});

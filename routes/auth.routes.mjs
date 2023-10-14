@@ -5,6 +5,7 @@ import {
     getVerifyTokenSchema,
     getForgetPasswordValidation,
     getResetPasswordValidation,
+    checkEmailValidation,
 } from "../app/validations/auth.validation.mjs";
 import { loginController } from "../app/controllers/auth/login.controller.mjs";
 import { registerController } from "../app/controllers/auth/register.controller.mjs";
@@ -21,6 +22,11 @@ import {
 import { logoutController } from "../app/controllers/auth/logout.controller.mjs";
 import { dynamicValidate } from "../utils/validate.mjs";
 import multer from "multer";
+
+import {
+    emailVerifiedCheckController,
+    emailVerifiedSendController,
+} from "../app/controllers/auth/emailVerified.controller.mjs";
 
 // Set up multer to parse multipart/form-data requests
 const upload = multer();
@@ -236,6 +242,48 @@ router.post(
     upload.none(), // multer parses the form data
     dynamicValidate(getResetPasswordValidation),
     resetPasswordController
+);
+
+/**
+ * @swagger
+ * /api/v1/auth/email-verified-send:
+ *   post:
+ *     tags: [Authentication]
+ *     description: Send email verification
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+
+router.post("/email-verified-send", emailVerifiedSendController);
+
+/**
+ * @swagger
+ * /api/v1/auth/email-verified-check:
+ *   post:
+ *     tags: [Authentication]
+ *     description: Check email verification status
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The email verification token
+ */
+
+router.post(
+    "/email-verified-check",
+    dynamicValidate(checkEmailValidation),
+    emailVerifiedCheckController
 );
 
 export default router;
