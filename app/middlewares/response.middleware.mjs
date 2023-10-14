@@ -30,7 +30,7 @@ export const unifiedResponseHandler = (req, res, next) => {
 };
 
 export const ErrorHandler = (err, req, res, next) => {
-    // If the error is not an instance of APIError, convert it
+    // If the error is not an instance of APIError, convert itche
     // if (!(err instanceof APIError)) {
     //     console.log("heloo............");
     //     err = ConvertError(err, req, res, next);
