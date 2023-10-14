@@ -1,52 +1,58 @@
 {
-  "errors": {
-    "duplicateUsername": "The username already exists. Please choose another one.",
-    "invalidRole": "Invalid role provided.",
-    "validationError": "Validation failed for the provided data.",
-    "invalidCredentials": "Invalid username or password.",
-    "accountLocked": "Your account has been locked due to multiple failed login attempts.",
-    "accountNotVerified": "Your account is not verified. Please check your email for verification instructions.",
-    "email_valid": "Email must be a valid email address.",
-    "unauthorized": "Authorization failed",
-    "alreadyVerified": "Your account is already verified.",
-    "something_went_wrong": "Something went wrong",
-    "forbidden": "Forbidden: Insufficient permissions",
-    "faild_email": "Faild to send email",
-    "user_not_found": "User not found"
-  },
-  "validation": {
-    "tokenExpired": "Password reset token has expired.",
-    "token_required": "Token is required.",
-    "username_min": "Username must be at least 3 characters long.",
-    "username_alphanum": "Username must only contain alphanumeric characters.",
-    "password_lowercase": "Password must contain at least one lowercase letter.",
-    "password_uppercase": "Password must contain at least one uppercase letter.",
-    "password_digit": "Password must contain at least one digit.",
-    "password_special": "Password must contain at least one special character.",
-    "password_min": "Password must be at least 8 characters.",
-    "email_valid": "Email must be a valid email address.",
-    "role_valid": "Role must be either \"user\" or \"admin\".",
-    "password_required": "Password is required."
-  },
-
-  "success": {
-    "success": "Operation successful",
-    "registration": {
-      "success": "Registration successful."
-    },
-    "login": {
-      "success": "Logged in successfully."
-    },
-    "passwordReset": {
-      "emailSent": "Password reset instructions have been sent to your email.",
-      "success": "Password has been reset successfully."
-    },
-    "verification": {
-      "emailSent": "Verification email has been sent.",
-      "success": "Account verified successfully."
-    },
-    "logout": {
-      "success": "Logged out successfully."
-    }
-  }
+	"errors": {
+		"duplicateUsername": "The username already exists. Please choose another one.",
+		"invalidRole": "Invalid role provided.",
+		"validationError": "Validation failed for the provided data.",
+		"invalidCredentials": "Invalid username or password.",
+		"accountLocked": "Your account has been locked due to multiple failed login attempts.",
+		"accountNotVerified": "Your account is not verified. Please check your email for verification instructions.",
+		"email_valid": "Email must be a valid email address.",
+		"unauthorized": "Authorization failed",
+		"alreadyVerified": "Your account is already verified.",
+		"something_went_wrong": "Something went wrong",
+		"forbidden": "Forbidden: Insufficient permissions",
+		"faild_email": "Faild to send email",
+		"user_not_found": "User not found"
+	},
+	"validation": {
+		"tokenExpired": "Password reset token has expired.",
+		"token_required": "Token is required.",
+		"username_min": "Username must be at least 3 characters long.",
+		"username_alphanum": "Username must only contain alphanumeric characters.",
+		"password_lowercase": "Password must contain at least one lowercase letter.",
+		"password_uppercase": "Password must contain at least one uppercase letter.",
+		"password_digit": "Password must contain at least one digit.",
+		"password_special": "Password must contain at least one special character.",
+		"password_min": "Password must be at least 8 characters.",
+		"email_valid": "Email must be a valid email address.",
+		"role_valid": "Role must be either \"user\" or \"admin\".",
+		"password_required": "Password is required.",
+		"page_number": "validation.page_number",
+		"page_integer": "validation.page_integer",
+		"page_min": "validation.page_min",
+		"pageSize_number": "validation.pageSize_number",
+		"pageSize_integer": "validation.pageSize_integer",
+		"pageSize_min": "validation.pageSize_min",
+		"pageSize_max": "validation.pageSize_max"
+	},
+	"success": {
+		"success": "Operation successful",
+		"registration": {
+			"success": "Registration successful."
+		},
+		"login": {
+			"success": "Logged in successfully."
+		},
+		"passwordReset": {
+			"emailSent": "Password reset instructions have been sent to your email.",
+			"success": "Password has been reset successfully."
+		},
+		"verification": {
+			"emailSent": "Verification email has been sent.",
+			"success": "Account verified successfully."
+		},
+		"logout": {
+			"success": "Logged out successfully."
+		}
+	}
 }

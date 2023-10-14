@@ -51,13 +51,31 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Limit requests from same API
-const limiter = rateLimit({
-    trustProxy: false,
-    max: 100,
-    windowMs: 60 * 60 * 1000,
-    message: "Too many requests from this IP, please try again in an hour!",
-});
-app.use("/api", limiter);
+// const limiter = rateLimit({
+//     trustProxy: false,
+//     max: 100,
+//     windowMs: 60 * 60 * 1000,
+//     message: "Too many requests from this IP, please try again in an hour!",
+// });
+// app.use("/api", limiter);
+
+// Sending Response best practice for debugging
+// app.use((req, res, next) => {
+//     const oldSend = res.send;
+//     const oldJson = res.json;
+
+//     res.send = function (data) {
+//         console.log("Sending Response:", data);
+//         return oldSend.apply(res, arguments);
+//     };
+
+//     res.json = function (data) {
+//         console.log("Sending Response:", data);
+//         return oldJson.apply(res, arguments);
+//     };
+
+//     next();
+// });
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10kb" }));

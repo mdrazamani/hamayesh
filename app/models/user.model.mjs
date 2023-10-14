@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
 import Role from "./role.model.mjs";
 
 const userSchema = new mongoose.Schema(
@@ -22,6 +21,12 @@ const userSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
         },
+        emailVerifiedAt: {
+            type: Date,
+            required: true,
+            default: null,
+            expires: 0, // This will remove the document when the current date and time is >= expiresAt
+        },
         role: {
             id: {
                 type: mongoose.Schema.Types.ObjectId,
@@ -32,7 +37,7 @@ const userSchema = new mongoose.Schema(
                 required: true,
             },
         },
-        resetPasswordToken: { type: String },
+        resetPasswordToken: { type: String, unique: true },
         resetPasswordExpires: {
             type: Date,
             expires: 3600,

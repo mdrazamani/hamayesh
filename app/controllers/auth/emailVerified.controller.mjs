@@ -1,13 +1,12 @@
-import pug from "pug";
-import User from "../../models/user.model.mjs";
+import { getUserByToken } from "../../../utils/getUserByToken.mjs";
 import { sendEmail } from "../../emails/verify.email.mjs";
-import { createPath } from "../../../config/tools.mjs";
-import constants from "../../../utils/constants.mjs";
-import { getMessage } from "../../../config/i18nConfig.mjs";
+import User from "../../models/user.model.mjs";
 
-export const forgetPasswordController = async (req, res, next) => {
+export const emailVerifiedSendController = async (req, res, next) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const authorization = req.headers.authorization;
+
+        const user = await getUserByToken(authorization);
         if (!user) {
             return res.respond(
                 constants.NOT_FOUND,
@@ -23,10 +22,10 @@ export const forgetPasswordController = async (req, res, next) => {
 
         const mailOptions = {
             to: user.email,
-            subject: "Password Reset",
+            subject: "Email Verified",
             html: pug.renderFile(
                 createPath(
-                    "../../../views/emails/forget-password.pug",
+                    "../../../views/emails/email-verified.pug",
                     import.meta.url
                 ),
                 {
@@ -48,14 +47,11 @@ export const forgetPasswordController = async (req, res, next) => {
             ); // 500 Internal Server Error
         }
     } catch (error) {
-        return res.respond(
-            constants.INTERNAL_SERVER_ERROR,
-            getMessage("errors.something_went_wrong", req)
-        ); // 500 Internal Server Error
+        next(error);
     }
 };
 
-export const resetPasswordController = async (req, res, next) => {
+export const emailVerifiedCheckController = async (req, res, next) => {
     try {
         const user = await User.findOne({
             resetPasswordToken: req.body.token,
@@ -69,20 +65,14 @@ export const resetPasswordController = async (req, res, next) => {
             );
         }
 
-        user.password = req.body.password;
+        user.emailVerifiedAt = Date.now();
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
         await user.save();
 
-        return res.respond(
-            constants.OK,
-            getMessage("success.passwordReset.success", req)
-        );
+        return res.respond(constants.OK, getMessage("success.success", req));
     } catch (error) {
-        return res.respond(
-            constants.INTERNAL_SERVER_ERROR,
-            getMessage("errors.something_went_wrong", req)
-        ); // 500 Internal Server Error
+        next(error);
     }
 };
