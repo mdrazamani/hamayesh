@@ -31,9 +31,10 @@ export const unifiedResponseHandler = (req, res, next) => {
 
 export const ErrorHandler = (err, req, res, next) => {
     // If the error is not an instance of APIError, convert it
-    if (!(err instanceof APIError)) {
-        err = ConvertError(err, req, res, next);
-    }
+    // if (!(err instanceof APIError)) {
+    //     console.log("heloo............");
+    //     err = ConvertError(err, req, res, next);
+    // }
 
     const response = {
         code: err.status || 500,
@@ -41,9 +42,11 @@ export const ErrorHandler = (err, req, res, next) => {
         errors: err.errors,
         stack: err.stack,
     };
+
     if (Debug_mode === "production") delete response.stack;
+
     res.status(response.code).json(response);
-    res.end();
+    // res.end();
 };
 
 /**
@@ -99,7 +102,6 @@ export const ConvertError = (err, req, res, next) => {
             stack: err.stack,
         });
     }
-
     return ErrorHandler(ConvertedError, req, res, next);
 };
 

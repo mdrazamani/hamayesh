@@ -3,6 +3,7 @@ export const paginate = async (Model, page = 1, pageSize = 10, query = {}) => {
         const skip = (page - 1) * pageSize;
         const items = await Model.find(query).skip(skip).limit(pageSize);
         const total = await Model.countDocuments(query);
+
         return {
             items,
             total,

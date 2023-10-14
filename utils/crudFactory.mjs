@@ -1,29 +1,32 @@
 import { paginate } from "./pagination.mjs";
 const handleAsync =
     (fn) =>
+    (next) =>
     (...args) =>
-        fn(...args).catch(console.error);
+        fn(next)(...args).catch((error) => {
+            next(error);
+        });
 
 export default {
     getAll: (Model) =>
-        handleAsync(async (page, pageSize, query) => {
+        handleAsync((next) => async (page, pageSize, query) => {
             return await paginate(Model, page, pageSize, query);
         }),
     get: (Model) =>
-        handleAsync(async (id) => {
+        handleAsync((next) => async (id) => {
             return await Model.findById(id);
         }),
     create: (Model) =>
-        handleAsync(async (data) => {
+        handleAsync((next) => async (data) => {
             const entity = new Model(data);
             return await entity.save();
         }),
     update: (Model) =>
-        handleAsync(async (id, data) => {
+        handleAsync((next) => async (id, data) => {
             return await Model.findByIdAndUpdate(id, data, { new: true });
         }),
     delete: (Model) =>
-        handleAsync(async (id) => {
+        handleAsync((next) => async (id) => {
             return await Model.findByIdAndDelete(id);
         }),
 };
