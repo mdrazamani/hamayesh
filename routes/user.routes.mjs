@@ -1,15 +1,13 @@
 import express from "express";
 import { getRegistrationSchema } from "../app/validations/auth.validation.mjs";
 import { dynamicValidate } from "../utils/validate.mjs";
-import multer from "multer";
 import { createController } from "../app/controllers/user/create.controller.mjs";
 import { deleteController } from "../app/controllers/user/delete.controller.mjs";
 import { indexController } from "../app/controllers/user/index.controller.mjs";
 import { showController } from "../app/controllers/user/show.controller.mjs";
 import { updateController } from "../app/controllers/user/update.controller.mjs";
 import { paginationValidation } from "../app/validations/pagination.validation.mjs";
-
-const upload = multer();
+import { updateValidation } from "../app/validations/user.validation.mjs";
 
 /**
  * @swagger
@@ -45,54 +43,128 @@ const router = express.Router();
  * /api/v1/users:
  *   post:
  *     tags: [Users]
- *     description: Create a new user
+ *     summary: Create a new user
+ *     description: Create a new user with the provided information.
  *     parameters:
  *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - username
- *               - password
- *               - email
  *             properties:
  *               username:
  *                 type: string
- *                 description: The user's username
  *               password:
  *                 type: string
- *                 description: The user's password
  *               email:
  *                 type: string
- *                 description: The user's email
  *               role:
  *                 type: string
- *                 description: The user's role (optional)
  */
-router.post(
-    "/",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getRegistrationSchema),
-    createController
-);
+router.post("/", dynamicValidate(getRegistrationSchema), createController);
+
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   delete:
+ *     tags: [Users]
+ *     summary: Delete a user
+ *     description: Delete a user with the provided ID.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ */
 
 router.delete("/:id", deleteController);
 
-router.get(
-    "/",
-    upload.none(), // multer parses the form data
-    dynamicValidate(paginationValidation),
-    indexController
-);
+/**
+ * @swagger
+ * /api/v1/users:
+ *   get:
+ *     tags: [Users]
+ *     summary: Retrieve users
+ *     description: Retrieve a list of users with pagination.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *         description: Number of items per page
+ */
+
+router.get("/", dynamicValidate(paginationValidation), indexController);
+
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     summary: Retrieve a user
+ *     description: Retrieve detailed information of a specific user.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ */
+
 router.get("/:id", showController);
 
-router.patch(
-    "/:id",
-    upload.none(), // multer parses the form data
-    updateController
-);
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   patch:
+ *     tags: [Users]
+ *     summary: Update a user
+ *     description: Update user details.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               profileImage:
+ *                 type: string
+ */
+
+router.patch("/:id", dynamicValidate(updateValidation), updateController);
 
 export default router;

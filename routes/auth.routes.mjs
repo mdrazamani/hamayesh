@@ -21,15 +21,11 @@ import {
 } from "../app/controllers/auth/forgetPassword.controller.mjs";
 import { logoutController } from "../app/controllers/auth/logout.controller.mjs";
 import { dynamicValidate } from "../utils/validate.mjs";
-import multer from "multer";
 
 import {
     emailVerifiedCheckController,
     emailVerifiedSendController,
 } from "../app/controllers/auth/emailVerified.controller.mjs";
-
-// Set up multer to parse multipart/form-data requests
-const upload = multer();
 
 // routes/auth.routes.mjs
 
@@ -108,7 +104,6 @@ const router = express.Router();
 
 router.post(
     "/register",
-    upload.none(), // multer parses the form data
     dynamicValidate(getRegistrationSchema),
     registerController
 );
@@ -139,12 +134,7 @@ router.post(
  *                 description: The user's password
  */
 
-router.post(
-    "/login",
-    upload.none(), // multer parses the form data
-    dynamicValidate(getLoginSchema),
-    loginController
-);
+router.post("/login", dynamicValidate(getLoginSchema), loginController);
 
 /**
  * @swagger
@@ -183,7 +173,6 @@ router.post("/logout", authenticateJWT, logoutController);
 
 router.post(
     "/verify-token",
-    upload.none(), // multer parses the form data
     authenticateJWT,
     authorizeRole("admin", "user"),
     dynamicValidate(getVerifyTokenSchema),
@@ -214,7 +203,6 @@ router.post(
 
 router.post(
     "/forget-password",
-    upload.none(), // multer parses the form data
     dynamicValidate(getForgetPasswordValidation),
     forgetPasswordController
 );
@@ -250,7 +238,6 @@ router.post(
 
 router.post(
     "/reset-password",
-    upload.none(), // multer parses the form data
     dynamicValidate(getResetPasswordValidation),
     resetPasswordController
 );
@@ -298,7 +285,6 @@ router.post(
 router.post(
     "/email-verified-check",
     authenticateJWT,
-    upload.none(), // multer parses the form data
     dynamicValidate(checkEmailValidation),
     emailVerifiedCheckController
 );

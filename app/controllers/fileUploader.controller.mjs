@@ -1,5 +1,3 @@
-// controllers/fileUploadController.js
-
 import { uploadFile } from "../services/fileUpload.service.mjs";
 
 export const handleFileUpload = async (req, res, next) => {
@@ -7,12 +5,19 @@ export const handleFileUpload = async (req, res, next) => {
         return res.status(400).send("No files were uploaded.");
     }
 
-    const file = req.files.file;
-
     try {
-        const result = await uploadFile(file);
-        res.json(result);
+        const files = req.files;
+        let uploadResults = [];
+
+        for (const [key, file] of Object.entries(files)) {
+            const result = await uploadFile(file, key);
+            uploadResults.push(result);
+            console.log(uploadResults);
+        }
+        if (uploadResults.length == 1) uploadResults = uploadResults[0];
+
+        res.status(200).json(uploadResults);
     } catch (err) {
-        res.status(500).send(err.message);
+        next(err);
     }
 };

@@ -31,7 +31,8 @@ dbconnect();
 app.use(sessionMiddleware);
 
 app.use(express.static("public"));
-app.use(fileUpload());
+
+app.use(fileUpload);
 
 app.use(i18n.init);
 app.use(setLocaleMiddleware);
@@ -56,13 +57,13 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Limit requests from same API
-const limiter = rateLimit({
-    trustProxy: false,
-    max: 100,
-    windowMs: 60 * 60 * 1000,
-    message: "Too many requests from this IP, please try again in an hour!",
-});
-app.use("/api", limiter);
+// const limiter = rateLimit({
+//     trustProxy: false,
+//     max: 100,
+//     windowMs: 60 * 60 * 1000,
+//     message: "Too many requests from this IP, please try again in an hour!",
+// });
+// app.use("/api", limiter);
 
 // Sending Response best practice for debugging
 // app.use((req, res, next) => {
