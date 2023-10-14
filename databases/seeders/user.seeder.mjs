@@ -7,9 +7,9 @@ export const seedUsers = async () => {
     console.log("Fetched Role:", adminRole);
     const users = [
         {
-            fisrtName: "mohammadreza",
+            firstName: "mohammadreza",
             lastName: "zamani",
-            phoneNumber: "+989035631126",
+            phoneNumber: "09108494221",
             password: await bcrypt.hash("Password123@", 10),
             email: "john@example.com",
             emailVerifiedAt: null,

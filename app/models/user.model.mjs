@@ -4,13 +4,15 @@ import Role from "./role.model.mjs";
 
 const userSchema = new mongoose.Schema(
     {
-        fisrtName: {
+        firstName: {
             type: String,
+            required: true,
         },
         lastName: {
             type: String,
+            required: true,
         },
-        phoneNumber: { type: String, unique: true },
+        phoneNumber: { type: String, unique: true, required: true },
         password: {
             type: String,
             required: true,
@@ -24,7 +26,6 @@ const userSchema = new mongoose.Schema(
         emailVerifiedAt: {
             type: Date,
             default: null,
-            expires: 0, // This will remove the document when the current date and time is >= expiresAt
         },
         role: {
             id: {
@@ -53,9 +54,13 @@ userSchema.methods.toResource = function (api_token = null) {
     // return userObject;
 
     return {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        phoneNumber: this.phoneNumber,
         email: this.email,
-        profileImage: this.profileImage,
         role: this.role.name,
+        emailVerifiedAt: this.emailVerifiedAt,
+        lastLoginAt: this.lastLoginAt,
         api_token,
         // Other fields...
     };

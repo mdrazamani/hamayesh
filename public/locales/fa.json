@@ -1,62 +1,69 @@
 {
-  "errors": {
-    "duplicateUsername": "نام کاربری قبلاً وجود دارد. لطفاً یکی دیگر انتخاب کنید.",
-    "invalidRole": "نقش نامعتبر است.",
-    "validationError": "اعتبار سنجی برای داده‌های ارائه شده ناموفق بود.",
-    "invalidCredentials": "نام کاربری یا رمز عبور نامعتبر است.",
-    "accountLocked": "حساب شما به دلیل تلاش‌های متعدد ناموفق برای ورود به سیستم قفل شده است.",
-    "accountNotVerified": "حساب شما تأیید نشده است. لطفاً ایمیل خود را برای دستورالعمل‌های تأیید بررسی کنید.",
-    "email_valid": "ایمیل باید یک آدرس ایمیل معتبر باشد.",
-    "unauthorized": "تأیید اعتبار ناموفق بود",
-    "alreadyVerified": "حساب شما قبلاً تأیید شده است.",
-    "something_went_wrong": "مشکلی پیش آمده است",
-    "invalidToken": "کد وارد شده اشتباه است",
-    "user_not_found": "کاربر مورد نظر وجود ندارد",
-    "email_not_verified": "حساب شما تأیید نشده است."
-  },
-  "validation": {
-    "tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
-    "token_required": "توکن مورد نیاز است.",
-    "username_min": "نام کاربری باید حداقل 3 کاراکتر داشته باشد.",
-    "username_alphanum": "نام کاربری باید فقط شامل کاراکترهای الفبایی-عددی باشد.",
-    "password_lowercase": "رمز عبور باید حداقل شامل یک حرف کوچک باشد.",
-    "password_uppercase": "رمز عبور باید حداقل شامل یک حرف بزرگ باشد.",
-    "password_digit": "رمز عبور باید حداقل شامل یک رقم باشد.",
-    "password_special": "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد.",
-    "password_min": "رمز عبور باید حداقل 8 کاراکتر داشته باشد.",
-    "email_valid": "ایمیل باید یک آدرس ایمیل معتبر باشد.",
-    "role_valid": "نقش باید یا \"کاربر\" یا \"مدیر\" باشد.",
-    "password_required": "رمز عبور مورد نیاز است.",
-    "password_confirmation_match": "validation.password_confirmation_match",
-		"first_name_required": "validation.first_name_required",
-		"last_name_required": "validation.last_name_required",
-		"phone_number_required": "validation.phone_number_required",
-		"phone_number_format_invalid": "validation.phone_number_format_invalid",
-		"profile_image_required": "validation.profile_image_required",
-		"profile_image_size_limit": "validation.profile_image_size_limit",
-		"profile_image_format_invalid": "validation.profile_image_format_invalid"
-  },
-  "success": {
-    "success": "عملیات موفق آمیز بود",
-    "registration": {
-      "success": "ثبت نام موفقیت‌آمیز بود."
+    "errors": {
+        "duplicateUsername": "نام کاربری قبلاً وجود دارد. لطفاً یکی دیگر انتخاب کنید.",
+        "invalidRole": "نقش نامعتبر است.",
+        "validationError": "اعتبار سنجی برای داده‌های ارائه شده ناموفق بود.",
+        "invalidCredentials": "نام کاربری یا رمز عبور نامعتبر است.",
+        "accountLocked": "حساب شما به دلیل تلاش‌های متعدد ناموفق برای ورود به سیستم قفل شده است.",
+        "accountNotVerified": "حساب شما تأیید نشده است. لطفاً ایمیل خود را برای دستورالعمل‌های تأیید بررسی کنید.",
+        "email_valid": "ایمیل باید یک آدرس ایمیل معتبر باشد.",
+        "unauthorized": "تأیید اعتبار ناموفق بود",
+        "alreadyVerified": "حساب شما قبلاً تأیید شده است.",
+        "something_went_wrong": "مشکلی پیش آمده است",
+        "invalidToken": "کد وارد شده اشتباه است",
+        "user_not_found": "کاربر مورد نظر وجود ندارد",
+        "email_not_verified": "حساب شما تأیید نشده است."
     },
-    "login": {
-      "success": "ورود موفقیت‌آمیز بود."
+    "validation": {
+        "tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
+        "token_required": "توکن مورد نیاز است.",
+        "username_min": "نام کاربری باید حداقل 3 کاراکتر داشته باشد.",
+        "username_alphanum": "نام کاربری باید فقط شامل کاراکترهای الفبایی-عددی باشد.",
+        "password_lowercase": "رمز عبور باید حداقل شامل یک حرف کوچک باشد.",
+        "password_uppercase": "رمز عبور باید حداقل شامل یک حرف بزرگ باشد.",
+        "password_digit": "رمز عبور باید حداقل شامل یک رقم باشد.",
+        "password_special": "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد.",
+        "password_min": "رمز عبور باید حداقل 8 کاراکتر داشته باشد.",
+        "email_valid": "ایمیل باید یک آدرس ایمیل معتبر باشد.",
+        "role_valid": "نقش باید یا \"کاربر\" یا \"مدیر\" باشد.",
+        "password_required": "رمز عبور مورد نیاز است.",
+        "password_confirmation_match": "تاییدیه رمز عبور با رمز عبور مطابقت ندارد",
+        "first_name_required": "نام الزامی است",
+        "last_name_required": "نام خانوادگی الزامی است",
+        "phone_number_required": "شماره تلفن الزامی است",
+        "phone_number_format_invalid": "فرمت شماره تلفن نامعتبر است",
+        "profile_image_required": "تصویر پروفایل الزامی است",
+        "profile_image_size_limit": "اندازه تصویر پروفایل بیش از حد مجاز است",
+        "profile_image_format_invalid": "فرمت تصویر پروفایل نامعتبر است",
+        "firstName_min": "نام باید حداقل یک کاراکتر باشد",
+        "firstName_max": "نام نباید بیشتر از 50 کاراکتر باشد",
+        "lastName_min": "نام خانوادگی باید حداقل یک کاراکتر باشد",
+        "lastName_max": "نام خانوادگی نباید بیشتر از 50 کاراکتر باشد",
+        "phoneNumber_length": "شماره تلفن باید دقیقاً 11 رقم باشد",
+        "profileImage_string": "تصویر پروفایل باید یک رشته باشد",
+        "email_required": "ایمیل الزامی است"
     },
-    "passwordReset": {
-      "emailSent": "دستورالعمل‌های بازیابی رمز عبور به ایمیل شما ارسال شده است.",
-      "success": "رمز عبور با موفقیت بازیابی شد."
-    },
-    "verification": {
-      "emailSent": "ایمیل تأیید ارسال شده است.",
-      "success": "حساب با موفقیت تأیید شد."
-    },
-    "logout": {
-      "success": "با موفقیت خارج شدید."
-    },
-    "verifytoken": {
-      "success": "success.verifytoken.success"
+    "success": {
+        "success": "عملیات موفق آمیز بود",
+        "registration": {
+            "success": "ثبت نام موفقیت‌آمیز بود."
+        },
+        "login": {
+            "success": "ورود موفقیت‌آمیز بود."
+        },
+        "passwordReset": {
+            "emailSent": "دستورالعمل‌های بازیابی رمز عبور به ایمیل شما ارسال شده است.",
+            "success": "رمز عبور با موفقیت بازیابی شد."
+        },
+        "verification": {
+            "emailSent": "ایمیل تأیید ارسال شده است.",
+            "success": "حساب با موفقیت تأیید شد."
+        },
+        "logout": {
+            "success": "با موفقیت خارج شدید."
+        },
+        "verifytoken": {
+            "success": "success.verifytoken.success"
+        }
     }
-  }
 }
