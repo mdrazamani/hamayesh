@@ -5,7 +5,7 @@ import { create } from "../../services/user.service.mjs";
 export const createController = async (req, res, next) => {
     try {
         const user = await create(req.body, next);
-        if (user) res.respond(constants.OK, getMessage("success.success", req));
+        if (user) res.respond(constants.OK, getMessage("success.success"));
     } catch (error) {
         next(error);
     }

@@ -1,3 +1,7 @@
+import { getMessage } from "../config/i18nConfig.mjs";
+import constants from "./constants.mjs";
+import APIError from "./errors.mjs";
+
 export const paginate = async (Model, page = 1, pageSize = 10, query = {}) => {
     try {
         const skip = (page - 1) * pageSize;
@@ -11,6 +15,9 @@ export const paginate = async (Model, page = 1, pageSize = 10, query = {}) => {
             currentPage: page,
         };
     } catch (error) {
-        throw new Error("Error during pagination");
+        throw new APIError({
+            message: getMessage("errors.during_pagination"),
+            status: constants.BAD_REQUEST,
+        });
     }
 };

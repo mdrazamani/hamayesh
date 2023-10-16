@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import Role from "./role.model.mjs";
 import Token from "./token.model.mjs";
+import { getMessage } from "../../config/i18nConfig.mjs";
+import APIError from "../../utils/errors.mjs";
+import constants from "../../utils/constants.mjs";
 
 const userSchema = new mongoose.Schema(
     {
@@ -62,9 +65,9 @@ userSchema.pre("remove", function (next) {
 });
 
 // Query middleware to exclude soft-deleted users
-userSchema.pre(/^find/, function (next) {
+userSchema.pre(/^find$/, function (next) {
     // 'this' is an instance of mongoose.Query
-    this.find({ deletedAt: { $eq: null } });
+    this.find({ deletedAt: { $eq: null } }).select("-password");
     next();
 });
 
@@ -93,7 +96,10 @@ userSchema.pre("validate", async function (next) {
     if (this.isModified("role")) {
         const role = await Role.findOne({ name: this.role.name });
         if (!role) {
-            throw new Error("Invalid role name provided");
+            throw new APIError({
+                message: getMessage("errors.Invalid_role_name_provided"),
+                status: constants.BAD_REQUEST,
+            });
         }
     }
     next();

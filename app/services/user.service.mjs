@@ -10,7 +10,7 @@ export const create = async (data, next) => {
         // Using the unified response handler to send error response
         return res.respond(
             constants.BAD_REQUEST,
-            getMessage("errors.invalidRole", req)
+            getMessage("errors.invalidRole")
         );
     }
     data.role = { id: role._id, name: role.name };

@@ -13,7 +13,7 @@ export const loginController = async (req, res, next) => {
             // Using the unified response handler for error
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             ); // 401 Unauthorized
         }
 
@@ -22,7 +22,7 @@ export const loginController = async (req, res, next) => {
         // Using the unified response handler for success
         res.respond(
             constants.OK,
-            getMessage("success.login.success", req),
+            getMessage("success.login.success"),
             user.toResource(token)
         );
     } catch (error) {

@@ -8,7 +8,7 @@ export const updateController = async (req, res, next) => {
         if (updatedUser)
             res.respond(
                 constants.OK,
-                getMessage("success.success", req),
+                getMessage("success.success"),
                 updatedUser.toResource()
             );
     } catch (error) {

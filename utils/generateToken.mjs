@@ -15,12 +15,16 @@ export const generateTokens = async (user) => {
         }
     );
 
-    new Token({
-        token,
-        refreshToken,
-        userId: user._id,
-        expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000), //+ 7 * 24 * 60 * 60 * 1000
-    }).save();
+    try {
+        await new Token({
+            token,
+            refreshToken,
+            userId: user._id,
+            expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000), //+ 7 * 24 * 60 * 60 * 1000
+        }).save();
 
-    return { token, refreshToken };
+        return { token, refreshToken };
+    } catch (error) {
+        throw error; // Or handle it in a way that's appropriate for your application logic
+    }
 };

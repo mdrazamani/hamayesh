@@ -12,11 +12,7 @@ export const indexController = async (req, res, next) => {
             next
         );
         if (users)
-            res.respond(
-                constants.OK,
-                getMessage("success.success", req),
-                users
-            );
+            res.respond(constants.OK, getMessage("success.success"), users);
     } catch (error) {
         return next(error);
     }

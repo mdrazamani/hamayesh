@@ -8,7 +8,7 @@ export const showController = async (req, res, next) => {
         if (user)
             res.respond(
                 constants.OK,
-                getMessage("success.success", req),
+                getMessage("success.success"),
                 user.toResource()
             );
     } catch (error) {

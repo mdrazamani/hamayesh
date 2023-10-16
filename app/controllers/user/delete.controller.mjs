@@ -11,15 +11,12 @@ export const deleteController = async (req, res, next) => {
         if (userIdToDelete === authenticatedUserId) {
             return res.respond(
                 constants.BAD_REQUEST,
-                getMessage("errors.cannot_delete_self", req)
+                getMessage("errors.cannot_delete_self")
             );
         }
         const deleteRes = await deleteDoc(req.params.id, next);
         if (deleteRes)
-            return res.respond(
-                constants.OK,
-                getMessage("success.success", req)
-            );
+            return res.respond(constants.OK, getMessage("success.success"));
     } catch (error) {
         return next(error);
     }

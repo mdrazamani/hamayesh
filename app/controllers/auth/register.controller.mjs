@@ -11,7 +11,7 @@ export const registerController = async (req, res, next) => {
         // Using the unified response handler to send success response
         return res.respond(
             constants.CREATED,
-            getMessage("success.registration.success", req),
+            getMessage("success.registration.success"),
             userResource
         );
     } catch (error) {

@@ -13,7 +13,7 @@ export const authenticateJWT = async (req, res, next) => {
         if (!authHeader) {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             ); // 401 Unauthorized
         }
 
@@ -22,7 +22,7 @@ export const authenticateJWT = async (req, res, next) => {
         if (authHeaderParts.length !== 2 || authHeaderParts[0] !== "Bearer") {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             ); // 400 Bad Request
         }
 
@@ -34,7 +34,7 @@ export const authenticateJWT = async (req, res, next) => {
         if (!user) {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             ); // 401 Unauthorized
         }
 
@@ -50,7 +50,7 @@ export const authenticateJWT = async (req, res, next) => {
         ) {
             return res.respond(
                 constants.EMAIL_VERIFICATION,
-                getMessage("errors.email_not_verified", req)
+                getMessage("errors.email_not_verified")
             ); // 403 Forbidden
         }
 
@@ -63,7 +63,7 @@ export const authenticateJWT = async (req, res, next) => {
         ) {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             ); // 401 Unauthorized
         }
         next(error);
@@ -76,7 +76,7 @@ export const authorizeRole = (...allowedRoles) => {
         if (req.user && !allowedRoles.includes(req.user.role.name)) {
             return res.respond(
                 constants.FORBIDDEN,
-                getMessage("errors.forbidden", req)
+                getMessage("errors.forbidden")
             ); // 403 Forbidden
         }
         next();

@@ -1,6 +1,4 @@
 import { validate } from "express-validation";
-import { getMessage } from "../config/i18nConfig.mjs";
-import constants from "./constants.mjs";
 
 export function dynamicValidate(schemaFunc) {
     return (req, res, next) => {

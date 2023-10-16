@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { getMessage } from "../../config/i18nConfig.mjs";
+import APIError from "../../utils/errors.mjs";
+import constants from "../../utils/constants.mjs";
 
 const uploadPath = "./public/uploads/"; // Choose your upload path
 
@@ -30,6 +33,9 @@ export const uploadFile = async (file, key) => {
         };
     } catch (err) {
         console.error(err);
-        throw new Error("File upload failed: " + err.message);
+        throw new APIError({
+            message: getMessage("errors.File_pload_failed") + err.message,
+            status: constants.BAD_REQUEST,
+        });
     }
 };

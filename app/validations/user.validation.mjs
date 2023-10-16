@@ -7,8 +7,8 @@ export const updateValidation = (req) => ({
             .min(1)
             .max(50)
             .messages({
-                "string.min": getMessage("validation.firstName_min", req),
-                "string.max": getMessage("validation.firstName_max", req),
+                "string.min": getMessage("validation.firstName_min"),
+                "string.max": getMessage("validation.firstName_max"),
                 "string.empty": getMessage(
                     "validation.first_name_required",
                     req
@@ -18,8 +18,8 @@ export const updateValidation = (req) => ({
             .min(1)
             .max(50)
             .messages({
-                "string.min": getMessage("validation.lastName_min", req),
-                "string.max": getMessage("validation.lastName_max", req),
+                "string.min": getMessage("validation.lastName_min"),
+                "string.max": getMessage("validation.lastName_max"),
                 "string.empty": getMessage(
                     "validation.last_name_required",
                     req
@@ -40,7 +40,7 @@ export const updateValidation = (req) => ({
         email: Joi.string()
             .email()
             .messages({
-                "string.email": getMessage("validation.email_valid", req),
+                "string.email": getMessage("validation.email_valid"),
             }),
         profileImage: Joi.string()
             .optional()

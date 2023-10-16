@@ -10,7 +10,7 @@ export const logoutController = async (req, res, next) => {
         if (!token) {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             );
         }
 
@@ -19,18 +19,15 @@ export const logoutController = async (req, res, next) => {
         if (!result) {
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized", req)
+                getMessage("errors.unauthorized")
             );
         }
 
-        return res.respond(
-            constants.OK,
-            getMessage("success.logout.success", req)
-        );
+        return res.respond(constants.OK, getMessage("success.logout.success"));
     } catch (error) {
         res.respond(
             500,
-            error.message || getMessage("errors.something_went_wrong", req)
+            error.message || getMessage("errors.something_went_wrong")
         );
     }
 };

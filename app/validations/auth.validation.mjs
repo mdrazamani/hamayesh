@@ -8,8 +8,8 @@ export const getRegistrationSchema = (req) => ({
             .max(50)
             .required()
             .messages({
-                "string.min": getMessage("validation.firstName_min", req),
-                "string.max": getMessage("validation.firstName_max", req),
+                "string.min": getMessage("validation.firstName_min"),
+                "string.max": getMessage("validation.firstName_max"),
                 "string.empty": getMessage(
                     "validation.first_name_required",
                     req
@@ -20,8 +20,8 @@ export const getRegistrationSchema = (req) => ({
             .max(50)
             .required()
             .messages({
-                "string.min": getMessage("validation.lastName_min", req),
-                "string.max": getMessage("validation.lastName_max", req),
+                "string.min": getMessage("validation.lastName_min"),
+                "string.max": getMessage("validation.lastName_max"),
                 "string.empty": getMessage(
                     "validation.last_name_required",
                     req
@@ -45,29 +45,29 @@ export const getRegistrationSchema = (req) => ({
             .min(8)
             .required()
             .pattern(/(?=.*[a-z])/)
-            .message(getMessage("validation.password_lowercase", req))
+            .message(getMessage("validation.password_lowercase"))
             .pattern(/(?=.*[A-Z])/)
-            .message(getMessage("validation.password_uppercase", req))
+            .message(getMessage("validation.password_uppercase"))
             .pattern(/(?=.*\d)/)
-            .message(getMessage("validation.password_digit", req))
+            .message(getMessage("validation.password_digit"))
             .pattern(/(?=.*[@$!%*?&#])/)
-            .message(getMessage("validation.password_special", req))
+            .message(getMessage("validation.password_special"))
             .messages({
-                "string.min": getMessage("validation.password_min", req),
+                "string.min": getMessage("validation.password_min"),
             })
             .required(),
         email: Joi.string()
             .email()
             .required()
             .messages({
-                "string.email": getMessage("validation.email_valid", req),
-                "string.empty": getMessage("validation.email_required", req), // Note: Add this key in your lang file
+                "string.email": getMessage("validation.email_valid"),
+                "string.empty": getMessage("validation.email_required"), // Note: Add this key in your lang file
             }),
         role: Joi.string()
             .valid("user", "admin")
             .optional()
             .messages({
-                "any.only": getMessage("validation.role_valid", req),
+                "any.only": getMessage("validation.role_valid"),
             }),
         profileImage: Joi.string()
             .optional()
@@ -87,12 +87,12 @@ export const getLoginSchema = (req) => ({
             .email()
             .required()
             .messages({
-                "string.email": getMessage("validation.email_valid", req),
+                "string.email": getMessage("validation.email_valid"),
             }),
         password: Joi.string()
             .required()
             .messages({
-                "string.base": getMessage("validation.password_required", req),
+                "string.base": getMessage("validation.password_required"),
             }),
     }).options({ abortEarly: false }),
 });
@@ -109,7 +109,7 @@ export const getForgetPasswordValidation = (req) => ({
             .email()
             .required()
             .messages({
-                "string.email": getMessage("validation.email_valid", req),
+                "string.email": getMessage("validation.email_valid"),
             }),
     }),
 });
@@ -119,21 +119,21 @@ export const getResetPasswordValidation = (req) => ({
         token: Joi.string()
             .required()
             .messages({
-                "string.base": getMessage("validation.token_required", req),
+                "string.base": getMessage("validation.token_required"),
             }),
         password: Joi.string()
             .min(8)
             .required()
             .pattern(/(?=.*[a-z])/)
-            .message(getMessage("validation.password_lowercase", req))
+            .message(getMessage("validation.password_lowercase"))
             .pattern(/(?=.*[A-Z])/)
-            .message(getMessage("validation.password_uppercase", req))
+            .message(getMessage("validation.password_uppercase"))
             .pattern(/(?=.*\d)/)
-            .message(getMessage("validation.password_digit", req))
+            .message(getMessage("validation.password_digit"))
             .pattern(/(?=.*[@$!%*?&#])/)
-            .message(getMessage("validation.password_special", req))
+            .message(getMessage("validation.password_special"))
             .messages({
-                "string.min": getMessage("validation.password_min", req),
+                "string.min": getMessage("validation.password_min"),
             })
             .required(),
         passwordConfirmation: Joi.string()
@@ -154,7 +154,7 @@ export const checkEmailValidation = (req) => ({
             .required()
             .min(6)
             .messages({
-                "string.base": getMessage("validation.token_required", req),
+                "string.base": getMessage("validation.token_required"),
             }),
     }),
 });

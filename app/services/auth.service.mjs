@@ -10,7 +10,7 @@ export const registerUser = async (data, req, res) => {
     if (!role) {
         return res.respond(
             constants.BAD_REQUEST,
-            getMessage("errors.invalidRole", req)
+            getMessage("errors.invalidRole")
         );
     }
 

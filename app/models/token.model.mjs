@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { getMessage } from "../../config/i18nConfig.mjs";
+import APIError from "../../utils/errors.mjs";
+import constants from "../../utils/constants.mjs";
 
 const tokenSchema = new mongoose.Schema(
     {
@@ -35,23 +38,22 @@ tokenSchema.methods.toResource = function () {
 
 tokenSchema.pre("save", async function (next) {
     try {
-        const userId = this.userId;
         const existingTokensCount = await this.model("Token").countDocuments({
-            userId: userId,
+            userId: this.userId,
         });
 
         if (existingTokensCount >= 3) {
-            // Create a custom error and pass it to the next function
-            const error = new Error(
-                "You cannot have more than 3 active tokens"
-            );
+            const error = new APIError({
+                message: getMessage("errors.more_than_3_active_tokens"),
+                status: constants.BAD_REQUEST,
+            });
             error.status = 403;
             next(error); // Passing error to the next middleware
         } else {
             next(); // No error, proceed to save
         }
-    } catch (error) {
-        next(error); // If there's an error during the execution, pass it to the next middleware
+    } catch (err) {
+        next(err); // In case of an unexpected error, ensure it's handled
     }
 });
 
