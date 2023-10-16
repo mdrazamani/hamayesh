@@ -1,7 +1,5 @@
 import express from "express";
 import { handleFileUpload } from "../app/controllers/others/fileUploader.controller.mjs";
-import { dynamicValidate } from "../utils/validate.mjs";
-import { fileUploadValidation } from "../app/validations/uploader.validation.mjs";
 
 const router = express.Router();
 

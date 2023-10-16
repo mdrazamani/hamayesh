@@ -34,15 +34,24 @@ tokenSchema.methods.toResource = function () {
 };
 
 tokenSchema.pre("save", async function (next) {
-    const userId = this.userId; // 'this' refers to the token instance
+    try {
+        const userId = this.userId;
+        const existingTokensCount = await this.model("Token").countDocuments({
+            userId: userId,
+        });
 
-    if ((await this.model("Token").countDocuments({ userId: userId })) >= 3) {
-        // Throw an error if the user has 3 or more active tokens
-        const error = new Error("You cannot have more than 3 active tokens");
-        error.status = 403; // Forbidden status code
-        next(error);
-    } else {
-        next(); // Move on to the next middleware or save the document
+        if (existingTokensCount >= 3) {
+            // Create a custom error and pass it to the next function
+            const error = new Error(
+                "You cannot have more than 3 active tokens"
+            );
+            error.status = 403;
+            next(error); // Passing error to the next middleware
+        } else {
+            next(); // No error, proceed to save
+        }
+    } catch (error) {
+        next(error); // If there's an error during the execution, pass it to the next middleware
     }
 });
 

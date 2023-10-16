@@ -27,10 +27,11 @@ import fileUpload from "./config/fileUpload.mjs";
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
+
 dbconnect();
 app.use(sessionMiddleware);
 
-app.use(express.static("public"));
+app.use("/public", express.static("public"));
 
 app.use(fileUpload);
 
