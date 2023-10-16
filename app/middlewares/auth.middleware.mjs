@@ -7,14 +7,26 @@ import User from "../models/user.model.mjs";
 // Middleware for JWT Authentication
 export const authenticateJWT = async (req, res, next) => {
     try {
-        const apiToken = req.headers.authorization;
+        // Extract the token from the 'Authorization' header
+        const authHeader = req.headers.authorization;
 
-        if (!apiToken) {
+        if (!authHeader) {
             return res.respond(
                 constants.UNAUTHORIZED,
                 getMessage("errors.unauthorized", req)
             ); // 401 Unauthorized
         }
+
+        // Check if the Authorization type is Bearer
+        const authHeaderParts = authHeader.split(" ");
+        if (authHeaderParts.length !== 2 || authHeaderParts[0] !== "Bearer") {
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("errors.unauthorized", req)
+            ); // 400 Bad Request
+        }
+
+        const apiToken = authHeaderParts[1];
 
         const decoded = jwt.verify(apiToken, secret);
         const user = await User.findById(decoded.id).populate("role");

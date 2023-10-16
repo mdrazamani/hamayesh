@@ -12,7 +12,8 @@
         "something_went_wrong": "مشکلی پیش آمده است",
         "invalidToken": "کد وارد شده اشتباه است",
         "user_not_found": "کاربر مورد نظر وجود ندارد",
-        "email_not_verified": "حساب شما تأیید نشده است."
+        "email_not_verified": "حساب شما تأیید نشده است.",
+        "cannot_delete_self": "شما نمیتوانید کاربر خود را حذف کنید"
     },
     "validation": {
         "tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
@@ -41,7 +42,14 @@
         "lastName_max": "نام خانوادگی نباید بیشتر از 50 کاراکتر باشد",
         "phoneNumber_length": "شماره تلفن باید دقیقاً 11 رقم باشد",
         "profileImage_string": "تصویر پروفایل باید یک رشته باشد",
-        "email_required": "ایمیل الزامی است"
+        "email_required": "ایمیل الزامی است",
+        "page_number": "validation.page_number",
+        "page_integer": "validation.page_integer",
+        "page_min": "validation.page_min",
+        "pageSize_number": "validation.pageSize_number",
+        "pageSize_integer": "validation.pageSize_integer",
+        "pageSize_min": "validation.pageSize_min",
+        "pageSize_max": "validation.pageSize_max"
     },
     "success": {
         "success": "عملیات موفق آمیز بود",

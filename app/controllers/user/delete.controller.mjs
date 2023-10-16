@@ -4,9 +4,22 @@ import { deleteDoc } from "../../services/user.service.mjs";
 
 export const deleteController = async (req, res, next) => {
     try {
+        const userIdToDelete = req.params.id;
+        const authenticatedUserId = req.user.id; // Or however you get the authenticated user's ID
+
+        // Prevent users from deleting themselves
+        if (userIdToDelete === authenticatedUserId) {
+            return res.respond(
+                constants.BAD_REQUEST,
+                getMessage("errors.cannot_delete_self", req)
+            );
+        }
         const deleteRes = await deleteDoc(req.params.id, next);
         if (deleteRes)
-            res.respond(constants.OK, getMessage("success.success", req));
+            return res.respond(
+                constants.OK,
+                getMessage("success.success", req)
+            );
     } catch (error) {
         return next(error);
     }

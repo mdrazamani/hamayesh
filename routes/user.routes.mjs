@@ -40,7 +40,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/users:
+ * /api/v1/admin/users:
  *   post:
  *     tags: [Users]
  *     summary: Create a new user
@@ -68,7 +68,7 @@ router.post("/", dynamicValidate(getRegistrationSchema), createController);
 
 /**
  * @swagger
- * /api/v1/users/{id}:
+ * /api/v1/admin/users/{id}:
  *   delete:
  *     tags: [Users]
  *     summary: Delete a user
@@ -88,7 +88,7 @@ router.delete("/:id", deleteController);
 
 /**
  * @swagger
- * /api/v1/users:
+ * /api/v1/admin/users:
  *   get:
  *     tags: [Users]
  *     summary: Retrieve users
@@ -112,7 +112,7 @@ router.get("/", dynamicValidate(paginationValidation), indexController);
 
 /**
  * @swagger
- * /api/v1/users/{id}:
+ * /api/v1/admin/users/{id}:
  *   get:
  *     tags: [Users]
  *     summary: Retrieve a user
@@ -132,7 +132,7 @@ router.get("/:id", showController);
 
 /**
  * @swagger
- * /api/v1/users/{id}:
+ * /api/v1/admin/users/{id}:
  *   patch:
  *     tags: [Users]
  *     summary: Update a user

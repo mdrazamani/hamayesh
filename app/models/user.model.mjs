@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import Role from "./role.model.mjs";
+import Token from "./token.model.mjs";
 
 const userSchema = new mongoose.Schema(
     {
@@ -43,9 +44,30 @@ const userSchema = new mongoose.Schema(
         lastLoginAt: {
             type: Date,
         },
+        // In your User schema definition
+        deletedAt: {
+            type: Date, // or you can use 'default: null' if you want it to be explicitly set for active users
+            default: null,
+        },
     },
     { timestamps: true }
 );
+
+// Soft delete middleware
+userSchema.pre("remove", function (next) {
+    // Instead of removing, set 'deletedAt'
+    this.deletedAt = new Date();
+    // Save the current document and proceed
+    this.save(next);
+});
+
+// Query middleware to exclude soft-deleted users
+userSchema.pre(/^find/, function (next) {
+    // 'this' is an instance of mongoose.Query
+    this.find({ deletedAt: { $eq: null } });
+    next();
+});
+
 // user data resource
 userSchema.methods.toResource = function (api_token = null) {
     // another method
@@ -75,6 +97,19 @@ userSchema.pre("validate", async function (next) {
         }
     }
     next();
+});
+
+userSchema.post("save", async function (doc, next) {
+    try {
+        // Check if 'deletedAt' was set, indicating a soft delete operation
+        if (doc.deletedAt) {
+            // Delete the associated tokens
+            await Token.deleteMany({ userId: doc._id });
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
 // Hash the password before saving

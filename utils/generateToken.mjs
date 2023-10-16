@@ -3,16 +3,8 @@ import Token from "../app/models/token.model.mjs";
 import { secret } from "../config/index.mjs";
 // import bcrypt from "bcrypt";
 
-const checkToken = async (user) => {
-    await Token.deleteMany({
-        userId: user._id,
-        expiresAt: { $lt: new Date() },
-    });
-};
-
-export const generateTokens = async (user, req, res) => {
+export const generateTokens = async (user, req, res, next) => {
     //check token
-    await checkToken(user);
 
     const token = jwt.sign({ id: user._id, role: user.role.name }, secret, {
         expiresIn: "4h",
@@ -34,6 +26,6 @@ export const generateTokens = async (user, req, res) => {
         refreshToken,
         userId: user._id,
         expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000), //+ 7 * 24 * 60 * 60 * 1000
-    }).save({ req, res });
+    }).save();
     return { token, refreshToken };
 };

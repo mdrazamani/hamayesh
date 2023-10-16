@@ -6,7 +6,6 @@ export const paginationValidation = (req) => ({
         page: Joi.number()
             .integer()
             .min(1)
-            .required()
             .messages({
                 "number.base": getMessage("validation.page_number", req),
                 "number.integer": getMessage("validation.page_integer", req),
@@ -16,7 +15,6 @@ export const paginationValidation = (req) => ({
             .integer()
             .min(1)
             .max(100) // you might want to limit the page size to some reasonable maximum
-            .required()
             .messages({
                 "number.base": getMessage("validation.pageSize_number", req),
                 "number.integer": getMessage(

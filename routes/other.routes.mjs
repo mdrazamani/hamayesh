@@ -34,7 +34,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /upload:
+ * /api/v1/upload:
  *   post:
  *     tags: [FileUpload]
  *     description: Upload a file
@@ -55,6 +55,6 @@ const router = express.Router();
  *                   format: binary
  *                 description: The file(s) to upload
  */
-router.post("/upload", dynamicValidate(fileUploadValidation), handleFileUpload);
+router.post("/upload", handleFileUpload);
 
 export default router;
