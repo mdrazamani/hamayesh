@@ -1,7 +1,7 @@
 // userService.mjs
 
 import crudFactory from "../../utils/crudFactory.mjs";
-import User from "../models/user.model.mjs";
+import User, { getUsersWithStructure } from "../models/user.model.mjs";
 import Role from "../models/role.model.mjs";
 import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
@@ -33,6 +33,7 @@ export const getAllUsers = async (page, pageSize, query) => {
         ...query,
         deletedAt: null,
     });
+    // return getUsersWithStructure(page, pageSize);
 };
 
 export const deleteDoc = async (id, req) => {

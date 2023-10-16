@@ -44,7 +44,6 @@ const router = express.Router();
  *   post:
  *     tags: [Users]
  *     summary: Create a new user
- *     description: Create a new user with the provided information.
  *     parameters:
  *       - $ref: '#/components/parameters/AcceptLanguage'
  *       - $ref: '#/components/parameters/Authorization'
@@ -54,15 +53,34 @@ const router = express.Router();
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - phoneNumber
+ *               - password
+ *               - email
  *             properties:
- *               username:
+ *               firstName:
  *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The user's phone number
  *               password:
  *                 type: string
+ *                 description: The user's password
  *               email:
  *                 type: string
+ *                 description: The user's email
  *               role:
  *                 type: string
+ *                 description: The user's role (optional)
+ *               profileImage:
+ *                 type: string
+ *                 description: The user's profile image (optional)
  */
 router.post("/", dynamicValidate(getRegistrationSchema), createController);
 
@@ -108,7 +126,7 @@ router.delete("/:id", deleteController);
  *         description: Number of items per page
  */
 
-router.get("/", dynamicValidate(paginationValidation), indexController);
+router.get("/", /*dynamicValidate(paginationValidation),*/ indexController);
 
 /**
  * @swagger
