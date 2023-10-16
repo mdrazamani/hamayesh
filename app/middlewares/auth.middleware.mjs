@@ -6,67 +6,67 @@ import User from "../models/user.model.mjs";
 
 // Middleware for JWT Authentication
 export const authenticateJWT = async (req, res, next) => {
-  try {
-    const apiToken = req.headers.authorization;
+    try {
+        const apiToken = req.headers.authorization;
 
-    if (!apiToken) {
-      return res.respond(
-        constants.UNAUTHORIZED,
-        getMessage("errors.unauthorized", req)
-      ); // 401 Unauthorized
+        if (!apiToken) {
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("errors.unauthorized", req)
+            ); // 401 Unauthorized
+        }
+
+        const decoded = jwt.verify(apiToken, secret);
+        const user = await User.findById(decoded.id).populate("role");
+
+        if (!user) {
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("errors.unauthorized", req)
+            ); // 401 Unauthorized
+        }
+
+        // Check email verification status for non-exception routes
+        if (
+            !user.emailVerifiedAt &&
+            ![
+                "/email-verified-send",
+                "/email-verified-check",
+                "/verify-token",
+                "/logout",
+            ].includes(req.path)
+        ) {
+            return res.respond(
+                constants.EMAIL_VERIFICATION,
+                getMessage("errors.email_not_verified", req)
+            ); // 403 Forbidden
+        }
+
+        req.user = user; // Attach the user object to the request for further processing
+        next();
+    } catch (error) {
+        if (
+            error.name === "JsonWebTokenError" ||
+            error.name === "TokenExpiredError"
+        ) {
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("errors.unauthorized", req)
+            ); // 401 Unauthorized
+        }
+        next(error);
     }
-
-    const decoded = jwt.verify(apiToken, secret);
-    const user = await User.findById(decoded.id).populate("role");
-
-    if (!user) {
-      return res.respond(
-        constants.UNAUTHORIZED,
-        getMessage("errors.unauthorized", req)
-      ); // 401 Unauthorized
-    }
-
-    // Check email verification status for non-exception routes
-    if (
-      !user.emailVerifiedAt &&
-      ![
-        "/email-verified-send",
-        "/email-verified-check",
-        "/verify-token",
-        "/logout",
-      ].includes(req.path)
-    ) {
-      return res.respond(
-        constants.EMAIL_VERIFICATION,
-        getMessage("errors.email_not_verified", req)
-      ); // 403 Forbidden
-    }
-
-    req.user = user; // Attach the user object to the request for further processing
-    next();
-  } catch (error) {
-    if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
-    ) {
-      return res.respond(
-        constants.UNAUTHORIZED,
-        getMessage("errors.unauthorized", req)
-      ); // 401 Unauthorized
-    }
-    next(error);
-  }
 };
 
 // Middleware for Role-based Authorization
 export const authorizeRole = (...allowedRoles) => {
-  return (req, res, next) => {
-    if (req.user && !allowedRoles.includes(req.user.role.name)) {
-      return res.respond(
-        constants.FORBIDDEN,
-        getMessage("errors.forbidden", req)
-      ); // 403 Forbidden
-    }
-    next();
-  };
+    return (req, res, next) => {
+        if (req.user && !allowedRoles.includes(req.user.role.name)) {
+            return res.respond(
+                constants.FORBIDDEN,
+                getMessage("errors.forbidden", req)
+            ); // 403 Forbidden
+        }
+        next();
+    };
 };

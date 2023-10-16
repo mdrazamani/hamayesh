@@ -1,4 +1,4 @@
-import { uploadFile } from "../services/fileUpload.service.mjs";
+import { uploadFile } from "../../services/fileUpload.service.mjs";
 
 export const handleFileUpload = async (req, res, next) => {
     if (!req.files || Object.keys(req.files).length === 0) {
