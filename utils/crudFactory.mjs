@@ -9,27 +9,25 @@ import { QueryBuilder } from "./QueryBuilder.mjs";
 export default {
     getAll: (Model) => async (queryParams) => {
         try {
-            // Destructure page and pageSize from queryParams and provide default values if not present
             const { page = 1, pageSize = 10, ...otherParams } = queryParams;
 
-            // Create a new QueryBuilder instance. Here, we're passing an empty find query and the query parameters.
-            const queryBuilder = new QueryBuilder(Model, otherParams); // Assuming `User` is your Mongoose model.
+            const queryBuilder = new QueryBuilder(Model, otherParams, {
+                page,
+                pageSize,
+            });
 
-            // Apply the various query building methods for filtering, sorting, field selection, and pagination.
-            queryBuilder.filter().sort().limitFields().paginate(page, pageSize); // We assume your `paginate` method now accepts these parameters.
+            queryBuilder.filter().sort().limitFields().paginate();
 
-            // Execute the query to get the paginated results.
             const paginatedResults = await queryBuilder.query;
-            // Additionally, fetch the total number of documents matching the filter criteria.
+
             const totalDocuments = await queryBuilder.totalDocuments();
 
-            // Structure the response object, including the items and necessary pagination metadata.
             const response = {
-                items: paginatedResults, // The actual results.
-                total: totalDocuments, // Total number of matching documents.
-                pages: Math.ceil(totalDocuments / pageSize), // Total number of pages.
-                currentPage: page, // Current page number.
-                pageSize, // Number of results per page.
+                items: paginatedResults,
+                total: totalDocuments,
+                pages: Math.ceil(totalDocuments / pageSize),
+                currentPage: page,
+                pageSize,
             };
 
             return response;

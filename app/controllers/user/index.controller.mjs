@@ -6,12 +6,11 @@ export const indexController = async (req, res, next) => {
     try {
         const { page = 1, pageSize = 10, ...query } = req.query;
 
-        const users = await getAllUsers(
-            Number(page),
-            Number(pageSize),
-            query,
-            next
-        );
+        const users = await getAllUsers({
+            page: Number(page),
+            pageSize: Number(pageSize),
+            ...query,
+        });
         if (users)
             res.respond(constants.OK, getMessage("success.success"), users);
     } catch (error) {

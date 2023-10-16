@@ -1,9 +1,10 @@
 // QueryBuilder.js
 
 export class QueryBuilder {
-    constructor(query, queryString) {
+    constructor(query, queryString, options) {
         this.query = query;
         this.queryString = queryString;
+        this.options = options;
     }
 
     filter() {
@@ -13,7 +14,7 @@ export class QueryBuilder {
 
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(
-            /\b(gte|gt|lte|lt)\b/g,
+            /\b(gte|gt|lte|lt|eq)\b/g,
             (match) => `$${match}`
         );
 
@@ -45,18 +46,18 @@ export class QueryBuilder {
     }
 
     paginate() {
-        const page = this.queryString.page * 1 || 1;
-        const limit = this.queryString.limit * 1 || 100;
-        const skip = (page - 1) * limit;
+        const skip = (this.options.page - 1) * this.options.pageSize;
 
-        this.query = this.query.skip(skip).limit(limit);
-        this.originalQuery = this.query.find().merge(this.query);
+        this.query = this.query.skip(skip).limit(this.options.pageSize);
+        // this.originalQuery = this.query.find().merge(this.query);
 
         return this;
     }
 
     async totalDocuments() {
         // Since 'paginate' was called before, 'this.originalQuery' is the query before 'limit' and 'skip' were applied
-        return await this.originalQuery.countDocuments();
+        // return await this.originalQuery.countDocuments();
+
+        return await this.query.find().skip(0).limit().countDocuments();
     }
 }

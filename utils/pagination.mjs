@@ -4,10 +4,9 @@ import APIError from "./errors.mjs";
 
 export const paginate = async (Model, page = 1, pageSize = 10, query = {}) => {
     try {
-        console.log(query);
         const skip = (page - 1) * pageSize;
         const items = await Model.find(query).skip(skip).limit(pageSize);
-        const total = await Model.countDocuments(query);
+        const total = await Model.count(query);
 
         return {
             items,

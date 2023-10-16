@@ -28,11 +28,8 @@ export const get = async (id) => {
     return await crudFactory.get(User)(id);
 };
 
-export const getAllUsers = async (page, pageSize, query) => {
-    return await crudFactory.getAll(User)(page, pageSize, {
-        ...query,
-        deletedAt: null,
-    });
+export const getAllUsers = async (options) => {
+    return await crudFactory.getAll(User)(options);
     // return getUsersWithStructure(page, pageSize);
 };
 
