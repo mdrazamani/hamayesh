@@ -56,14 +56,6 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Soft delete middleware
-userSchema.pre("remove", function (next) {
-    // Instead of removing, set 'deletedAt'
-    this.deletedAt = new Date();
-    // Save the current document and proceed
-    this.save(next);
-});
-
 // Query middleware to exclude soft-deleted users
 userSchema.pre(/^find$/, function (next) {
     // 'this' is an instance of mongoose.Query

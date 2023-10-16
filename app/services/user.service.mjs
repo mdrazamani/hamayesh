@@ -1,10 +1,13 @@
+// userService.mjs
+
 import crudFactory from "../../utils/crudFactory.mjs";
 import User from "../models/user.model.mjs";
 import Role from "../models/role.model.mjs";
-import constants from "../../utils/constants.mjs";
+import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
+import constants from "../../utils/constants.mjs";
 
-export const create = async (data, next) => {
+export const create = async (data) => {
     const role = await Role.findOne({ name: data.role });
     if (!role) {
         // Using the unified response handler to send error response
@@ -14,16 +17,37 @@ export const create = async (data, next) => {
         );
     }
     data.role = { id: role._id, name: role.name };
-
-    return await crudFactory.create(User)(next)(data);
+    return await crudFactory.create(User)(data);
 };
 
-export const update = (id, data, next) =>
-    crudFactory.update(User)(next)(id, data);
+export const update = async (id, data) => {
+    return await crudFactory.update(User)(id, data);
+};
 
-export const get = (id, next) => crudFactory.get(User)(next)(id);
+export const get = async (id) => {
+    return await crudFactory.get(User)(id);
+};
 
-export const getAllUsers = (page, pageSize, query, next) =>
-    crudFactory.getAll(User)(next)(page, pageSize, query);
+export const getAllUsers = async (page, pageSize, query) => {
+    return await crudFactory.getAll(User)(page, pageSize, {
+        ...query,
+        deletedAt: null,
+    });
+};
 
-export const deleteDoc = (id, next) => crudFactory.delete(User)(next)(id);
+export const deleteDoc = async (id, req) => {
+    // Find the user first
+    const user = await User.findById(id);
+    if (!user) {
+        throw new APIError({
+            message: getMessage("errors.not_found", req),
+            status: constants.NOT_FOUND,
+        });
+    }
+
+    // Perform a soft delete by setting 'deletedAt'
+    user.deletedAt = new Date();
+    await user.save();
+
+    return user;
+};

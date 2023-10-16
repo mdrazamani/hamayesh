@@ -1,23 +1,24 @@
+// user.controller.mjs
+
 import { getMessage } from "../../../config/i18nConfig.mjs";
 import constants from "../../../utils/constants.mjs";
 import { deleteDoc } from "../../services/user.service.mjs";
 
 export const deleteController = async (req, res, next) => {
     try {
-        const userIdToDelete = req.params.id;
+        const { id: userIdToDelete } = req.params;
         const authenticatedUserId = req.user.id; // Or however you get the authenticated user's ID
 
-        // Prevent users from deleting themselves
         if (userIdToDelete === authenticatedUserId) {
             return res.respond(
                 constants.BAD_REQUEST,
                 getMessage("errors.cannot_delete_self")
             );
         }
-        const deleteRes = await deleteDoc(req.params.id, next);
-        if (deleteRes)
-            return res.respond(constants.OK, getMessage("success.success"));
+
+        await deleteDoc(userIdToDelete, req);
+        res.respond(constants.OK, getMessage("success.success")); // message is automatically handled based on status code
     } catch (error) {
-        return next(error);
+        next(error); // this error will be passed to your ConvertError handler
     }
 };
