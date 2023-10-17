@@ -3,7 +3,6 @@
 import { getMessage } from "../config/i18nConfig.mjs";
 import constants from "./constants.mjs";
 import APIError from "./errors.mjs";
-import { paginate } from "./pagination.mjs";
 import { QueryBuilder } from "./QueryBuilder.mjs";
 
 export default {
