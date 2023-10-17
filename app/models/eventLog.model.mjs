@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ACTION_TYPES = ["create", "update", "delete", "login", "logout"];
+const ACTION_TYPES = ["create", "update", "delete", "get"];
 
 const EventLogSchema = new mongoose.Schema(
     {
