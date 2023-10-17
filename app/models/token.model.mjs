@@ -35,15 +35,12 @@ tokenSchema.pre("save", async function (next) {
         });
 
         if (existingTokensCount >= 3) {
-            const error = new APIError({
+            throw new APIError({
                 message: getMessage("errors.more_than_3_active_tokens"),
                 status: constants.BAD_REQUEST,
             });
-            error.status = 403;
-            next(error); // Passing error to the next middleware
-        } else {
-            next(); // No error, proceed to save
         }
+        next(); // No error, proceed to save
     } catch (err) {
         next(err); // In case of an unexpected error, ensure it's handled
     }

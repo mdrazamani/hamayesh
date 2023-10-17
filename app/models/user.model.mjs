@@ -137,7 +137,7 @@ userSchema
     });
 
 // Method to generate or set the token
-userSchema.methods.generateAuthToken = async function () {
+userSchema.methods.generateAuthToken = async function (next) {
     const token = jwt.sign({ id: this._id, role: this.role.name }, secret, {
         expiresIn: "4h",
     });
@@ -154,10 +154,7 @@ userSchema.methods.generateAuthToken = async function () {
 
         return token;
     } catch (error) {
-        throw new APIError(
-            getMessage("errors.something_went_wrong"),
-            constants.INTERNAL_SERVER_ERROR
-        ); // Or handle it in a way that's appropriate for your application logic
+        next(error);
     }
 };
 

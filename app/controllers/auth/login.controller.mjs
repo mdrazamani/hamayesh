@@ -16,7 +16,7 @@ export const loginController = async (req, res, next) => {
             ); // 401 Unauthorized
         }
 
-        await user.generateAuthToken();
+        await user.generateAuthToken(next);
         // Using the unified response handler for success
         res.respond(constants.OK, getMessage("success.login.success"), user);
     } catch (error) {
