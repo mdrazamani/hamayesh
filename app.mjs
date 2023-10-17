@@ -22,6 +22,7 @@ import {
 import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
 import sessionMiddleware from "./config/session.mjs";
 import fileUpload from "./config/fileUpload.mjs";
+import { logEvent } from "./app/middlewares/eventLog.middleware.mjs";
 
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
@@ -110,7 +111,7 @@ app.get("/api-docs.json", (req, res) => {
 });
 
 app.use(unifiedResponseHandler);
-app.use("/api/v1", routes);
+app.use("/api/v1", logEvent, routes);
 app.use(ConvertError); // Make sure to use ConvertError before ErrorHandler in middleware stack
 app.use(ErrorHandler);
 

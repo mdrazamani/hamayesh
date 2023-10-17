@@ -19,7 +19,8 @@
 		"Invalid_role_name_provided": "نام نقش نامعتبر ارائه شده است",
 		"more_than_3_active_tokens": "شما در حال حاضر بیش از 3 بار ورود کرده اید!",
 		"not_found": "درخواست شما یافت نشد",
-		"deletion_failed": "errors.deletion_failed"
+		"deletion_failed": "errors.deletion_failed",
+		"isMainOrganize": "یک مورد اصلی یافت شد"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",

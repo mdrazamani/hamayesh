@@ -19,7 +19,8 @@
     "during_pagination": "Error during pagination",
     "File_pload_failed": "File upload failed",
     "Invalid_role_name_provided": "Invalid role name provided",
-    "more_than_3_active_tokens": "You cannot have more than 3 active tokens"
+    "more_than_3_active_tokens": "You cannot have more than 3 active tokens",
+	"isMainOrganize": "An original item was found"
 	},
 	"validation": {
 		"tokenExpired": "Password reset token has expired.",
