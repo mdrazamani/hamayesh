@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
         phoneNumber: {
             type: String,
             required: true,
+            unique: true,
         },
         password: {
             type: String,
@@ -30,6 +31,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             lowercase: true,
+            unique: true,
         },
         emailVerifiedAt: {
             type: Date,
@@ -42,7 +44,6 @@ const userSchema = new mongoose.Schema(
             },
             name: {
                 type: String,
-                required: true,
             },
         },
         profileImage: {
@@ -56,11 +57,46 @@ const userSchema = new mongoose.Schema(
             type: Date, // or you can use 'default: null' if you want it to be explicitly set for active users
             default: null,
         },
+        national_id: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        gender: {
+            type: String,
+            required: true,
+        },
+        study_field: {
+            type: String,
+            required: true,
+        },
+        degree: {
+            type: String,
+            required: true,
+        },
+        institute: {
+            type: String,
+            required: true,
+        },
+        state: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+        },
+        city: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "State",
+        },
     },
     { timestamps: true }
 );
 
-userSchema.index({ firstName: "text" }); // Add this if these are the fields you want to search within.
+userSchema.index({
+    firstName: "text",
+    email: "text",
+    lastName: "text",
+    phoneNumber: "text",
+}); // Add this if these are the fields you want to search within.
 
 // Query middleware to exclude soft-deleted users
 userSchema.pre(/^find/, function (next) {
@@ -124,6 +160,31 @@ userSchema.methods.generateAuthToken = async function () {
         ); // Or handle it in a way that's appropriate for your application logic
     }
 };
+
+userSchema.pre("save", async function (next) {
+    if (!this.role || !this.role.id) {
+        try {
+            // This is a schema-level middleware; 'this' refers to the document being saved.
+            const defaultRole = await Role.findOne({ name: "user" });
+
+            if (!defaultRole) {
+                throw new APIError(
+                    getMessage("errors.invalidRole"),
+                    constants.BAD_REQUEST
+                );
+            }
+
+            // Set the default role id and name
+            this.role = {
+                id: defaultRole._id,
+                name: defaultRole.name,
+            };
+        } catch (error) {
+            return next(error); // If there's an error, pass it to the next middleware
+        }
+    }
+    next(); // If there's no error, proceed to the next middleware or save operation
+});
 
 // Ensure the provided role name exists in the Role collection
 userSchema.pre("validate", async function (next) {

@@ -54,7 +54,17 @@
 		"pageSize_number": "validation.pageSize_number",
 		"pageSize_integer": "validation.pageSize_integer",
 		"pageSize_min": "validation.pageSize_min",
-		"pageSize_max": "validation.pageSize_max"
+		"pageSize_max": "validation.pageSize_max",
+		"national_id_invalid": "validation.national_id_invalid",
+		"national_id_required": "validation.national_id_required",
+		"gender_valid": "validation.gender_valid",
+		"gender_required": "validation.gender_required",
+		"study_field_required": "validation.study_field_required",
+		"degree_required": "validation.degree_required",
+		"institute_required": "validation.institute_required",
+		"country_required": "validation.country_required",
+		"state_required": "validation.state_required",
+		"city_required": "validation.city_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

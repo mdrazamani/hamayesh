@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { getMessage } from "../../config/i18nConfig.mjs";
+import constants from "../../utils/constants.mjs";
 
 export const getRegistrationSchema = (req) => ({
     body: Joi.object({
@@ -63,12 +64,6 @@ export const getRegistrationSchema = (req) => ({
                 "string.email": getMessage("validation.email_valid"),
                 "string.empty": getMessage("validation.email_required"), // Note: Add this key in your lang file
             }),
-        role: Joi.string()
-            .valid("user", "admin")
-            .optional()
-            .messages({
-                "any.only": getMessage("validation.role_valid"),
-            }),
         profileImage: Joi.string()
             .optional()
             .allow("")
@@ -77,6 +72,53 @@ export const getRegistrationSchema = (req) => ({
                     "validation.profileImage_string",
                     req
                 ),
+            }),
+        national_id: Joi.string()
+            .pattern(constants.iranianNationalIdRegex)
+            .required()
+            .messages({
+                "string.pattern.base": getMessage(
+                    "validation.national_id_invalid"
+                ),
+                "string.empty": getMessage("validation.national_id_required"),
+            }),
+
+        gender: Joi.string()
+            .valid("male", "female", "other")
+            .required()
+            .messages({
+                "any.only": getMessage("validation.gender_valid"),
+                "string.empty": getMessage("validation.gender_required"),
+            }),
+
+        study_field: Joi.string()
+            .required()
+            .messages({
+                "string.empty": getMessage("validation.study_field_required"),
+            }),
+
+        degree: Joi.string()
+            .required()
+            .messages({
+                "string.empty": getMessage("validation.degree_required"),
+            }),
+
+        institute: Joi.string()
+            .required()
+            .messages({
+                "string.empty": getMessage("validation.institute_required"),
+            }),
+
+        state: Joi.string()
+            .required()
+            .messages({
+                "string.empty": getMessage("validation.state_required"),
+            }),
+
+        city: Joi.string()
+            .required()
+            .messages({
+                "string.empty": getMessage("validation.city_required"),
             }),
     }).options({ abortEarly: false }),
 });

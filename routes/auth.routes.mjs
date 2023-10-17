@@ -78,6 +78,13 @@ const router = express.Router();
  *               - phoneNumber
  *               - password
  *               - email
+ *               - national_id
+ *               - gender
+ *               - study_field
+ *               - degree
+ *               - institute
+ *               - state
+ *               - city
  *             properties:
  *               firstName:
  *                 type: string
@@ -94,12 +101,30 @@ const router = express.Router();
  *               email:
  *                 type: string
  *                 description: The user's email
- *               role:
- *                 type: string
- *                 description: The user's role (optional)
  *               profileImage:
  *                 type: string
  *                 description: The user's profile image (optional)
+ *               national_id:
+ *                 type: string
+ *                 description: The user's national ID (now required)
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender (now required)
+ *               study_field:
+ *                 type: string
+ *                 description: Field of study (now required)
+ *               degree:
+ *                 type: string
+ *                 description: The user's degree (now required)
+ *               institute:
+ *                 type: string
+ *                 description: The user's educational institute (now required)
+ *               state:
+ *                 type: string
+ *                 description: The user's state (now required)
+ *               city:
+ *                 type: string
+ *                 description: The user's city (now required)
  */
 
 router.post(

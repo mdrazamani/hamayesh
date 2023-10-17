@@ -59,6 +59,14 @@ const router = express.Router();
  *               - phoneNumber
  *               - password
  *               - email
+ *               - national_id
+ *               - gender
+ *               - study_field
+ *               - degree
+ *               - institute
+ *               - country
+ *               - state
+ *               - city
  *             properties:
  *               firstName:
  *                 type: string
@@ -81,7 +89,32 @@ const router = express.Router();
  *               profileImage:
  *                 type: string
  *                 description: The user's profile image (optional)
+ *               national_id:
+ *                 type: string
+ *                 description: The user's national ID (now required)
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender (now required)
+ *               study_field:
+ *                 type: string
+ *                 description: Field of study (now required)
+ *               degree:
+ *                 type: string
+ *                 description: The user's degree (now required)
+ *               institute:
+ *                 type: string
+ *                 description: The user's educational institute (now required)
+ *               country:
+ *                 type: string
+ *                 description: The user's country (now required)
+ *               state:
+ *                 type: string
+ *                 description: The user's state (now required)
+ *               city:
+ *                 type: string
+ *                 description: The user's city (now required)
  */
+
 router.post("/", dynamicValidate(getRegistrationSchema), createController);
 
 /**
@@ -170,17 +203,59 @@ router.get("/:id", showController);
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - phoneNumber
+ *               - password
+ *               - email
+ *               - national_id
+ *               - gender
+ *               - study_field
+ *               - degree
+ *               - institute
+ *               - state
+ *               - city
  *             properties:
  *               firstName:
  *                 type: string
+ *                 description: The user's first name
  *               lastName:
  *                 type: string
+ *                 description: The user's last name
  *               phoneNumber:
  *                 type: string
+ *                 description: The user's phone number
+ *               password:
+ *                 type: string
+ *                 description: The user's password
  *               email:
  *                 type: string
+ *                 description: The user's email
  *               profileImage:
  *                 type: string
+ *                 description: The user's profile image (optional)
+ *               national_id:
+ *                 type: string
+ *                 description: The user's national ID (now required)
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender (now required)
+ *               study_field:
+ *                 type: string
+ *                 description: Field of study (now required)
+ *               degree:
+ *                 type: string
+ *                 description: The user's degree (now required)
+ *               institute:
+ *                 type: string
+ *                 description: The user's educational institute (now required)
+ *               state:
+ *                 type: string
+ *                 description: The user's state (now required)
+ *               city:
+ *                 type: string
+ *                 description: The user's city (now required)
  */
 
 router.patch("/:id", dynamicValidate(updateValidation), updateController);

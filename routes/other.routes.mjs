@@ -1,4 +1,9 @@
 import express from "express";
+import {
+    getAllCountries,
+    getAllSates,
+    getCitiesByState,
+} from "../app/controllers/others/country.controller.mjs";
 import { handleFileUpload } from "../app/controllers/others/fileUploader.controller.mjs";
 
 const router = express.Router();
@@ -54,5 +59,54 @@ const router = express.Router();
  *                 description: The file(s) to upload
  */
 router.post("/upload", handleFileUpload);
+
+/**
+ * @swagger
+ * /api/v1/countries:
+ *   get:
+ *     tags: [Countries]
+ *     summary: Retrieve a list of all countries
+ *     description: This endpoint retrieves a list of all countries.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+router.get("/countries", getAllCountries);
+
+/**
+ * @swagger
+ * /api/v1/states:
+ *   get:
+ *     tags: [States]
+ *     description: Retrieve a list of states by country
+ *     parameters:
+ *       - in: path
+ *         name: countryId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the country
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+router.get("/states", getAllSates); // Get states by country
+
+/**
+ * @swagger
+ * /api/v1/states/{stateId}/cities:
+ *   get:
+ *     tags: [Cities]
+ *     description: Retrieve a list of cities by state
+ *     parameters:
+ *       - in: path
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the state
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+router.get("/states/:stateId/cities", getCitiesByState); // Get cities by state
 
 export default router;

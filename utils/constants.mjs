@@ -37,4 +37,6 @@ export default {
     INVALID_CREDENTIALS: "Invalid Credentials, Please check and try again",
     EMAIL_EXIST: "Email is already in use by another account",
     INVALID_FILE_TYPE: "Invalid file type",
+
+    iranianNationalIdRegex: /^[1-9]\d{9}$/,
 };
