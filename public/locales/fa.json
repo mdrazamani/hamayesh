@@ -64,7 +64,19 @@
 		"institute_required": "validation.institute_required",
 		"country_required": "validation.country_required",
 		"state_required": "validation.state_required",
-		"city_required": "validation.city_required"
+		"city_required": "validation.city_required",
+		"name_min": "validation.name_min",
+		"name_max": "validation.name_max",
+		"name_required": "validation.name_required",
+		"logo_required": "validation.logo_required",
+		"supportType_invalid": "validation.supportType_invalid",
+		"link_format": "validation.link_format",
+		"isMain": "validation.isMain",
+		"title_required": "validation.title_required",
+		"description_required": "validation.description_required",
+		"question_required": "validation.question_required",
+		"response_required": "validation.response_required",
+		"items_required": "validation.items_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

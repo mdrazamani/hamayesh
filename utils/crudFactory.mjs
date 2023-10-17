@@ -65,11 +65,11 @@ export default {
         }
         return updatedEntity;
     },
-    delete: (Model) => async (id, req) => {
+    delete: (Model) => async (id) => {
         const deletedEntity = await Model.remove({ _id: id });
         if (!deletedEntity) {
             throw new APIError({
-                message: getMessage("errors.not_found", req),
+                message: getMessage("errors.not_found"),
                 status: constants.NOT_FOUND,
             });
         }

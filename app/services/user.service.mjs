@@ -32,12 +32,12 @@ export const getAllUsers = async (options) => {
     return await crudFactory.getAll(User)(options);
 };
 
-export const deleteDoc = async (id, req) => {
+export const deleteDoc = async (id) => {
     // Find the user first
     const user = await User.findById(id);
     if (!user) {
         throw new APIError({
-            message: getMessage("errors.not_found", req),
+            message: getMessage("errors.not_found"),
             status: constants.NOT_FOUND,
         });
     }

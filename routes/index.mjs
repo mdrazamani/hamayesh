@@ -2,6 +2,9 @@ import express from "express";
 import userRoutes from "./user.routes.mjs";
 import authRoutes from "./auth.routes.mjs";
 import otherRoutes from "./other.routes.mjs";
+import SupporterRoutes from "./supporter.routes.mjs";
+import OrganizerRoutes from "./organizer.routes.mjs";
+import QuestionRoutes from "./question.routes.mjs";
 
 import {
     authenticateJWT,
@@ -13,5 +16,9 @@ const router = express.Router();
 router.use("/", otherRoutes);
 router.use("/auth", authRoutes);
 router.use("/admin/users", authenticateJWT, authorizeRole("admin"), userRoutes);
+
+router.use("/supporters", SupporterRoutes);
+router.use("/organizers", OrganizerRoutes);
+router.use("/questions", QuestionRoutes);
 
 export default router;

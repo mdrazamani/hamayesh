@@ -2,7 +2,7 @@ import Joi from "joi";
 import { getMessage } from "../../config/i18nConfig.mjs";
 import constants from "../../utils/constants.mjs";
 
-export const updateValidation = (req) => ({
+export const updateValidation = () => ({
     body: Joi.object({
         firstName: Joi.string()
             .min(1)
@@ -10,10 +10,7 @@ export const updateValidation = (req) => ({
             .messages({
                 "string.min": getMessage("validation.firstName_min"),
                 "string.max": getMessage("validation.firstName_max"),
-                "string.empty": getMessage(
-                    "validation.first_name_required",
-                    req
-                ),
+                "string.empty": getMessage("validation.first_name_required"),
             }),
         lastName: Joi.string()
             .min(1)
@@ -21,22 +18,15 @@ export const updateValidation = (req) => ({
             .messages({
                 "string.min": getMessage("validation.lastName_min"),
                 "string.max": getMessage("validation.lastName_max"),
-                "string.empty": getMessage(
-                    "validation.last_name_required",
-                    req
-                ),
+                "string.empty": getMessage("validation.last_name_required"),
             }),
         phoneNumber: Joi.string()
             .pattern(/^09[0-9]{9}$/)
             .messages({
                 "string.pattern.base": getMessage(
-                    "validation.phone_number_format_invalid",
-                    req
+                    "validation.phone_number_format_invalid"
                 ),
-                "string.empty": getMessage(
-                    "validation.phone_number_required",
-                    req
-                ),
+                "string.empty": getMessage("validation.phone_number_required"),
             }),
         email: Joi.string()
             .email()
@@ -47,10 +37,7 @@ export const updateValidation = (req) => ({
             .optional()
             .allow("")
             .messages({
-                "string.base": getMessage(
-                    "validation.profileImage_string",
-                    req
-                ),
+                "string.base": getMessage("validation.profileImage_string"),
             }),
         national_id: Joi.string()
             .pattern(constants.iranianNationalIdRegex)

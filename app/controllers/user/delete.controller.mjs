@@ -16,7 +16,7 @@ export const deleteController = async (req, res, next) => {
             );
         }
 
-        await deleteDoc(userIdToDelete, req);
+        await deleteDoc(userIdToDelete);
         res.respond(constants.OK, getMessage("success.success")); // message is automatically handled based on status code
     } catch (error) {
         next(error); // this error will be passed to your ConvertError handler
