@@ -28,14 +28,6 @@ const tokenSchema = new mongoose.Schema(
     }
 );
 
-// token data resource
-tokenSchema.methods.toResource = function () {
-    return {
-        token: this.token,
-        expiresAt: this.expiresAt,
-    };
-};
-
 tokenSchema.pre("save", async function (next) {
     try {
         const existingTokensCount = await this.model("Token").countDocuments({

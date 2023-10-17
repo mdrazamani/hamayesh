@@ -32,10 +32,12 @@ export const verifyTokenController = async (req, res, next) => {
                 ); // 401 Unauthorized
             }
 
+            user.api_token = apiToken;
+
             return res.respond(
                 constants.OK,
                 getMessage("success.success"),
-                user.toResource(apiToken)
+                user
             );
         });
     } catch (error) {

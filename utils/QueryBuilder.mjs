@@ -1,21 +1,33 @@
-// QueryBuilder.js
+import sanitize from "mongo-sanitize"; // To prevent NoSQL injection
+import { getMessage } from "../config/i18nConfig.mjs";
+import constants from "./constants.mjs";
+import APIError from "./errors.mjs";
 
 export class QueryBuilder {
     constructor(Model, queryString, options) {
         this.query = Model.find();
-        this.Model = Model; // Store the Model for later queries
+        this.Model = Model;
         this.queryString = queryString;
         this.options = options;
     }
 
     async execute() {
-        // Ensure the query gets executed here.
-        return await this.query.exec(); // '.exec()' will trigger the query to run and fetch the results.
+        try {
+            return await this.query.exec();
+        } catch (error) {
+            // Implement proper error handling
+            console.error("Error executing query:", error);
+            throw new APIError(
+                getMessage("errors.executing_query"),
+                constants.BAD_REQUEST
+            );
+        }
     }
 
     filter() {
-        const queryObj = { ...this.queryString };
-        const excludedFields = ["page", "sort", "limit", "fields"];
+        // Sanitization and preparing filter conditions
+        const queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
+        const excludedFields = ["page", "sort", "limit", "fields", "search"];
         excludedFields.forEach((el) => delete queryObj[el]);
 
         let queryStr = JSON.stringify(queryObj);
@@ -24,67 +36,74 @@ export class QueryBuilder {
             (match) => `$${match}`
         );
 
-        const q = this.query.find(JSON.parse(queryStr)); // Initialized and assigned here.
-        this.query = this.query.merge(q);
+        const additionalFilters = JSON.parse(queryStr);
+        const currentFilters = this.query.getFilter();
 
+        // Ensure no sensitive fields can be queried, for example:
+        delete additionalFilters["sensitiveField1"];
+        delete additionalFilters["sensitiveField2"];
+
+        const combinedFilters = { ...currentFilters, ...additionalFilters };
+
+        this.query.find(combinedFilters);
         return this;
     }
 
     sort() {
-        let q; // Define the variable outside of the conditionals so it's in scope
-
         if (this.queryString.sort) {
-            const sortBy = this.queryString.sort.split(",").join(" ");
-            q = this.query.sort(sortBy); // sorts according to query parameters
+            // Validate and sanitize sort field to ensure it's a legitimate field
+            const sortBy = sanitize(this.queryString.sort.split(",").join(" ")); // Prevent NoSQL injection in sort field
+            this.query.sort(sortBy);
         } else {
-            q = this.query.sort("-createdAt"); // default sort when no parameter specified
+            this.query.sort("-createdAt");
         }
-
-        // Here, 'q' will be a valid query object because it's assigned in both branches above
-        this.query = this.query.merge(q); // No more ReferenceError
-
         return this;
     }
 
     limitFields() {
-        let q; // We define 'q' at the beginning of the method so it's available in this scope.
-
         if (this.queryString.fields) {
-            const fields = this.queryString.fields.split(",").join(" ");
-            q = this.query.select(fields); // If specific fields are provided, we limit to those.
+            // Validate and sanitize fields
+            const fields = sanitize(
+                this.queryString.fields.split(",").join(" ")
+            ); // Sanitize the fields input
+            this.query.select(fields);
         } else {
-            q = this.query.select("-__v"); // Otherwise, we exclude the "__v" field (a common practice with Mongoose).
+            this.query.select("-__v");
         }
-
-        // At this point, 'q' is a valid query object because it's been assigned in both branches above.
-        this.query = this.query.merge(q); // We merge 'q' into our main query.
-
-        return this; // By returning 'this', we allow for method chaining.
+        return this;
     }
 
     paginate() {
-        const skip = (this.options.page - 1) * this.options.pageSize;
-        const q = this.query.skip(skip).limit(this.options.pageSize); // Initialized and assigned here.
-        this.query = this.query.merge(q);
+        // Assuming options.page and options.pageSize are integers. If they come from user input, validate these as well.
+        const page = this.options.page > 0 ? this.options.page : 1; // Ensure page is a positive integer
+        const pageSize = this.options.pageSize > 0 ? this.options.pageSize : 10; // Ensure pageSize is a positive integer, and consider setting a maximum
+
+        const skip = (page - 1) * pageSize;
+        this.query = this.query.skip(skip).limit(pageSize);
 
         return this;
     }
+
     search() {
         if (this.queryString.search) {
-            // Constructing the text search query.
-            const searchQuery = { $text: { $search: this.queryString.search } };
-
-            console.log("Executing text search with query:", searchQuery);
-
-            // MongoDB will use the text index to perform this search.
+            const searchTerm = sanitize(this.queryString.search); // Sanitize search term
+            const searchQuery = { $text: { $search: searchTerm } };
             this.query = this.query.find(searchQuery);
         }
-
         return this;
     }
 
     async totalDocuments() {
-        // No need for the 'q' variable here as we are directly returning the result of an operation.
-        return await this.Model.countDocuments(this.query.getFilter());
+        return await this.Model.countDocuments(this.query.getFilter()).catch(
+            (error) => {
+                console.error("Error counting documents:", error);
+                throw new APIError(
+                    getMessage(
+                        "errors.counting_documents",
+                        constants.BAD_REQUEST
+                    )
+                );
+            }
+        );
     }
 }

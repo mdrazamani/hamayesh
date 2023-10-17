@@ -2,7 +2,6 @@
 
 import User from "../models/user.model.mjs";
 import Role from "../models/role.model.mjs";
-import { generateTokens } from "../../utils/generateToken.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
 
 export const registerUser = async (data, req, res) => {
@@ -23,7 +22,7 @@ export const registerUser = async (data, req, res) => {
     });
     await user.save();
 
-    const { token } = await generateTokens(user);
+    await user.generateAuthToken();
 
-    return user.toResource(token);
+    return user;    
 };

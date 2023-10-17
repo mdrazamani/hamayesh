@@ -5,6 +5,8 @@ import Token from "./token.model.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
 import APIError from "../../utils/errors.mjs";
 import constants from "../../utils/constants.mjs";
+import jwt from "jsonwebtoken";
+import { secret } from "../../config/index.mjs";
 
 const userSchema = new mongoose.Schema(
     {
@@ -18,7 +20,6 @@ const userSchema = new mongoose.Schema(
         },
         phoneNumber: {
             type: String,
-            unique: true,
             required: true,
         },
         password: {
@@ -28,7 +29,6 @@ const userSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
             lowercase: true,
         },
         emailVerifiedAt: {
@@ -60,34 +60,69 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-userSchema.index({ firstName: "text" });
+userSchema.index({ firstName: "text" }); // Add this if these are the fields you want to search within.
 
 // Query middleware to exclude soft-deleted users
 userSchema.pre(/^find/, function (next) {
-    // 'this' is an instance of mongoose.Query
-    // this.find({ deletedAt: { $eq: null } }).select("-password");
     this.find({ deletedAt: { $eq: null } });
     next();
 });
 
-// user data resource
-userSchema.methods.toResource = function (api_token = null) {
-    // another method
-    // const userObject = this.toObject();
-    // delete userObject.password;
-    // return userObject;
+userSchema.set("toJSON", {
+    virtuals: true, // ensures virtual fields are included
+    transform: (doc, converted) => {
+        delete converted.password; // removes this field from the response
+        delete converted._id; // if you also want to remove the _id field
+        delete converted.__v; // if you want to remove the version key
+        delete converted.deletedAt;
+        // conditionally add the api_token to the output if it exists
+        if (doc._api_token) {
+            converted.api_token = doc._api_token;
+        }
 
-    return {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        phoneNumber: this.phoneNumber,
-        email: this.email,
-        role: this.role.name,
-        emailVerifiedAt: this.emailVerifiedAt,
-        lastLoginAt: this.lastLoginAt,
-        api_token,
-        // Other fields...
-    };
+        if (converted.role && converted.role.name) {
+            // Replace 'role' object with just the role name
+            converted.role = converted.role.name;
+        }
+    },
+});
+
+// Add this within your userSchema definition
+
+userSchema
+    .virtual("api_token")
+    .get(function () {
+        // This value should be set using a method in the model. It does not persist in the database.
+        return this._api_token;
+    })
+    .set(function (value) {
+        // Temporary hold the value in the model instance
+        this._api_token = value;
+    });
+
+// Method to generate or set the token
+userSchema.methods.generateAuthToken = async function () {
+    const token = jwt.sign({ id: this._id, role: this.role.name }, secret, {
+        expiresIn: "4h",
+    });
+    // Here you can call the logic to generate a token
+    // You could use JWT or any other token generation logic you need
+
+    try {
+        await new Token({
+            token,
+            userId: this._id,
+            expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000), //+ 7 * 24 * 60 * 60 * 1000
+        }).save();
+        this.api_token = token; // setting the virtual field
+
+        return token;
+    } catch (error) {
+        throw new APIError(
+            getMessage("errors.something_went_wrong"),
+            constants.INTERNAL_SERVER_ERROR
+        ); // Or handle it in a way that's appropriate for your application logic
+    }
 };
 
 // Ensure the provided role name exists in the Role collection
@@ -127,56 +162,5 @@ userSchema.pre("save", async function (next) {
 });
 
 const User = mongoose.model("User", userSchema);
-
-export async function getUsersWithStructure(page = 1, pageSize = 10) {
-    try {
-        const skip = (page - 1) * pageSize;
-        // Define the aggregation pipeline
-        const pipeline = [
-            {
-                $match: { deletedAt: { $eq: null } }, // filtering out soft-deleted records
-            },
-            {
-                $lookup: {
-                    from: "roles", // assuming your roles collection is named "roles"
-                    localField: "role.id", // the field from your "users" collection
-                    foreignField: "_id", // the field from your "roles" collection (usually the primary key)
-                    as: "roleDetails", // the array where the joined data will be placed
-                },
-            },
-            {
-                $unwind: "$roleDetails", // removes the array shell, can cause issues if there are users without roles
-            },
-            {
-                $project: {
-                    // shaping the document structure
-                    _id: 0, // excluding the field "_id"
-                    firstName: 1, // including the field "firstName"
-                    lastName: 1, // including the field "lastName"
-                    phoneNumber: 1, // including the field "phoneNumber"
-                    email: 1, // including the field "email"
-                    role: "$roleDetails.name", // getting the role name from the looked-up document
-                    emailVerifiedAt: 1, // including the field "emailVerifiedAt"
-                    lastLoginAt: 1, // including the field "lastLoginAt"
-                    // if you have more fields, include them here
-                },
-            },
-        ];
-
-        // Execute the aggregation pipeline
-        const items = await User.aggregate(pipeline).skip(skip).limit(pageSize);
-        const total = await User.countDocuments({ deletedAt: { $eq: null } });
-        return {
-            items,
-            total,
-            pages: Math.ceil(total / pageSize),
-            currentPage: page,
-        };
-    } catch (err) {
-        // Handle the error properly
-        console.error(err);
-        throw err; // re-throwing or handling it as per your application's error handling logic
-    }
-}
 
 export default User;

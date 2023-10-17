@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import User from "../../models/user.model.mjs";
-import { generateTokens } from "../../../utils/generateToken.mjs";
 import constants from "../../../utils/constants.mjs";
 import { getMessage } from "../../../config/i18nConfig.mjs";
 
@@ -17,14 +16,9 @@ export const loginController = async (req, res, next) => {
             ); // 401 Unauthorized
         }
 
-        const { token } = await generateTokens(user);
-
+        await user.generateAuthToken();
         // Using the unified response handler for success
-        res.respond(
-            constants.OK,
-            getMessage("success.login.success"),
-            user.toResource(token)
-        );
+        res.respond(constants.OK, getMessage("success.login.success"), user);
     } catch (error) {
         next(error);
     }

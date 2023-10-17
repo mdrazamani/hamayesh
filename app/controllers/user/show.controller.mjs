@@ -6,11 +6,7 @@ export const showController = async (req, res, next) => {
     try {
         const user = await get(req.params.id, next);
         if (user)
-            res.respond(
-                constants.OK,
-                getMessage("success.success"),
-                user.toResource()
-            );
+            res.respond(constants.OK, getMessage("success.success"), user);
     } catch (error) {
         return next(error);
     }
