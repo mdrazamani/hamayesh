@@ -16,7 +16,7 @@ export default {
                 pageSize,
             });
 
-            queryBuilder.filter().sort().limitFields().paginate();
+            queryBuilder.filter().search().sort().limitFields().paginate();
 
             const paginatedResults = await queryBuilder.query;
 

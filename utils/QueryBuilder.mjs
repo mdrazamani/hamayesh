@@ -18,18 +18,19 @@ export class QueryBuilder {
             (match) => `$${match}`
         );
 
-        this.query = this.query.find(JSON.parse(queryStr));
-
+        const q = this.query.find(JSON.parse(queryStr));
+        this.query = this.query.find().merge(q);
         return this;
     }
 
     sort() {
         if (this.queryString.sort) {
             const sortBy = this.queryString.sort.split(",").join(" ");
-            this.query = this.query.sort(sortBy);
+            const q = this.query.sort(sortBy);
         } else {
-            this.query = this.query.sort("-createdAt");
+            const q = this.query.sort("-createdAt");
         }
+        this.query = this.query.find().merge(q);
 
         return this;
     }
@@ -37,10 +38,11 @@ export class QueryBuilder {
     limitFields() {
         if (this.queryString.fields) {
             const fields = this.queryString.fields.split(",").join(" ");
-            this.query = this.query.select(fields);
+            const q = this.query.select(fields);
         } else {
-            this.query = this.query.select("-__v");
+            const q = this.query.select("-__v");
         }
+        this.query = this.query.find().merge(q);
 
         return this;
     }
@@ -48,9 +50,21 @@ export class QueryBuilder {
     paginate() {
         const skip = (this.options.page - 1) * this.options.pageSize;
 
-        this.query = this.query.skip(skip).limit(this.options.pageSize);
-        // this.originalQuery = this.query.find().merge(this.query);
+        const q = this.query.skip(skip).limit(this.options.pageSize);
+        this.query = this.query.find().merge(q);
 
+        return this;
+    }
+
+    search() {
+        if (this.queryString.search) {
+            const textSearchQuery = {
+                $text: { $search: this.queryString.search },
+            };
+
+            const q = this.query.find(textSearchQuery);
+            this.query = this.query.find().merge(q);
+        }
         return this;
     }
 
