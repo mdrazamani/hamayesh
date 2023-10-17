@@ -5,8 +5,17 @@ import { deleteController } from "../app/controllers/question/delete.controller.
 import { indexController } from "../app/controllers/question/index.controller.mjs";
 import { showController } from "../app/controllers/question/show.controller.mjs";
 import { updateController } from "../app/controllers/question/update.controller.mjs";
-import { questionValidationSchema } from "../app/validations/question.validation.mjs";
+import {
+    addItemValidationSchema,
+    questionValidationSchema,
+    updateItemValidationSchema,
+} from "../app/validations/question.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    addNestedItemController,
+    deleteNestedItemController,
+    updateNestedItemController,
+} from "../app/controllers/question/question.controller.mjs";
 
 /**
  * @swagger
@@ -194,5 +203,116 @@ router.patch(
     dynamicValidate(questionValidationSchema),
     updateController
 );
+
+/**
+ * @swagger
+ * /api/v1/questions/{id}/items:
+ *   post:
+ *     tags: [Questions]
+ *     summary: Add a nested item to a question
+ *     description: Adds a new item to the specified question's items array.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the question to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: The question content.
+ *               response:
+ *                 type: string
+ *                 description: The response content.
+ *             required:
+ *               - question
+ *               - response
+ */
+router.post(
+    "/:id/items",
+    authenticateJWT,
+    dynamicValidate(addItemValidationSchema),
+    addNestedItemController
+);
+
+/**
+ * @swagger
+ * /api/v1/questions/{id}/items/{itemId}:
+ *   patch:
+ *     tags: [Questions]
+ *     summary: Update an item within a question
+ *     description: Updates an existing item in the specified question's items array.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the question to update.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         description: The ID of the item to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: The updated question content.
+ *               response:
+ *                 type: string
+ *                 description: The updated response content.
+ *             required:
+ *               - question
+ *               - response
+ */
+router.patch(
+    "/:id/items/:itemId",
+    authenticateJWT,
+    dynamicValidate(updateItemValidationSchema),
+    updateNestedItemController
+);
+
+/**
+ * @swagger
+ * /api/v1/questions/{id}/items/{itemId}:
+ *   delete:
+ *     tags: [Questions]
+ *     summary: Delete an item within a question
+ *     description: Deletes an existing item from the specified question's items array.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the question.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         description: The ID of the item to delete.
+ *         schema:
+ *           type: string
+ */
+router.delete("/:id/items/:itemId", deleteNestedItemController);
 
 export default router;

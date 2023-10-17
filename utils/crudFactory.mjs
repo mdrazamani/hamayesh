@@ -3,6 +3,11 @@
 import { getMessage } from "../config/i18nConfig.mjs";
 import constants from "./constants.mjs";
 import APIError from "./errors.mjs";
+import {
+    addNestedDocument,
+    deleteNestedDocument,
+    updateNestedDocument,
+} from "./nested.mjs";
 import { QueryBuilder } from "./QueryBuilder.mjs";
 
 export default {
@@ -66,7 +71,7 @@ export default {
         return updatedEntity;
     },
     delete: (Model) => async (id) => {
-        const deletedEntity = await Model.remove({ _id: id });
+        const deletedEntity = await Model.findByIdAndDelete(id);
         if (!deletedEntity) {
             throw new APIError({
                 message: getMessage("errors.not_found"),
@@ -74,5 +79,61 @@ export default {
             });
         }
         return deletedEntity;
+    },
+
+    addNested: (Model) => async (mainDocId, nestedField, itemData) => {
+        try {
+            const updatedDoc = await addNestedDocument(
+                Model,
+                mainDocId,
+                nestedField,
+                itemData
+            );
+            return updatedDoc;
+        } catch (error) {
+            throw new APIError({
+                message: getMessage("errors.update_failed"),
+                status: constants.BAD_REQUEST,
+                errors: error.message, // Include the original error message
+            });
+        }
+    },
+
+    updateNested:
+        (Model) => async (mainDocId, nestedField, itemId, itemData) => {
+            try {
+                const updatedDoc = await updateNestedDocument(
+                    Model,
+                    mainDocId,
+                    nestedField,
+                    itemId,
+                    itemData
+                );
+                return updatedDoc;
+            } catch (error) {
+                throw new APIError({
+                    message: getMessage("errors.update_failed"),
+                    status: constants.BAD_REQUEST,
+                    errors: error.message, // Include the original error message
+                });
+            }
+        },
+
+    deleteNested: (Model) => async (mainDocId, nestedField, itemId) => {
+        try {
+            const updatedDoc = await deleteNestedDocument(
+                Model,
+                mainDocId,
+                nestedField,
+                itemId
+            );
+            return updatedDoc;
+        } catch (error) {
+            throw new APIError({
+                message: getMessage("errors.deletion_failed"),
+                status: constants.BAD_REQUEST,
+                errors: error.message, // Include the original error message
+            });
+        }
     },
 };

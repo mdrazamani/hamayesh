@@ -18,7 +18,8 @@
 		"File_pload_failed": "آپلود فایل ناموفق بود!",
 		"Invalid_role_name_provided": "نام نقش نامعتبر ارائه شده است",
 		"more_than_3_active_tokens": "شما در حال حاضر بیش از 3 بار ورود کرده اید!",
-		"not_found": "درخواست شما یافت نشد"
+		"not_found": "درخواست شما یافت نشد",
+		"deletion_failed": "errors.deletion_failed"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",

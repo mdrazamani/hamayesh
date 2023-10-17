@@ -28,7 +28,6 @@ const QuestionSchema = new mongoose.Schema(
 
 QuestionSchema.set("toJSON", {
     transform: (doc, converted) => {
-        delete converted._id;
         delete converted.__v;
     },
 });

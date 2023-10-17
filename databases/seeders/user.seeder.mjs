@@ -31,8 +31,8 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            state: "Tehran",
-            city: "Tehran",
+            state: "ObjectId(6048700ec917be5bd82d3d64)",
+            city: "ObjectId(61bae70c9accd671e8246734)",
             deletedAt: null, // Assuming the user is active
         },
 
@@ -55,8 +55,8 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            state: "Tehran",
-            city: "Tehran",
+            state: "ObjectId(6048700ec917be5bd82d3d64)",
+            city: "ObjectId(61bae70c9accd671e8246734)",
             deletedAt: null, // Assuming the user is active
         },
         // ... other users
