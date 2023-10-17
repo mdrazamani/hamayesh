@@ -18,7 +18,7 @@ export default {
 
             queryBuilder.filter().search().sort().limitFields().paginate();
 
-            const paginatedResults = await queryBuilder.query;
+            const paginatedResults = await queryBuilder.execute();
 
             const totalDocuments = await queryBuilder.totalDocuments();
 

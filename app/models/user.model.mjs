@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        phoneNumber: { type: String, unique: true, required: true },
+        phoneNumber: {
+            type: String,
+            unique: true,
+            required: true,
+        },
         password: {
             type: String,
             required: true,
@@ -26,7 +30,6 @@ const userSchema = new mongoose.Schema(
             required: true,
             unique: true,
             lowercase: true,
-            index: true,
         },
         emailVerifiedAt: {
             type: Date,
@@ -57,7 +60,7 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-userSchema.index({ email: "text" });
+userSchema.index({ firstName: "text" });
 
 // Query middleware to exclude soft-deleted users
 userSchema.pre(/^find/, function (next) {
