@@ -35,6 +35,7 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
+            job: "engineer",
             state: state._id,
             city: city._id,
             deletedAt: null, // Assuming the user is active
@@ -59,6 +60,7 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
+            job: "engineer",
             state: state._id,
             city: city._id,
             deletedAt: null, // Assuming the user is active

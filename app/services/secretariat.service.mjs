@@ -14,11 +14,32 @@ export const updateSecretariat = async (id, data) => {
 };
 
 export const getSecretariat = async (id) => {
-    return await crudFactory.get(Secretariat)(id);
+    // Define population options for the 'users' field
+    const populateOptions = {
+        path: "users", // This time, we are populating 'users', not 'user'
+        select: "-__v", // excluding MongoDB's internal field '__v'
+    };
+
+    // Pass the populate options to the get method
+    return await crudFactory.get(Secretariat)(id, {
+        populate: populateOptions,
+    });
 };
 
 export const getAllSecretariats = async (options) => {
-    return await crudFactory.getAll(Secretariat)(options);
+    // Define population options for the 'users' field
+    const populateOptions = {
+        path: "users",
+        select: "-__v",
+    };
+
+    // Include population options in the parameters passed to the factory method
+    const modifiedOptions = {
+        ...options,
+        populate: populateOptions, // add populate here
+    };
+
+    return await crudFactory.getAll(Secretariat)(modifiedOptions);
 };
 
 export const deleteSecretariat = async (id) => {

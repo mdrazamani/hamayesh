@@ -27,7 +27,14 @@ export class QueryBuilder {
     filter() {
         // Sanitization and preparing filter conditions
         const queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
-        const excludedFields = ["page", "sort", "limit", "fields", "search"];
+        const excludedFields = [
+            "page",
+            "sort",
+            "limit",
+            "fields",
+            "search",
+            "populate",
+        ];
         excludedFields.forEach((el) => delete queryObj[el]);
 
         let queryStr = JSON.stringify(queryObj);
@@ -105,5 +112,13 @@ export class QueryBuilder {
                 );
             }
         );
+    }
+
+    populate() {
+        if (this.options.populate) {
+            const populateOptions = this.options.populate;
+            this.query = this.query.populate(populateOptions);
+        }
+        return this; // for method chaining
     }
 }

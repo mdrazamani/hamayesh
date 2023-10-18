@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import { getMessage } from "../../config/i18nConfig.mjs";
-import constants from "../../utils/constants.mjs";
-import APIError from "../../utils/errors.mjs";
+
 const secretariatType = ["academic", "executive", "policy", "conferance"];
 const secretariatSchema = new mongoose.Schema(
     {
@@ -22,8 +20,6 @@ const secretariatSchema = new mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // assuming 'User' is the model name for your userSchema
-                unique: true,
-                dropDups: true,
             },
         ],
         type: {
@@ -37,6 +33,12 @@ const secretariatSchema = new mongoose.Schema(
 );
 
 secretariatSchema.index({ title: "text" }); // example compound index
+
+secretariatSchema.set("toJSON", {
+    transform: (doc, converted) => {
+        delete converted.__v;
+    },
+});
 
 // Pre-save hook to execute before saving a new document
 secretariatSchema.pre("save", async function (next) {

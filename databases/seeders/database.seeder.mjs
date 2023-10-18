@@ -11,6 +11,7 @@ import { seedQuestions } from "./question.seeder.mjs";
 import { seedHamayeshDetail } from "./hamayeshDetail.seeder.mjs";
 import { seedAxie } from "./axie.seeder.mjs";
 import { seedSecretariats } from "./secretariats.seeder.mjs";
+import { seedSpeakers } from "./speakers.seeder.mjs";
 
 const seedDatabase = async () => {
     try {
@@ -20,6 +21,7 @@ const seedDatabase = async () => {
         await seedRoles();
         await seedUsers();
         await seedSecretariats();
+        await seedSpeakers();
         await seedOrganizers();
         await seedSupporters();
         await seedQuestions();

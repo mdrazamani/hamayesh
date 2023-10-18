@@ -13,17 +13,28 @@ import { QueryBuilder } from "./QueryBuilder.mjs";
 export default {
     getAll: (Model) => async (queryParams) => {
         try {
-            const { page = 1, pageSize = 10, ...otherParams } = queryParams;
+            const {
+                populate,
+                page = 1,
+                pageSize = 10,
+                ...otherParams
+            } = queryParams;
 
             const queryBuilder = new QueryBuilder(Model, otherParams, {
                 page,
                 pageSize,
+                populate, // pass populate here
             });
 
-            queryBuilder.filter().search().sort().limitFields().paginate();
+            queryBuilder
+                .filter()
+                .search()
+                .sort()
+                .limitFields()
+                .paginate()
+                .populate();
 
             // queryBuilder.search();
-
             const paginatedResults = await queryBuilder.execute();
 
             const totalDocuments = await queryBuilder.totalDocuments();
@@ -44,16 +55,35 @@ export default {
             });
         }
     },
-    get: (Model) => async (id) => {
-        const entity = await Model.findById(id);
-        if (!entity) {
-            throw new APIError({
-                message: getMessage("errors.not_found"),
-                status: constants.NOT_FOUND,
-            });
-        }
-        return entity;
-    },
+    get:
+        (Model) =>
+        async (id, options = {}) => {
+            try {
+                // Start with a basic query
+                let query = Model.findById(id);
+
+                // If there are populate options, apply them
+                if (options.populate) {
+                    query = query.populate(options.populate);
+                }
+
+                // Execute the query and get the result
+                const entity = await query.exec();
+
+                if (!entity) {
+                    throw new APIError({
+                        message: getMessage("errors.not_found"),
+                        status: constants.NOT_FOUND,
+                    });
+                }
+                return entity;
+            } catch (error) {
+                throw new APIError({
+                    message: error.message,
+                    status: error.status,
+                });
+            }
+        },
     create: (Model) => async (data) => {
         const entity = new Model(data);
         return await entity.save();
