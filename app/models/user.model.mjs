@@ -87,6 +87,39 @@ const userSchema = new mongoose.Schema(
             required: true,
             ref: "State",
         },
+
+        bio: {
+            type: String,
+        },
+
+        job: {
+            type: String,
+            required: true,
+        },
+
+        socials: {
+            facebook: {
+                type: String,
+                default: null, // assuming the link may not be provided
+            },
+            twitter: {
+                type: String,
+                default: null, // assuming the link may not be provided
+            },
+            linkedIn: {
+                type: String,
+                default: null, // assuming the link may not be provided
+            },
+            whatsapp: {
+                type: String,
+                default: null, // assuming the link may not be provided
+            },
+            telegram: {
+                type: String,
+                default: null, // assuming the link may not be provided
+            },
+            // add other platforms as needed
+        },
     },
     { timestamps: true }
 );

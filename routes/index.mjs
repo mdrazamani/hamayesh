@@ -5,6 +5,7 @@ import otherRoutes from "./other.routes.mjs";
 import SupporterRoutes from "./supporter.routes.mjs";
 import OrganizerRoutes from "./organizer.routes.mjs";
 import QuestionRoutes from "./question.routes.mjs";
+import Secretariat from "./secretariat.routes.mjs";
 
 import {
     authenticateJWT,
@@ -20,5 +21,6 @@ router.use("/admin/users", authenticateJWT, authorizeRole("admin"), userRoutes);
 router.use("/supporters", SupporterRoutes);
 router.use("/organizers", OrganizerRoutes);
 router.use("/questions", QuestionRoutes);
+router.use("/secretariats", Secretariat);
 
 export default router;

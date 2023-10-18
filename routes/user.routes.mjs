@@ -64,9 +64,9 @@ const router = express.Router();
  *               - study_field
  *               - degree
  *               - institute
- *               - country
  *               - state
  *               - city
+ *               - job // 'job' is now a required field
  *             properties:
  *               firstName:
  *                 type: string
@@ -84,38 +84,60 @@ const router = express.Router();
  *                 type: string
  *                 description: The user's email
  *               role:
- *                 type: string
- *                 description: The user's role (optional)
+ *                  type: string
+ *                  description: The name of the user's role
  *               profileImage:
  *                 type: string
  *                 description: The user's profile image (optional)
  *               national_id:
  *                 type: string
- *                 description: The user's national ID (now required)
+ *                 description: The user's national ID
  *               gender:
  *                 type: string
- *                 description: The user's gender (now required)
+ *                 description: The user's gender
  *               study_field:
  *                 type: string
- *                 description: Field of study (now required)
+ *                 description: Field of study
  *               degree:
  *                 type: string
- *                 description: The user's degree (now required)
+ *                 description: The user's degree
  *               institute:
  *                 type: string
- *                 description: The user's educational institute (now required)
- *               country:
- *                 type: string
- *                 description: The user's country (now required)
+ *                 description: The user's educational institute
  *               state:
  *                 type: string
- *                 description: The user's state (now required)
+ *                 description: The user's state
  *               city:
  *                 type: string
- *                 description: The user's city (now required)
+ *                 description: The user's city
+ *               job:
+ *                 type: string
+ *                 description: The user's current job (required)
+ *               bio:
+ *                 type: string
+ *                 description: A short bio about the user (optional)
+ *               socials:
+ *                 type: object // 'socials' is an object containing various social media links
+ *                 properties:
+ *                   facebook:
+ *                     type: string
+ *                     description: The user's Facebook profile URL (optional)
+ *                   twitter:
+ *                     type: string
+ *                     description: The user's Twitter profile URL (optional)
+ *                   linkedIn:
+ *                     type: string
+ *                     description: The user's LinkedIn profile URL (optional)
+ *                   whatsapp:
+ *                     type: string
+ *                     description: The user's WhatsApp number (optional)
+ *                   telegram:
+ *                     type: string
+ *                     description: The user's Telegram username (optional)
+ *                 description: Social media profiles of the user (optional)
  */
 
-router.post("/", dynamicValidate(getRegistrationSchema), createController);
+router.post("/", dynamicValidate(updateValidation), createController);
 
 /**
  * @swagger
@@ -216,6 +238,7 @@ router.get("/:id", showController);
  *               - institute
  *               - state
  *               - city
+ *               - job // 'job' is now a required field
  *             properties:
  *               firstName:
  *                 type: string
@@ -232,30 +255,58 @@ router.get("/:id", showController);
  *               email:
  *                 type: string
  *                 description: The user's email
+ *               role:
+ *                  type: string
+ *                  description: The name of the user's role
  *               profileImage:
  *                 type: string
  *                 description: The user's profile image (optional)
  *               national_id:
  *                 type: string
- *                 description: The user's national ID (now required)
+ *                 description: The user's national ID
  *               gender:
  *                 type: string
- *                 description: The user's gender (now required)
+ *                 description: The user's gender
  *               study_field:
  *                 type: string
- *                 description: Field of study (now required)
+ *                 description: Field of study
  *               degree:
  *                 type: string
- *                 description: The user's degree (now required)
+ *                 description: The user's degree
  *               institute:
  *                 type: string
- *                 description: The user's educational institute (now required)
+ *                 description: The user's educational institute
  *               state:
  *                 type: string
- *                 description: The user's state (now required)
+ *                 description: The user's state
  *               city:
  *                 type: string
- *                 description: The user's city (now required)
+ *                 description: The user's city
+ *               job:
+ *                 type: string
+ *                 description: The user's current job (required)
+ *               bio:
+ *                 type: string
+ *                 description: A short bio about the user (optional)
+ *               socials:
+ *                 type: object // 'socials' is an object containing various social media links
+ *                 properties:
+ *                   facebook:
+ *                     type: string
+ *                     description: The user's Facebook profile URL (optional)
+ *                   twitter:
+ *                     type: string
+ *                     description: The user's Twitter profile URL (optional)
+ *                   linkedIn:
+ *                     type: string
+ *                     description: The user's LinkedIn profile URL (optional)
+ *                   whatsapp:
+ *                     type: string
+ *                     description: The user's WhatsApp number (optional)
+ *                   telegram:
+ *                     type: string
+ *                     description: The user's Telegram username (optional)
+ *                 description: Social media profiles of the user (optional)
  */
 
 router.patch("/:id", dynamicValidate(updateValidation), updateController);

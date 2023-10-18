@@ -1,11 +1,16 @@
 import User from "../../app/models/user.model.mjs";
 import bcrypt from "bcrypt";
 import Role from "../../app/models/role.model.mjs";
+import State from "../../app/models/state.model.mjs";
+import City from "../../app/models/city.model.mjs";
 
 export const seedUsers = async () => {
     // First, find the 'user' and 'admin' roles in the database to use their IDs.
     const adminRole = await Role.findOne({ name: "admin" });
     const userRole = await Role.findOne({ name: "user" });
+
+    const userState = await State.findOne({ state: "البرز" });
+    const userCity = await City.findOne({ city: "کرج" });
 
     // If these roles are not found, you may need to seed them first or check your roles' seeder.
 
@@ -17,7 +22,7 @@ export const seedUsers = async () => {
             lastName: "Zamani",
             phoneNumber: "09108494221",
             password: await bcrypt.hash("Password123@", 10),
-            email: "mohammadreza@example.com", // changed to avoid confusion with 'john@example.com'
+            email: "mohsen.rezvani.rad33@gmail.com", // changed to avoid confusion with 'john@example.com'
             emailVerifiedAt: null, // or new Date() if the email is considered verified
             role: {
                 id: adminRole._id,
@@ -31,8 +36,9 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            state: "ObjectId(6048700ec917be5bd82d3d64)",
-            city: "ObjectId(61bae70c9accd671e8246734)",
+            state: userState._id,
+            city: userCity._id,
+            job: "engineer",
             deletedAt: null, // Assuming the user is active
         },
 
@@ -55,8 +61,9 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            state: "ObjectId(6048700ec917be5bd82d3d64)",
-            city: "ObjectId(61bae70c9accd671e8246734)",
+            job: "engineer",
+            state: userState._id,
+            city: userCity._id,
             deletedAt: null, // Assuming the user is active
         },
         // ... other users

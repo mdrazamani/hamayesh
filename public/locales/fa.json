@@ -20,7 +20,8 @@
 		"more_than_3_active_tokens": "شما در حال حاضر بیش از 3 بار ورود کرده اید!",
 		"not_found": "درخواست شما یافت نشد",
 		"deletion_failed": "errors.deletion_failed",
-		"isMainOrganize": "یک مورد اصلی یافت شد"
+		"isMainOrganize": "یک مورد اصلی یافت شد",
+		"secretariat_exists": "errors.secretariat_exists"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
@@ -78,7 +79,17 @@
 		"description_required": "validation.description_required",
 		"question_required": "validation.question_required",
 		"response_required": "validation.response_required",
-		"items_required": "validation.items_required"
+		"items_required": "validation.items_required",
+		"title_min": "validation.title_min",
+		"title_max": "validation.title_max",
+		"description_min": "validation.description_min",
+		"description_max": "validation.description_max",
+		"boss_min": "validation.boss_min",
+		"boss_max": "validation.boss_max",
+		"boss_required": "validation.boss_required",
+		"invalid_user_id": "validation.invalid_user_id",
+		"invalid_secretariat_type": "validation.invalid_secretariat_type",
+		"type_required": "validation.type_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

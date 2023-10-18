@@ -8,19 +8,19 @@ import { seedRoles } from "./role.seeder.mjs";
 import { seedSupporters } from "./supporter.seeder.mjs";
 import { seedOrganizers } from "./organizer.seeder.mjs";
 import { seedQuestions } from "./question.seeder.mjs";
+import { seedSecretariats } from "./secretariats.seeder.mjs";
 
 const seedDatabase = async () => {
     try {
         dbconnection();
 
         await seedRoles();
-        await seedUsers();
         await seedStates();
         await seedCity();
-
+        await seedUsers();
+        await seedSecretariats();
         await seedOrganizers();
         await seedSupporters();
-
         await seedQuestions();
 
         console.log("Database seeded successfully!");

@@ -1,7 +1,7 @@
 import express from "express";
 import routes from "./routes/index.mjs";
 import dbconnect from "./config/db.mjs";
-import { PORT } from "./config/index.mjs";
+import { Debug_mode, PORT } from "./config/index.mjs";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./config/swagger.mjs";
 import cookieParser from "cookie-parser";
@@ -54,7 +54,7 @@ app.options("*", cors());
 app.use(helmet());
 
 // Development logging
-if (process.env.NODE_ENV === "development") {
+if (Debug_mode === "development") {
     app.use(morgan("dev"));
 }
 
@@ -96,7 +96,7 @@ app.use(mongoSanitize());
 // Data sanitization against XSS
 app.use(xss());
 
-// Prevent parameter pollution
+    // Prevent parameter pollution
 app.use(hpp());
 
 app.use(compression());

@@ -4,11 +4,23 @@ export const seedRoles = async () => {
     const roles = [
         {
             name: "admin",
-            permissions: ["create", "update", "read", "delete"],
+            faName: "ادمین",
         },
         {
             name: "user",
-            permissions: ["read"],
+            faName: "کاربر",
+        },
+        {
+            name: "executive",
+            faName: "کاربر اجرایی",
+        },
+        {
+            name: "scientific",
+            faName: "کاربر علمی",
+        },
+        {
+            name: "referee",
+            faName: "داور",
         },
     ];
 
