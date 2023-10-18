@@ -9,9 +9,8 @@ export const seedUsers = async () => {
     const adminRole = await Role.findOne({ name: "admin" });
     const userRole = await Role.findOne({ name: "user" });
 
-    const userState = await State.findOne({ state: "البرز" });
-    const userCity = await City.findOne({ city: "کرج" });
-
+    const state = await State.findOne({ state: "البرز" });
+    const city = await City.findOne({ city: "کرج" });
     // If these roles are not found, you may need to seed them first or check your roles' seeder.
 
     // Define the users you want to seed into the database.
@@ -36,9 +35,8 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            state: userState._id,
-            city: userCity._id,
-            job: "engineer",
+            state: state._id,
+            city: city._id,
             deletedAt: null, // Assuming the user is active
         },
 
@@ -61,9 +59,8 @@ export const seedUsers = async () => {
             degree: "Master's",
             institute: "Institute of Technology",
             country: "Iran",
-            job: "engineer",
-            state: userState._id,
-            city: userCity._id,
+            state: state._id,
+            city: city._id,
             deletedAt: null, // Assuming the user is active
         },
         // ... other users

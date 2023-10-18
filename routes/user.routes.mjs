@@ -6,7 +6,6 @@ import { deleteController } from "../app/controllers/user/delete.controller.mjs"
 import { indexController } from "../app/controllers/user/index.controller.mjs";
 import { showController } from "../app/controllers/user/show.controller.mjs";
 import { updateController } from "../app/controllers/user/update.controller.mjs";
-import { paginationValidation } from "../app/validations/pagination.validation.mjs";
 import { updateValidation } from "../app/validations/user.validation.mjs";
 
 /**
@@ -181,7 +180,7 @@ router.delete("/:id", deleteController);
  *         description: Number of items per page
  */
 
-router.get("/", /*dynamicValidate(paginationValidation),*/ indexController);
+router.get("/", indexController);
 
 /**
  * @swagger

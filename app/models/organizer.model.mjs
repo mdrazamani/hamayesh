@@ -7,6 +7,7 @@ const OrganizerSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            unique: true,
         },
         logo: {
             type: String,
@@ -19,9 +20,49 @@ const OrganizerSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        details: {
+            address: {
+                state: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "State",
+                },
+                city: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "City",
+                },
+                address: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                },
+                longitude: {
+                    type: Number,
+                },
+                latitude: {
+                    type: Number,
+                },
+            },
+            description: {
+                type: String,
+            },
+            emails: [
+                {
+                    type: String,
+                },
+            ],
+            phoneNumbers: [
+                {
+                    type: String,
+                },
+            ],
+        },
     },
     { timestamps: true }
 );
+
+OrganizerSchema.index({
+    name: "text",
+});
 
 OrganizerSchema.set("toJSON", {
     transform: (doc, converted) => {

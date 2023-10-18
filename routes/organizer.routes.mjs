@@ -49,27 +49,60 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - name
- *               - logo
- *               - link
- *               - isMain
  *             properties:
- *         name:
- *           type: string
- *           description: The name of the Organizer.
- *         logo:
- *           type: string
- *           description: The logo URL of the Organizer.
- *         link:
- *           type: string
- *           description: A link associated with the Organizer (optional).
- *         isMain:
- *           type: boolean
- *           description: is main or not
+ *               name:
+ *                 type: string
+ *                 description: The name of the Organizer.
+ *               logo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The logo file for the Organizer.
+ *               link:
+ *                 type: string
+ *                 description: A link associated with the Organizer.
+ *               isMain:  # Ensure proper indentation for all nested properties
+ *                 type: boolean
+ *                 description: Whether or not the organizer is the main entity.
+ *               details:  # 'details' is a nested object, so its structure is also nested
+ *                 type: object
+ *                 properties:  # All properties of 'details' should be nested under 'properties'
+ *                   address:
+ *                     type: object
+ *                     properties:
+ *                       state:
+ *                         type: string
+ *                         description: State where the Organizer is located.
+ *                       city:
+ *                         type: string
+ *                         description: City where the Organizer is located.
+ *                       address:
+ *                         type: string
+ *                         description: Physical address of the Organizer.
+ *                       longitude:
+ *                         type: number
+ *                         format: float
+ *                         description: Geographical longitude of the Organizer's location.
+ *                       latitude:
+ *                         type: number
+ *                         format: float
+ *                         description: Geographical latitude of the Organizer's location.
+ *                   description:
+ *                     type: string
+ *                     description: A brief description of the Organizer.
+ *                   emails:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                       format: email
+ *                     description: List of email addresses for the Organizer.
+ *                   phoneNumbers:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: List of phone numbers for the Organizer.
  */
 router.post(
     "/",
@@ -152,31 +185,63 @@ router.get("/:id", showController);
  *     parameters:
  *       - $ref: '#/components/parameters/AcceptLanguage'
  *       - $ref: '#/components/parameters/Authorization'
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Organizer ID
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *         name:
- *           type: string
- *           description: The name of the Organizer.
- *         logo:
- *           type: string
- *           description: The logo URL of the Organizer.
- *         link:
- *           type: string
- *           description: A link associated with the Organizer (optional).
- *         isMain:
- *           type: boolean
- *           description: is main or not
+ *               name:
+ *                 type: string
+ *                 description: The name of the Organizer.
+ *               logo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The logo file for the Organizer.
+ *               link:
+ *                 type: string
+ *                 description: A link associated with the Organizer.
+ *               isMain:  # Ensure proper indentation for all nested properties
+ *                 type: boolean
+ *                 description: Whether or not the organizer is the main entity.
+ *               details:  # 'details' is a nested object, so its structure is also nested
+ *                 type: object
+ *                 properties:  # All properties of 'details' should be nested under 'properties'
+ *                   address:
+ *                     type: object
+ *                     properties:
+ *                       state:
+ *                         type: string
+ *                         description: State where the Organizer is located.
+ *                       city:
+ *                         type: string
+ *                         description: City where the Organizer is located.
+ *                       address:
+ *                         type: string
+ *                         description: Physical address of the Organizer.
+ *                       longitude:
+ *                         type: number
+ *                         format: float
+ *                         description: Geographical longitude of the Organizer's location.
+ *                       latitude:
+ *                         type: number
+ *                         format: float
+ *                         description: Geographical latitude of the Organizer's location.
+ *                   description:
+ *                     type: string
+ *                     description: A brief description of the Organizer.
+ *                   emails:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                       format: email
+ *                     description: List of email addresses for the Organizer.
+ *                   phoneNumbers:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: List of phone numbers for the Organizer.
  */
 
 router.patch(

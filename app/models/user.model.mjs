@@ -65,6 +65,7 @@ const userSchema = new mongoose.Schema(
         gender: {
             type: String,
             required: true,
+            enum: ["male", "female"],
         },
         study_field: {
             type: String,
@@ -81,6 +82,7 @@ const userSchema = new mongoose.Schema(
         state: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "City",
         },
         city: {
             type: mongoose.Schema.Types.ObjectId,

@@ -6,6 +6,8 @@ import SupporterRoutes from "./supporter.routes.mjs";
 import OrganizerRoutes from "./organizer.routes.mjs";
 import QuestionRoutes from "./question.routes.mjs";
 import Secretariat from "./secretariat.routes.mjs";
+import HamayeshDetailRoutes from "./hamayeshDetail.routes.mjs";
+import AxieRoutes from "./axie.routes.mjs";
 
 import {
     authenticateJWT,
@@ -22,5 +24,7 @@ router.use("/supporters", SupporterRoutes);
 router.use("/organizers", OrganizerRoutes);
 router.use("/questions", QuestionRoutes);
 router.use("/secretariats", Secretariat);
+router.use("/hamayesh-detail", HamayeshDetailRoutes);
+router.use("/axies", AxieRoutes);
 
 export default router;
