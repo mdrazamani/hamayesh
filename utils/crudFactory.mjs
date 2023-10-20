@@ -101,13 +101,18 @@ export default {
         return updatedEntity;
     },
     delete: (Model) => async (id) => {
-        const deletedEntity = await Model.findByIdAndDelete(id);
-        if (!deletedEntity) {
+        // Find the document
+        const entity = await Model.findById(id);
+        if (!entity) {
             throw new APIError({
                 message: getMessage("errors.not_found"),
                 status: constants.NOT_FOUND,
             });
         }
+
+        // Call .remove() on the instance, not on the model.
+        // This triggers the 'remove' middleware.
+        const deletedEntity = await entity.remove();
         return deletedEntity;
     },
 

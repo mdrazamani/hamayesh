@@ -97,7 +97,13 @@
 		"description_empty": "validation.description_empty",
 		"parent_invalid": "validation.parent_invalid",
 		"level_invalid": "validation.level_invalid",
-		"level_min": "validation.level_min"
+		"level_min": "validation.level_min",
+		"description_min": "validation.description_min",
+		"description_max": "validation.description_max",
+		"image_required": "validation.image_required",
+		"invalid_link": "validation.invalid_link",
+		"invalid_isActive": "validation.invalid_isActive",
+		"invalid_order": "validation.invalid_order"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
@@ -120,7 +126,9 @@
 		},
 		"verifytoken": {
 			"success": "success.verifytoken.success"
-		}
+		},
+		"deleted": "success.deleted",
+		"updated": "success.updated"
 	},
 	"errprs": {
 		"user_not_found": "errprs.user_not_found"
