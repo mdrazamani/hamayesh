@@ -8,6 +8,7 @@ import QuestionRoutes from "./question.routes.mjs";
 import Secretariat from "./secretariat.routes.mjs";
 import Speaker from "./speaker.routes.mjs";
 import Slider from "./slider.routes.mjs";
+import Gallery from "./gallery.routes.mjs";
 
 import HamayeshDetailRoutes from "./hamayeshDetail.routes.mjs";
 import AxieRoutes from "./axie.routes.mjs";
@@ -31,5 +32,6 @@ router.use("/hamayesh-detail", HamayeshDetailRoutes);
 router.use("/axies", AxieRoutes);
 router.use("/speakers", Speaker);
 router.use("/sliders", Slider);
+router.use("/galleries", Gallery);
 
 export default router;

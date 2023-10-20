@@ -21,7 +21,8 @@
 		"not_found": "درخواست شما یافت نشد",
 		"deletion_failed": "errors.deletion_failed",
 		"isMainOrganize": "یک مورد اصلی یافت شد",
-		"secretariat_exists": "errors.secretariat_exists"
+		"secretariat_exists": "errors.secretariat_exists",
+		"update_failed": "errors.update_failed"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
@@ -103,7 +104,10 @@
 		"image_required": "validation.image_required",
 		"invalid_link": "validation.invalid_link",
 		"invalid_isActive": "validation.invalid_isActive",
-		"invalid_order": "validation.invalid_order"
+		"invalid_order": "validation.invalid_order",
+		"category_required": "validation.category_required",
+		"slug_required": "validation.slug_required",
+		"path_required": "validation.path_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
@@ -128,7 +132,11 @@
 			"success": "success.verifytoken.success"
 		},
 		"deleted": "success.deleted",
-		"updated": "success.updated"
+		"updated": "success.updated",
+		"created": "success.created",
+		"imageAdded": "success.imageAdded",
+		"imageDeleted": "success.imageDeleted",
+		"imageUpdated": "success.imageUpdated"
 	},
 	"errprs": {
 		"user_not_found": "errprs.user_not_found"
