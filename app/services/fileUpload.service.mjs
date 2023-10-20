@@ -24,7 +24,6 @@ export const uploadFile = async (file, key) => {
 
         await file.mv(filePath);
         return {
-            objectName: key,
             status: "success",
             path: filePath,
             name: newFileName,

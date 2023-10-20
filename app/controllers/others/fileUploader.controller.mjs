@@ -1,3 +1,5 @@
+import { getMessage } from "../../../config/i18nConfig.mjs";
+import constants from "../../../utils/constants.mjs";
 import { uploadFile } from "../../services/fileUpload.service.mjs";
 
 export const handleFileUpload = async (req, res, next) => {
@@ -7,16 +9,32 @@ export const handleFileUpload = async (req, res, next) => {
 
     try {
         const files = req.files;
-        let uploadResults = [];
+        let Results = {}; // We will store our categories here
 
         for (const [key, file] of Object.entries(files)) {
-            const result = await uploadFile(file, key);
-            uploadResults.push(result);
-            console.log(uploadResults);
-        }
-        if (uploadResults.length == 1) uploadResults = uploadResults[0];
+            // We will store individual upload results in this array
+            let uploadResults = [];
 
-        res.status(200).json(uploadResults);
+            if (Array.isArray(file)) {
+                // If we're dealing with an array of files, we handle each file
+                for (const nestedFile of file) {
+                    const result = await uploadFile(nestedFile, key);
+                    uploadResults.push(result);
+                    Results[key] = uploadResults;
+                }
+            } else {
+                // If we're dealing with a single file, we handle it here
+                const result = await uploadFile(file, key);
+                uploadResults.push(result);
+                Results[key] = result;
+            }
+        }
+
+        return res.respond(
+            constants.CREATED,
+            getMessage("success.success"),
+            Results
+        );
     } catch (err) {
         next(err);
     }

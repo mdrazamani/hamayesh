@@ -84,6 +84,35 @@ export default {
                 });
             }
         },
+
+    getBySlug:
+        (Model) =>
+        async (slug, options = {}) => {
+            try {
+                let query = Model.findOne({ slug: slug });
+                // If there are populate options, apply them
+                if (options.populate) {
+                    query = query.populate(options.populate);
+                }
+
+                // Execute the query and get the result
+                const entity = await query.exec();
+
+                if (!entity) {
+                    throw new APIError({
+                        message: getMessage("errors.not_found"),
+                        status: constants.NOT_FOUND,
+                    });
+                }
+                return entity;
+            } catch (error) {
+                throw new APIError({
+                    message: error.message,
+                    status: error.status,
+                });
+            }
+        },
+
     create: (Model) => async (data) => {
         const entity = new Model(data);
         return await entity.save();

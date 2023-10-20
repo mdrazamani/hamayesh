@@ -13,6 +13,11 @@ import Gallery from "./gallery.routes.mjs";
 import HamayeshDetailRoutes from "./hamayeshDetail.routes.mjs";
 import AxieRoutes from "./axie.routes.mjs";
 
+import News from "./news.routes.mjs";
+import newsCategory from "./newsCategory.routes.mjs";
+import NewsComment from "./newsComment.routes.mjs";
+import NewsTag from "./newsTag.routes.mjs";
+
 import {
     authenticateJWT,
     authorizeRole,
@@ -33,5 +38,10 @@ router.use("/axies", AxieRoutes);
 router.use("/speakers", Speaker);
 router.use("/sliders", Slider);
 router.use("/galleries", Gallery);
+
+router.use("/news", News);
+router.use("/news-categories", newsCategory);
+router.use("/news-comments", NewsComment);
+router.use("/news-tags", NewsTag);
 
 export default router;
