@@ -1,7 +1,8 @@
 import crudFactory from "../../utils/crudFactory.mjs";
 import News from "../models/news.model.mjs";
 
-export const create = async (data) => {
+export const create = async (data, user) => {
+    if (user) data.writer = user._id;
     return await crudFactory.create(News)(data);
 };
 
@@ -46,7 +47,11 @@ export const getSlug = async (slug) => {
         },
     ];
 
-    return await crudFactory.getBySlug(News)(slug, {
+    const news = await crudFactory.getBySlug(News)(slug, {
         populate: populateOptions,
     });
+
+    //await update(news._id, { $inc: { visitNumber: 1 } });
+    update(news._id, { $inc: { visitNumber: 1 } });
+    return news;
 };

@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { validateAndTransformSlug } from "../../utils/slugValidation.mjs";
 
 export const newsCategoryValidationSchema = Joi.object({
     title: Joi.string().min(2).max(100).required().messages({
@@ -9,11 +10,16 @@ export const newsCategoryValidationSchema = Joi.object({
     }),
     description: Joi.string().allow("").optional(), // Since description is not marked as required in your Mongoose schema
     slug: Joi.string()
-        .pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) // A typical pattern for slugs (alphanumeric, hyphen-separated)
+        .min(1)
+        .max(200)
+        .custom(validateAndTransformSlug)
         .required()
         .messages({
-            "string.pattern.base": 'Slug must be valid. E.g., "a-valid-slug"',
-            "any.required": "Slug is a required field",
+            "string.empty": "Slug نمی‌تواند خالی باشد",
+            "string.min": "Slug باید حداقل شامل 1 کاراکتر باشد",
+            "string.max": "Slug نباید بیشتر از 200 کاراکتر داشته باشد",
+            "any.required": "وارد کردن Slug الزامی است",
+            "any.invalid": "Slug معتبر نیست",
         }),
     image: Joi.string()
         .uri() // Assuming you expect a URI for an image

@@ -7,6 +7,7 @@ import { showController } from "../app/controllers/news/newsComment/show.control
 import { updateController } from "../app/controllers/news/newsComment/update.controller.mjs";
 import { newsCommentValidationSchema } from "../app/validations/newsComment.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import { likeController } from "../app/controllers/news/newsComment/like.controller.mjs";
 
 /**
  * @swagger
@@ -205,5 +206,24 @@ router.patch(
     dynamicValidate(newsCommentValidationSchema),
     updateController
 );
+
+/**
+ * @swagger
+ * /api/v1/news-comments/like/{id}:
+ *   patch:
+ *     tags: [NewsComments]
+ *     summary: Like a NewsComment
+ *     description: Like NewsComment details.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: NewsComment ID
+ */
+router.patch("/like/:id", likeController);
 
 export default router;

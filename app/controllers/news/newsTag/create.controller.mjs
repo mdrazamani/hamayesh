@@ -4,7 +4,7 @@ import { create } from "../../../services/newsTag.service.mjs";
 
 export const createController = async (req, res, next) => {
     try {
-        const newsTag = await create(req.body, next);
+        const newsTag = await create(req.body);
         if (newsTag) res.respond(constants.OK, getMessage("success.success"));
     } catch (error) {
         next(error);

@@ -5,7 +5,7 @@ import { update } from "../../../services/newsTag.service.mjs";
 export const updateController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const newsTag = await update(id, req.body, next);
+        const newsTag = await update(id, req.body);
         if (newsTag)
             res.respond(constants.OK, getMessage("success.success"), newsTag);
     } catch (error) {

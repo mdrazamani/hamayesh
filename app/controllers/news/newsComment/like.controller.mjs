@@ -1,16 +1,16 @@
 import { getMessage } from "../../../../config/i18nConfig.mjs";
 import constants from "../../../../utils/constants.mjs";
-import { update } from "../../../services/newsCategory.service.mjs";
+import { update } from "../../../services/newsComment.service.mjs";
 
-export const updateController = async (req, res, next) => {
+export const likeController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const newsCategory = await update(id, req.body);
-        if (newsCategory)
+        const newsComment = await update(id, { $inc: { visitNumber: 1 } });
+        if (newsComment)
             res.respond(
                 constants.OK,
                 getMessage("success.success"),
-                newsCategory
+                newsComment
             );
     } catch (error) {
         return next(error);

@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { validateAndTransformSlug } from "../../utils/slugValidation.mjs";
 
 export const newsValidationSchema = () => ({
     body: Joi.object({
@@ -12,11 +13,16 @@ export const newsValidationSchema = () => ({
         //     .min(0) // Assuming you want a positive number, inclusive of 0
         //     .optional(),
         slug: Joi.string()
-            .pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) // Slug typically is alphanumeric lowercase with hyphens
+            .min(1)
+            .max(200)
+            .custom(validateAndTransformSlug)
             .required()
             .messages({
-                "string.pattern.base":
-                    'Slug must be valid. E.g., "a-valid-slug"',
+                "string.empty": "Slug نمی‌تواند خالی باشد",
+                "string.min": "Slug باید حداقل شامل 1 کاراکتر باشد",
+                "string.max": "Slug نباید بیشتر از 200 کاراکتر داشته باشد",
+                "any.required": "وارد کردن Slug الزامی است",
+                "any.invalid": "Slug معتبر نیست",
             }),
         // writer: Joi.string()
         //     .pattern(/^[0-9a-fA-F]{24}$/) // Validating as a 24-character hexadecimal (for ObjectId)

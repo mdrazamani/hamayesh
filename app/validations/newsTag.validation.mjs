@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { validateAndTransformSlug } from "../../utils/slugValidation.mjs";
 
 export const newsTagValidationSchema = Joi.object({
     title: Joi.string()
@@ -13,16 +14,15 @@ export const newsTagValidationSchema = Joi.object({
         }),
     slug: Joi.string()
         .min(1)
-        .max(200) // You may want to ensure the slug isn't too lengthy for URL purposes
-        .pattern(/^[a-zA-Z0-9_-]+$/) // Slugs are usually alphanumeric plus _ and -
+        .max(200)
+        .custom(validateAndTransformSlug)
         .required()
         .messages({
-            "string.pattern.base":
-                "Slug can only contain alphanumeric characters, underscores, and dashes",
-            "string.empty": "Slug is required",
-            "string.min": "Slug should not be empty",
-            "string.max": "Slug should have a maximum length of 200",
-            "any.required": "Slug is a required field",
+            "string.empty": "Slug نمی‌تواند خالی باشد",
+            "string.min": "Slug باید حداقل شامل 1 کاراکتر باشد",
+            "string.max": "Slug نباید بیشتر از 200 کاراکتر داشته باشد",
+            "any.required": "وارد کردن Slug الزامی است",
+            "any.invalid": "Slug معتبر نیست",
         }),
 }).options({ abortEarly: false }); // Gather all validation errors, not just the first one
 
