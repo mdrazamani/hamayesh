@@ -43,7 +43,7 @@ const NewsSchema = new mongoose.Schema(
         publishDate: {
             type: Date,
         },
-        SpecialDate: {
+        specialDate: {
             type: Date,
         },
     },

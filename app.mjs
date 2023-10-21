@@ -23,6 +23,7 @@ import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
 import sessionMiddleware from "./config/session.mjs";
 import fileUpload from "./config/fileUpload.mjs";
 import { logEvent } from "./app/middlewares/eventLog.middleware.mjs";
+import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
 
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
@@ -31,6 +32,13 @@ const app = express();
 
 dbconnect();
 app.use(sessionMiddleware);
+
+import { state } from "./utils/visits.mjs";
+resetAndSaveDailyVisits(state);
+app.use((req, res, next) => {
+    state.dailyVisits += 1;
+    next();
+});
 
 app.use("/public", express.static("public"));
 
@@ -96,7 +104,7 @@ app.use(mongoSanitize());
 // Data sanitization against XSS
 app.use(xss());
 
-    // Prevent parameter pollution
+// Prevent parameter pollution
 app.use(hpp());
 
 app.use(compression());

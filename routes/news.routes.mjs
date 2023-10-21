@@ -106,7 +106,7 @@ const router = express.Router();
  *                 format: date-time
  *                 description: The ISO 8601 formatted date time when the news was published.
  *                 example: "2023-10-20T08:00:00Z"
- *               SpecialDate:
+ *               specialDate:
  *                 type: string
  *                 format: date-time
  *                 description: Any special date associated with the news, formatted in ISO 8601.
@@ -256,7 +256,7 @@ router.get("/:slug", showController);
  *                 format: date-time
  *                 description: The ISO 8601 formatted date time when the news was published.
  *                 example: "2023-10-20T08:00:00Z"
- *               SpecialDate:
+ *               specialDate:
  *                 type: string
  *                 format: date-time
  *                 description: Any special date associated with the news, formatted in ISO 8601.

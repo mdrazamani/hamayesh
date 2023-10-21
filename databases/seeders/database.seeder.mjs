@@ -13,6 +13,7 @@ import { seedAxie } from "./axie.seeder.mjs";
 import { seedSecretariats } from "./secretariats.seeder.mjs";
 import { seedSpeakers } from "./speakers.seeder.mjs";
 import { seedNews } from "./news.seeder.mjs";
+import { seedDailyVisit } from "./dailyVisit.seeder.mjs";
 
 const seedDatabase = async () => {
     try {
@@ -28,6 +29,7 @@ const seedDatabase = async () => {
         await seedQuestions();
         await seedAxie();
         await seedNews();
+        await seedDailyVisit();
 
         await seedHamayeshDetail();
 

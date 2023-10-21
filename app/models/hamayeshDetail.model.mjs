@@ -47,68 +47,6 @@ const hamayeshDetailSchema = new mongoose.Schema(
                 type: Number,
             },
         },
-        // costs: [
-        //     {
-        //         type: {
-        //             type: String,
-        //             required: true,
-        //             enum: costTypes,
-        //         },
-        //         title: {
-        //             type: String,
-        //             required: true,
-        //         },
-        //         description: {
-        //             type: String,
-        //         },
-        //         price: {
-        //             type: Number,
-        //             required: true,
-        //         },
-        //         lastDate: {
-        //             type: Date,
-        //             required: true,
-        //         },
-        //     },
-        // ],
-        // importantAxes: [ *******************
-        //     {
-        //         title: {
-        //             type: String,
-        //             required: true,
-        //         },
-        //         description: {
-        //             type: String,
-        //         },
-        //         parent: {
-        //             type: Number,
-        //             default: 0,
-        //         },
-        //         level: {
-        //             type: Number,
-        //             default: 1,
-        //         },
-        //     },
-        // ],
-        // importantDates: [
-        //     {
-        //         type: {
-        //             type: string,
-        //             required: true,
-        //             enum: importantDatesTypes,
-        //         },
-        //         title: {
-        //             type: String,
-        //             required: true,
-        //         },
-        //         description: {
-        //             type: String,
-        //         },
-        //         data: {
-        //             type: Date,
-        //         },
-        //     },
-        // ],
     },
     { timestamps: true }
 );
@@ -120,6 +58,7 @@ hamayeshDetailSchema.set("toJSON", {
     },
 });
 
+//پیدا کردن بدون نیاز به id
 // we need to this............................................................................................................
 // hamayeshDetailSchema.pre(/^find/, function (next) {
 //     this.findOne();

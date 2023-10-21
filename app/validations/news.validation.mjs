@@ -48,6 +48,6 @@ export const newsValidationSchema = () => ({
         publishDate: Joi.date()
             .iso() // If you expect an ISO date string
             .optional(),
-        SpecialDate: Joi.date().iso().optional(),
+        specialDate: Joi.date().iso().optional(),
     }).options({ abortEarly: false }), // This will return all the errors found, not just the first one
 });

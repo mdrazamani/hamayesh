@@ -32,7 +32,7 @@ export const seedNews = async () => {
             tags: tagIds, // replace with actual tag IDs
             comments: commentIds, // the comment IDs from the created comments
             publishDate: new Date(),
-            SpecialDate: new Date(),
+            specialDate: new Date(),
         },
         // ... more news items
     ];

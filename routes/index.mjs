@@ -18,6 +18,8 @@ import newsCategory from "./newsCategory.routes.mjs";
 import NewsComment from "./newsComment.routes.mjs";
 import NewsTag from "./newsTag.routes.mjs";
 
+import DailyVisit from "./dailyVisit.routes.mjs";
+
 import {
     authenticateJWT,
     authorizeRole,
@@ -43,5 +45,7 @@ router.use("/news", News);
 router.use("/news-categories", newsCategory);
 router.use("/news-comments", NewsComment);
 router.use("/news-tags", NewsTag);
+
+router.use("/daily-visits", DailyVisit);
 
 export default router;
