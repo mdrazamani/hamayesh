@@ -51,5 +51,34 @@ export const hamayeshDetailValidationSchema = () => ({
                     "number.base": getMessage("validation.latitude_invalid"),
                 }),
         }).required(),
+
+        writingArticles: Joi.object({
+            description: Joi.string().allow("").optional(),
+            files: Joi.array()
+                .items(
+                    Joi.object({
+                        title: Joi.string().optional().allow(""),
+                        image: Joi.string().optional().allow(""),
+                        format: Joi.string()
+                            .valid("pdf", "doc", "sheet")
+                            .optional(),
+                        description: Joi.string().optional().allow(""),
+                    })
+                )
+                .optional(),
+        }).optional(),
+        dates: Joi.object({
+            start: Joi.date()
+                .required()
+                .messages({
+                    "date.base": getMessage("validation.start_required"),
+                }),
+            end: Joi.date().optional(),
+            startArticle: Joi.date().optional(),
+            endArticle: Joi.date().optional(),
+            refeeResult: Joi.date().optional(),
+            editArticle: Joi.date().optional(),
+            lastRegistration: Joi.date().optional(),
+        }).required(),
     }).options({ abortEarly: false }),
 });
