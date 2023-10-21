@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// const importantDatesTypes = [];
+const ArticleFormats = ["pdf", "doc", "sheet"];
 // const costTypes = ["register"];
 
 const hamayeshDetailSchema = new mongoose.Schema(
@@ -45,6 +45,52 @@ const hamayeshDetailSchema = new mongoose.Schema(
             },
             latitude: {
                 type: Number,
+            },
+        },
+        writingArticles: {
+            description: {
+                type: String,
+            },
+            files: [
+                {
+                    title: {
+                        type: String,
+                    },
+                    image: {
+                        type: String,
+                    },
+                    format: {
+                        type: String,
+                        enum: ArticleFormats,
+                    },
+                    description: {
+                        type: String,
+                    },
+                },
+            ],
+        },
+        dates: {
+            start: {
+                type: Date,
+                required: true,
+            },
+            end: {
+                type: Date,
+            },
+            startArticle: {
+                type: Date,
+            },
+            endArticle: {
+                type: Date,
+            },
+            refeeResult: {
+                type: Date,
+            },
+            editArticle: {
+                type: Date,
+            },
+            lastRegistration: {
+                type: Date,
             },
         },
     },
