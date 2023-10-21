@@ -63,13 +63,19 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               category:
  *                 type: string
  *                 description: Title of the gallery.
+ *               slug:
+ *                 type: string
+ *                 description: slug of the gallery.
+ *               isActive:
+ *                 type: boolean
+ *                 description: status of the gallery.
  *               description:
  *                 type: string
  *                 description: Detailed description of the gallery.
@@ -78,18 +84,20 @@ const router = express.Router();
  *                 items:
  *                   type: object
  *                   properties:
- *                     imageUrl:
+ *                     path:
  *                       type: string
  *                       description: URL of the image.
- *                     caption:
+ *                     title:
  *                       type: string
  *                       description: Caption for the image.
  *                 description: Can be a single image or an array of images.
  *             required:
- *               - title
- *               - description
+ *               - category
+ *               - slug
  *               - images
+ *               - isActive
  */
+
 router.post(
     "/",
     authenticateJWT,
@@ -106,6 +114,7 @@ router.post(
  *     parameters:
  *       - $ref: '#/components/parameters/AcceptLanguage'
  */
+
 router.get("/", getAllGalleriesController);
 
 /**
@@ -123,6 +132,7 @@ router.get("/", getAllGalleriesController);
  *           type: string
  *         description: Gallery ID
  */
+
 router.get("/:id", getGalleryController);
 
 /**
@@ -141,6 +151,7 @@ router.get("/:id", getGalleryController);
  *           type: string
  *         description: Gallery ID
  */
+
 router.delete("/:id", authenticateJWT, deleteGalleryController);
 
 /**
@@ -165,16 +176,32 @@ router.delete("/:id", authenticateJWT, deleteGalleryController);
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               category:
  *                 type: string
- *                 description: Updated title of the gallery.
+ *                 description: Title of the gallery.
+ *               slug:
+ *                 type: string
+ *                 description: slug of the gallery.
+ *               isActive:
+ *                 type: boolean
+ *                 description: status of the gallery.
  *               description:
  *                 type: string
- *                 description: Updated description of the gallery.
- *             required:
- *               - title
- *               - description
+ *                 description: Detailed description of the gallery.
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     path:
+ *                       type: string
+ *                       description: URL of the image.
+ *                     title:
+ *                       type: string
+ *                       description: Caption for the image.
+ *                 description: Can be a single image or an array of images.
  */
+
 router.patch(
     "/:id",
     authenticateJWT,
@@ -202,20 +229,21 @@ router.patch(
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               imageUrl:
+ *               path:
  *                 type: string
  *                 description: URL of the image.
- *               caption:
+ *               title:
  *                 type: string
  *                 description: Caption for the image.
  *             required:
- *               - imageUrl
- *               - caption
+ *               - path
+ *               - title
  */
+
 router.post(
     "/:galleryId/images",
     authenticateJWT,
@@ -251,16 +279,17 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *               imageUrl:
+ *               path:
  *                 type: string
  *                 description: Updated URL of the image.
- *               caption:
+ *               title:
  *                 type: string
  *                 description: Updated caption for the image.
  *             required:
  *               - imageUrl
  *               - caption
  */
+
 router.patch(
     "/:galleryId/images/:imageId",
     authenticateJWT,

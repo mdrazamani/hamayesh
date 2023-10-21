@@ -1,12 +1,12 @@
 import express from "express";
 import { dynamicValidate } from "../utils/validate.mjs";
-import { createController } from "../app/controllers/news/NewsTag/create.controller.mjs";
-import { deleteController } from "../app/controllers/news/NewsTag/delete.controller.mjs";
-import { indexController } from "../app/controllers/news/NewsTag/index.controller.mjs";
-import { showController } from "../app/controllers/news/NewsTag/show.controller.mjs";
-import { updateController } from "../app/controllers/news/NewsTag/update.controller.mjs";
 import { newsTagValidationSchema } from "../app/validations/newsTag.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import { createController } from "../app/controllers/news/newsComment/create.controller.mjs";
+import { deleteController } from "../app/controllers/news/newsTag/delete.controller.mjs";
+import { indexController } from "../app/controllers/news/newsTag/index.controller.mjs";
+import { showController } from "../app/controllers/news/newsTag/show.controller.mjs";
+import { updateController } from "../app/controllers/news/newsTag/update.controller.mjs";
 
 /**
  * @swagger
