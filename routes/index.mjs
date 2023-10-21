@@ -19,6 +19,11 @@ import NewsComment from "./newsComment.routes.mjs";
 import NewsTag from "./newsTag.routes.mjs";
 
 import DailyVisit from "./dailyVisit.routes.mjs";
+<<<<<<< Updated upstream
+import ArticleCategory from "./articleCategory.routes.mjs";
+import Article from "./article.routes.mjs";
+=======
+>>>>>>> Stashed changes
 
 import {
     authenticateJWT,
@@ -47,5 +52,10 @@ router.use("/news-comments", NewsComment);
 router.use("/news-tags", NewsTag);
 
 router.use("/daily-visits", DailyVisit);
+<<<<<<< Updated upstream
+router.use("/article-Categories", ArticleCategory);
+router.use("/articles", Article);
+=======
+>>>>>>> Stashed changes
 
 export default router;

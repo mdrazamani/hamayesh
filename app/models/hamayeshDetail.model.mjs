@@ -47,6 +47,7 @@ const hamayeshDetailSchema = new mongoose.Schema(
                 type: Number,
             },
         },
+<<<<<<< Updated upstream
         writingArticles: {
             description: {
                 type: String,
@@ -93,6 +94,8 @@ const hamayeshDetailSchema = new mongoose.Schema(
                 type: Date,
             },
         },
+=======
+>>>>>>> Stashed changes
     },
     { timestamps: true }
 );

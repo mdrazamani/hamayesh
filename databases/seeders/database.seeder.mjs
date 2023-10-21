@@ -14,6 +14,11 @@ import { seedSecretariats } from "./secretariats.seeder.mjs";
 import { seedSpeakers } from "./speakers.seeder.mjs";
 import { seedNews } from "./news.seeder.mjs";
 import { seedDailyVisit } from "./dailyVisit.seeder.mjs";
+<<<<<<< Updated upstream
+import { seedArticleCategory } from "./articleCategory.seeder.mjs";
+import { seedArticles } from "./article.seeder.mjs";
+=======
+>>>>>>> Stashed changes
 
 const seedDatabase = async () => {
     try {
@@ -30,8 +35,13 @@ const seedDatabase = async () => {
         await seedAxie();
         await seedNews();
         await seedDailyVisit();
+<<<<<<< Updated upstream
+=======
 
+>>>>>>> Stashed changes
         await seedHamayeshDetail();
+        await seedArticleCategory();
+        await seedArticles();
 
         console.log("Database seeded successfully!");
     } catch (error) {
