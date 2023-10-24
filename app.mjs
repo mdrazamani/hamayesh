@@ -20,7 +20,6 @@ import {
     unifiedResponseHandler,
 } from "./app/middlewares/response.middleware.mjs";
 import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
-import sessionMiddleware from "./config/session.mjs";
 import fileUpload from "./config/fileUpload.mjs";
 import { logEvent } from "./app/middlewares/eventLog.middleware.mjs";
 import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
@@ -31,7 +30,6 @@ import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
 const app = express();
 
 dbconnect();
-app.use(sessionMiddleware);
 
 import { state } from "./utils/visits.mjs";
 resetAndSaveDailyVisits(state);
@@ -54,7 +52,15 @@ app.set("view engine", "pug");
 app.set("views", createFilePath("./views"));
 
 // GLOBAL MIDDLEWARES
-app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:3011", // replace with your frontend's actual origin
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true, // required as part of the response
+        preflightContinue: false,
+        optionsSuccessStatus: 204, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    })
+);
 
 app.options("*", cors());
 

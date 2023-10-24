@@ -4,6 +4,7 @@ import { sendEmail } from "../../emails/verify.email.mjs";
 import crypto from "crypto";
 import pug from "pug";
 import { createPath } from "../../../config/tools.mjs";
+import Resetoken from "../../models/passwordReset.model.mjs";
 
 export const emailVerifiedSendController = async (req, res, next) => {
     try {
@@ -16,13 +17,11 @@ export const emailVerifiedSendController = async (req, res, next) => {
         }
 
         const token = crypto.randomInt(100000, 999999).toString();
-        const tokenExpiryTime = 3; // Set token validity period (in minutes)
-        const tokenExpiryTimestamp = new Date(
-            Date.now() + tokenExpiryTime * 60 * 1000
-        );
-        req.session.verifiedEmailToken = token;
-        req.session.tokenExpiryTimestamp = tokenExpiryTimestamp;
-        req.session.userId = user._id;
+        await Resetoken.create({
+            userId: user._id,
+            token,
+            type: "emailVerification",
+        }); // Save token in the collection
 
         const mailOptions = {
             to: user.email,
@@ -60,23 +59,23 @@ export const emailVerifiedCheckController = async (req, res, next) => {
         const user = req.user;
         const { token } = req.body;
 
-        if (
-            Date.now() > new Date(req.session.tokenExpiryTimestamp) ||
-            !req.session.verifiedEmailToken
-        ) {
-            delete req.session.verifiedEmailToken;
-            delete req.session.userId;
-            delete req.session.tokenExpiryTimestamp;
-            return res.respond(
-                constants.UNAUTHORIZED,
-                getMessage("validation.tokenExpired")
-            );
-        }
-
-        if (req.session.verifiedEmailToken !== token) {
+        const emailToken = await Resetoken.findOne({
+            token,
+            type: "emailVerification",
+        });
+        if (!emailToken) {
             return res.respond(
                 constants.UNAUTHORIZED,
                 getMessage("errors.invalidToken")
+            );
+        }
+
+        // Verify the token has not expired
+        if (Date.now() > emailToken.createdAt.getTime() + 3600000) {
+            // token is 1 hour valid
+            return res.respond(
+                constants.UNAUTHORIZED,
+                getMessage("validation.tokenExpired")
             );
         }
 
@@ -88,10 +87,11 @@ export const emailVerifiedCheckController = async (req, res, next) => {
         }
 
         user.emailVerifiedAt = Date.now();
-        delete req.session.verifiedEmailToken;
-        delete req.session.userId;
-
         await user.save();
+        await Resetoken.deleteMany({
+            userId: user._id,
+            type: "emailVerification",
+        });
 
         return res.respond(constants.OK, getMessage("success.success"));
     } catch (error) {

@@ -5,6 +5,7 @@ import { createPath } from "../../../config/tools.mjs";
 import constants from "../../../utils/constants.mjs";
 import { getMessage } from "../../../config/i18nConfig.mjs";
 import crypto from "crypto";
+import Resetoken from "../../models/passwordReset.model.mjs";
 
 export const forgetPasswordController = async (req, res, next) => {
     try {
@@ -17,13 +18,11 @@ export const forgetPasswordController = async (req, res, next) => {
         }
 
         const token = crypto.randomInt(100000, 999999).toString();
-        const tokenExpiryTime = 3; // Set token validity period (in minutes)
-        const tokenExpiryTimestamp = new Date(
-            Date.now() + tokenExpiryTime * 60 * 1000
-        );
-        req.session.passwordResetToken = token;
-        req.session.tokenExpiryTimestamp = tokenExpiryTimestamp;
-        req.session.userId = user._id;
+        await Resetoken.create({
+            userId: user._id,
+            token,
+            type: "passwordReset",
+        }); // save token in the separate collection
 
         const mailOptions = {
             to: user.email,
@@ -59,43 +58,34 @@ export const forgetPasswordController = async (req, res, next) => {
 export const resetPasswordController = async (req, res, next) => {
     try {
         const { token, password } = req.body;
+        const passwordResetToken = await Resetoken.findOne({
+            token,
+            type: "passwordReset",
+        });
 
         if (
-            Date.now() > new Date(req.session.tokenExpiryTimestamp) ||
-            !req.session.passwordResetToken
+            !passwordResetToken ||
+            Date.now() > passwordResetToken.createdAt.getTime() + 3600000
         ) {
-            delete req.session.passwordResetToken;
-            delete req.session.userId;
-            delete req.session.tokenExpiryTimestamp;
+            // token is 1 hour valid
             return res.respond(
                 constants.UNAUTHORIZED,
-                getMessage("validation.tokenExpired")
+                getMessage("errors.invalid_or_expired_token")
             );
         }
+        const user = await User.findById(passwordResetToken.userId);
 
-        if (req.session.passwordResetToken !== token) {
+        if (!user) {
             return res.respond(
                 constants.UNAUTHORIZED,
                 getMessage("errors.invalidToken")
             );
         }
 
-        const user = await User.findById(req.session.userId);
-
-        if (!user) {
-            return res.respond(
-                constants.UNAUTHORIZED,
-                getMessage("errors.unauthorized")
-            );
-        }
-
-        user.password = password;
-
+        user.password = password; // this should trigger the pre-save hook to hash the password
         await user.save();
 
-        // Invalidate the session or token
-        delete req.session.passwordResetToken;
-        delete req.session.userId;
+        await Resetoken.deleteMany({ userId: user._id }); // clean up used or expired tokens
 
         return res.respond(
             constants.OK,
