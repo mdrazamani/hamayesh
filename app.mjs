@@ -52,15 +52,7 @@ app.set("view engine", "pug");
 app.set("views", createFilePath("./views"));
 
 // GLOBAL MIDDLEWARES
-app.use(
-    cors({
-        origin: "http://localhost:3011", // replace with your frontend's actual origin
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        credentials: true, // required as part of the response
-        preflightContinue: false,
-        optionsSuccessStatus: 204, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    })
-);
+app.use(cors());
 
 app.options("*", cors());
 
