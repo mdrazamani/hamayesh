@@ -31,6 +31,7 @@ export const seedSpeakers = async () => {
         ];
 
         // Inserting the sample data into your database
+        await Speaker.deleteMany({});
         await Speaker.insertMany(speakers);
         console.log("Speakers seeded successfully!");
     } catch (error) {

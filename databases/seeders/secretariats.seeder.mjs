@@ -42,6 +42,7 @@ export const seedSecretariats = async () => {
         ];
 
         // Inserting the sample data into your database
+        await Secretariat.deleteMany({});
         await Secretariat.insertMany(secretariats);
         console.log("Secretariats seeded successfully!");
     } catch (error) {

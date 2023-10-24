@@ -1,8 +1,8 @@
-import Article from "../../app/models/article.model.mjs"; // Adjust the import path as necessary
-import User from "../../app/models/user.model.mjs";
-import ArticleCategory from "../../app/models/articleCategory.model.mjs";
+import Article from "../../../app/models/article.model.mjs"; // Adjust the import path as necessary
+import User from "../../../app/models/user.model.mjs";
+import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
 
-export const seedArticles = async () => {
+export const seedArticlesFA = async () => {
     // Assuming users and categories are already seeded and we just need to fetch them.
     // If not, you would need to create them similarly to the articles below.
 
@@ -23,24 +23,23 @@ export const seedArticles = async () => {
     // Create a list of sample articles
     const articlesData = [
         {
-            title: "Innovations in Renewable Energy",
-            description:
-                "A detailed look at new technology driving today's clean energy initiatives.",
+            title: "نوآوری‌ها در انرژی تجدیدپذیر",
+            description: "یک نگاه دقیق به فناوری‌های جدید در تحرکی نظیف امروز.",
             category: categories[0]._id, // Assign a category ID
             userId: users[0]._id, // Assign a user ID
             articleFiles: [
                 {
-                    title: "Research Paper",
+                    title: "مقاله تحقیقاتی",
                     mimetype: "application/pdf",
                     size: 400,
                 },
                 {
-                    title: "Data Charts",
+                    title: "نمودارهای داده",
                     mimetype: "image/png",
                     size: 250,
                 },
                 {
-                    title: "Experimental Data",
+                    title: "داده‌های تجربی",
                     mimetype: "application/zip",
                     size: 800,
                 },
@@ -48,37 +47,37 @@ export const seedArticles = async () => {
             ],
             presentationFiles: [
                 {
-                    title: "Slide Deck",
+                    title: "اسلاید دسته",
                     mimetype: "application/vnd.ms-powerpoint",
                     size: 1000,
                 },
                 {
-                    title: "Presentation Video",
+                    title: "ویدیوی پرزنتیشن",
                     mimetype: "video/mp4",
                     size: 1200,
                 },
                 // ... other files
             ],
-            status: "success", // or "pending", or "failed"
+            status: "success", // or "در انتظار", or "ناموفق"
             arbitration: {
                 refereeId: users[1]._id, // Assign another user as a referee
-                message: "All standards met.",
+                message: "تمامی استانداردها مورد تأیید قرار گرفته است.",
             },
         },
         {
-            title: "Advancements in Artificial Intelligence",
+            title: "پیشرفت‌های هوش مصنوعی",
             description:
-                "Exploring the latest AI breakthroughs and their real-world applications.",
+                "بررسی آخرین پیشرفت‌های هوش مصنوعی و کاربردهای واقعی آن‌ها.",
             category: categories[0]._id,
             userId: users[1]._id,
             articleFiles: [
                 {
-                    title: "Research Paper",
+                    title: "مقاله تحقیقاتی",
                     mimetype: "application/pdf",
                     size: 350,
                 },
                 {
-                    title: "AI Code Samples",
+                    title: "نمونه‌های کد هوش مصنوعی",
                     mimetype: "text/plain",
                     size: 600,
                 },
@@ -86,7 +85,7 @@ export const seedArticles = async () => {
             ],
             presentationFiles: [
                 {
-                    title: "AI Demo Slides",
+                    title: "اسلایدهای دموی هوش مصنوعی",
                     mimetype: "application/vnd.ms-powerpoint",
                     size: 800,
                 },
@@ -95,18 +94,17 @@ export const seedArticles = async () => {
             status: "success",
             arbitration: {
                 refereeId: users[0]._id,
-                message: "Well-researched and insightful content.",
+                message: "محتوای مطالعاتی با کیفیت و تحقیقات دقیق.",
             },
         },
         {
-            title: "Healthcare Innovations: Telemedicine",
-            description:
-                "The rise of telemedicine and its impact on modern healthcare.",
+            title: "نوآوری‌های بهداشت: پزشکی از راه دور",
+            description: "صعود پزشکی از راه دور و تأثیر آن در بهداشت مدرن.",
             category: categories[1]._id,
             userId: users[0]._id,
             articleFiles: [
                 {
-                    title: "Research Paper",
+                    title: "مقاله تحقیقاتی",
                     mimetype: "application/pdf",
                     size: 450,
                 },
@@ -114,7 +112,7 @@ export const seedArticles = async () => {
             ],
             presentationFiles: [
                 {
-                    title: "Telemedicine Case Studies",
+                    title: "مطالعات موردی پزشکی از راه دور",
                     mimetype: "application/vnd.ms-powerpoint",
                     size: 950,
                 },
@@ -123,7 +121,7 @@ export const seedArticles = async () => {
             status: "pending",
             arbitration: {
                 refereeId: users[0]._id,
-                message: "Awaiting additional data for review.",
+                message: "منتظر داده‌های اضافی برای بررسی هستیم.",
             },
         },
         // ... more sample articles
@@ -133,9 +131,9 @@ export const seedArticles = async () => {
     try {
         await Article.deleteMany({});
         await Article.insertMany(articlesData);
-        console.log("Articles seeded successfully!");
+        console.log("مقالات با موفقیت seed شدند!");
     } catch (error) {
-        console.error("Error seeding articles:", error);
+        console.error("خطا در seed کردن مقالات:", error);
     }
 };
 

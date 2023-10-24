@@ -1,4 +1,3 @@
-// Importing the necessary model
 import NewsCategory from "../../app/models/newsCategory.model.mjs";
 
 export const seedNewsCategories = async () => {
@@ -8,29 +7,30 @@ export const seedNewsCategories = async () => {
             title: "Technology",
             description: "All about the latest technology",
             slug: "technology",
-            image: "test11",
+            image: "tech-image-url",
             level: 1,
         },
         {
             title: "Health",
             description: "Covering health and wellness topics",
             slug: "health",
-            image: "test22",
+            image: "health-image-url",
             level: 1,
         },
         {
             title: "Sports",
             description: "Latest news in the sports industry",
             slug: "sports",
-            image: "test33",
+            image: "sports-image-url",
             level: 1,
         },
-        // add more parent categories as needed...
+        // Add more parent categories as needed...
     ];
 
     let createdCategories;
 
     try {
+        await NewsCategory.deleteMany({});
         // Insert parent categories into the database and retrieve them with their generated IDs
         const createdParentCategories = await NewsCategory.insertMany(
             parentCategories
@@ -47,27 +47,27 @@ export const seedNewsCategories = async () => {
                 title: "Artificial Intelligence",
                 description: "Advancements in AI",
                 slug: "artificial-intelligence",
-                parent: parentIds[0], // assuming this is "Technology"
-                image: "test11",
+                parent: parentIds[0], // Referring to "Technology"
+                image: "ai-image-url",
                 level: 2,
             },
             {
                 title: "Nutrition",
                 description: "Healthy eating tips and news",
                 slug: "nutrition",
-                parent: parentIds[1], // assuming this is "Health"
-                image: "test2",
+                parent: parentIds[1], // Referring to "Health"
+                image: "nutrition-image-url",
                 level: 2,
             },
             {
                 title: "Football",
                 description: "Updates on local and international football",
                 slug: "football",
-                parent: parentIds[2], // assuming this is "Sports"
-                image: "test3",
+                parent: parentIds[2], // Referring to "Sports"
+                image: "football-image-url",
                 level: 2,
             },
-            // add more child categories as needed, referencing the appropriate parent...
+            // Add more child categories as needed, referencing the appropriate parent...
         ];
 
         // Insert child categories into the database

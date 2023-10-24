@@ -8,6 +8,7 @@ export const seedDailyVisit = async () => {
     });
     try {
         // Insert the seed data into the database
+        await DailyVisit.deleteMany({});
         await DailyVisit.insertMany(visitsData);
         console.log("Daily visits data has been successfully seeded.");
     } catch (error) {

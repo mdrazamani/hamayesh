@@ -1,18 +1,19 @@
 import i18n from "i18n";
+import { Language } from "./index.mjs";
 
 const languages = ["en", "fa"];
 
 i18n.configure({
     locales: languages,
     directory: "./public/locales",
-    defaultLocale: "fa",
+    defaultLocale: Language,
     objectNotation: true,
     register: global,
     header: "accept-language",
 });
 
 export const setLocaleMiddleware = (req, res, next) => {
-    const lang = req.headers["accept-language"] || "fa";
+    const lang = req.headers["accept-language"] || Language;
 
     // Check if the specified language is supported, if not, fall back to default
     if (!languages.includes(lang)) {

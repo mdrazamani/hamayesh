@@ -55,7 +55,7 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - title
- *               - categoryId
+ *               - category
  *               - userId
  *             properties:
  *               title:
@@ -67,7 +67,7 @@ const router = express.Router();
  *                 type: string
  *                 nullable: true
  *                 description: An optional detailed description of the article. This field can be null or contain an empty string.
- *               categoryId:
+ *               category:
  *                 type: string
  *                 format: uuid
  *                 description: The ObjectId of the category to which the article belongs. It must be a string of 24 hexadecimal characters.
@@ -211,7 +211,7 @@ router.get("/:id", showController);
  *             type: object
  *             required:
  *               - title
- *               - categoryId
+ *               - category
  *               - userId
  *             properties:
  *               title:
@@ -223,7 +223,7 @@ router.get("/:id", showController);
  *                 type: string
  *                 nullable: true
  *                 description: An optional detailed description of the article. This field can be null or contain an empty string.
- *               categoryId:
+ *               category:
  *                 type: string
  *                 format: uuid
  *                 description: The ObjectId of the category to which the article belongs. It must be a string of 24 hexadecimal characters.

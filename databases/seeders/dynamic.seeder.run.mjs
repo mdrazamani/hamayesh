@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dbconnection from "../../config/db.mjs";
+
 import { Language } from "../../config/index.mjs";
 
 import { seedStates } from "./state.seeder.mjs";
@@ -30,47 +31,44 @@ import { seedHamayeshDetailFA } from "./fa/hamayeshDetail.seeder.mjs";
 import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
 
-const seedDatabase = async () => {
+const seeders = {
+    states: seedStates,
+    cities: seedCity,
+    users: Language === "fa" ? seedUsersFA : seedUsers,
+    roles: seedRoles,
+    supporters: Language === "fa" ? seedSupportersFA : seedSupporters,
+    organizers: Language === "fa" ? seedOrganizersFA : seedOrganizers,
+    questions: Language === "fa" ? seedQuestionsFA : seedQuestions,
+    hamayeshDetail:
+        Language === "fa" ? seedHamayeshDetailFA : seedHamayeshDetail,
+    axies: Language === "fa" ? seedAxieFA : seedAxie,
+    secretariats: Language === "fa" ? seedSecretariatsFA : seedSecretariats,
+    speakers: Language === "fa" ? seedSpeakersFA : seedSpeakers,
+    news: Language === "fa" ? seedNewsFA : seedNews,
+    dailyVisit: seedDailyVisit,
+    articleCategories:
+        Language === "fa" ? seedArticleCategoryFA : seedArticleCategory,
+    articles: Language === "fa" ? seedArticlesFA : seedArticles,
+    // افزودن هر seeder دیگری که مورد نیاز است
+};
+
+const seedSpecificCollection = async (collectionName) => {
     try {
         dbconnection();
 
-        await seedStates();
-        await seedCity();
-        await seedRoles();
-        await seedDailyVisit();
-
-        if (Language == "fa") {
-            await seedUsersFA();
-            await seedSecretariatsFA();
-            await seedSpeakersFA();
-            await seedOrganizersFA();
-            await seedSupportersFA();
-            await seedQuestionsFA();
-            await seedAxieFA();
-            await seedNewsFA();
-            await seedHamayeshDetailFA();
-            await seedArticleCategoryFA();
-            await seedArticlesFA();
+        if (seeders[collectionName]) {
+            await seeders[collectionName]();
+            console.log(`${collectionName} collection seeded successfully!`);
         } else {
-            await seedUsers();
-            await seedSecretariats();
-            await seedSpeakers();
-            await seedOrganizers();
-            await seedSupporters();
-            await seedQuestions();
-            await seedAxie();
-            await seedNews();
-            await seedHamayeshDetail();
-            await seedArticleCategory();
-            await seedArticles();
+            console.log(`No seeder found for ${collectionName}`);
         }
-
-        console.log("Database seeded successfully!");
     } catch (error) {
-        console.error("Error seeding database:", error);
+        console.error(`Error seeding ${collectionName} collection:`, error);
     } finally {
         mongoose.connection.close();
     }
 };
 
-seedDatabase();
+const collectionName = process.argv[2];
+
+seedSpecificCollection(collectionName);

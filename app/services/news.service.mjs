@@ -30,7 +30,7 @@ export const getSlug = async (slug) => {
             select: "-__v",
         },
         {
-            path: "categoryId",
+            path: "category",
             model: "NewsCategory",
             select: "-__v",
         },

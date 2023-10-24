@@ -12,6 +12,7 @@ export const seedEventLog = async () => {
     ];
 
     try {
+        await EventLog.deleteMany({});
         await EventLog.insertMany(eventLogs);
         console.log("EventLog seeded successfully!");
     } catch (error) {

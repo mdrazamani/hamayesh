@@ -19,14 +19,14 @@ export const articleValidationSchema = () => ({
             .messages({
                 "string.empty": getMessage("validation.description_empty"),
             }),
-        categoryId: Joi.string()
+        category: Joi.string()
             .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
             .required()
             .messages({
                 "string.pattern.base": getMessage(
-                    "validation.invalid_categoryId"
+                    "validation.invalid_category"
                 ),
-                "any.required": getMessage("validation.categoryId_required"),
+                "any.required": getMessage("validation.category_required"),
             }),
         userId: Joi.string()
             .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId

@@ -24,7 +24,7 @@ const NewsSchema = new mongoose.Schema(
         image: {
             type: String,
         },
-        categoryId: {
+        category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "NewsCategory",
         },

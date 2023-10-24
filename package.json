@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon app.mjs",
     "seed": "node databases/seeders/database.seeder.mjs",
+    "seed:dynamic": "node databases/seeders/dynamic.seeder.run.mjs",
     "debug": "nodemon --inspect app.mjs"
   },
   "dependencies": {

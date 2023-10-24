@@ -33,7 +33,7 @@ export const newsValidationSchema = () => ({
         image: Joi.string()
             .uri() // If you're expecting a URL for the image
             .optional(),
-        categoryId: Joi.string()
+        category: Joi.string()
             .pattern(/^[0-9a-fA-F]{24}$/)
             .required()
             .messages({

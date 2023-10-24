@@ -56,7 +56,7 @@ const router = express.Router();
  *             required:
  *               - title
  *               - slug
- *               - categoryId
+ *               - category
  *             properties:
  *               title:
  *                 type: string
@@ -78,7 +78,7 @@ const router = express.Router();
  *                 description: URL of the image representing the news content.
  *                 format: uri
  *                 example: "http://example.com/image.jpg"
- *               categoryId:
+ *               category:
  *                 type: string
  *                 description: The unique identifier for the news category.
  *                 format: uuid
@@ -206,7 +206,7 @@ router.get("/:slug", showController);
  *             required:
  *               - title
  *               - slug
- *               - categoryId
+ *               - category
  *             properties:
  *               title:
  *                 type: string
@@ -228,7 +228,7 @@ router.get("/:slug", showController);
  *                 description: URL of the image representing the news content.
  *                 format: uri
  *                 example: "http://example.com/image.jpg"
- *               categoryId:
+ *               category:
  *                 type: string
  *                 description: The unique identifier for the news category.
  *                 format: uuid

@@ -25,6 +25,7 @@ export const seedRoles = async () => {
     ];
 
     try {
+        await Role.deleteMany({});
         await Role.insertMany(roles);
         console.log("Roles seeded successfully!");
     } catch (error) {

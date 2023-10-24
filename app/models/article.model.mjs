@@ -14,7 +14,7 @@ const ArticleSchema = new mongoose.Schema(
         description: {
             type: String,
         },
-        categoryId: {
+        category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "ArticleCategory",
         },

@@ -28,6 +28,7 @@ export const seedOrganizers = async () => {
     ];
 
     try {
+        await Organizer.deleteMany({});
         await Organizer.insertMany(organizers);
         console.log("Organizer seeded successfully!");
     } catch (error) {

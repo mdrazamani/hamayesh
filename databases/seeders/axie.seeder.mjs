@@ -2,16 +2,25 @@ import Axie from "../../app/models/axie.model.mjs";
 
 export const seedAxie = async () => {
     const parentAxies = [
-        { title: "هوش مصنوعی", description: "هوش مصنوعی خیلی خوبه", level: 1 },
-        { title: "بلاک چین", description: "بلاک چین خیلی خوبه", level: 1 },
         {
-            title: "اینترنت اشیا",
-            description: "اینترنت اشیا خیلی خوبه",
+            title: "Artificial Intelligence",
+            description: "Artificial Intelligence is fascinating.",
+            level: 1,
+        },
+        {
+            title: "Blockchain",
+            description: "Blockchain technology is revolutionary.",
+            level: 1,
+        },
+        {
+            title: "Internet of Things",
+            description: "The Internet of Things is shaping the future.",
             level: 1,
         },
     ];
 
     try {
+        await Axie.deleteMany({});
         const createdParentAxies = await Axie.insertMany(parentAxies);
         const parentIds = createdParentAxies.map((axie) => axie._id);
 
@@ -38,6 +47,42 @@ export const seedAxie = async () => {
                 title: "Axie #14",
                 description: "Description for Axie #14",
                 parent: parentIds[2],
+                level: 2,
+            },
+            {
+                title: "Axie #15",
+                description: "Description for Axie #15",
+                parent: parentIds[0],
+                level: 2,
+            },
+            {
+                title: "Axie #16",
+                description: "Description for Axie #16",
+                parent: parentIds[2],
+                level: 2,
+            },
+            {
+                title: "Axie #17",
+                description: "Description for Axie #17",
+                parent: parentIds[2],
+                level: 2,
+            },
+            {
+                title: "Axie #18",
+                description: "Description for Axie #18",
+                parent: parentIds[0],
+                level: 2,
+            },
+            {
+                title: "Axie #19",
+                description: "Description for Axie #19",
+                parent: parentIds[1],
+                level: 2,
+            },
+            {
+                title: "Axie #20",
+                description: "Description for Axie #20",
+                parent: parentIds[1],
                 level: 2,
             },
         ];
