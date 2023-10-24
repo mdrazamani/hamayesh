@@ -20,6 +20,7 @@ export const seedHamayeshDetail = async () => {
                 aboutHtml:
                     "<div><h1>This is no ordinary conference!</h1></div>",
                 poster: "path/to/poster",
+                headerImage: "path/to/poster",
                 eventAddress: {
                     state: state._id,
                     city: city._id,

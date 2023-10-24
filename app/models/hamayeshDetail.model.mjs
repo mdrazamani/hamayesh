@@ -26,6 +26,9 @@ const hamayeshDetailSchema = new mongoose.Schema(
         poster: {
             type: String,
         },
+        headerImage: {
+            type: String,
+        },
         eventAddress: {
             state: {
                 type: mongoose.Schema.Types.ObjectId,
