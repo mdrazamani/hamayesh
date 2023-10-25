@@ -18,7 +18,7 @@ const tokenSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 3600, // The record will be removed after an hour
+        expires: 240, // The record will be removed after 3 min
     },
 });
 

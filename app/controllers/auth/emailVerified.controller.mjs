@@ -41,7 +41,10 @@ export const emailVerifiedSendController = async (req, res, next) => {
         if (result) {
             return res.respond(
                 constants.OK,
-                getMessage("success.verification.success")
+                getMessage("success.verification.success"),
+                {
+                    exTime: Date.now() + 3 * 60 * 1000,
+                }
             );
         } else {
             return res.respond(
