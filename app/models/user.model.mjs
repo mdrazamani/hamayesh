@@ -82,12 +82,12 @@ const userSchema = new mongoose.Schema(
         state: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: "City",
+            ref: "State",
         },
         city: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: "State",
+            ref: "City",
         },
 
         bio: {
@@ -136,6 +136,8 @@ userSchema.index({
 // Query middleware to exclude soft-deleted users
 userSchema.pre(/^find/, function (next) {
     this.find({ deletedAt: { $eq: null } });
+    this.populate("state", "state") // replace 'name' with the actual fields you want from the State document
+        .populate("city", "city"); // replace 'name' with the actual fields you want from the City document
     next();
 });
 
@@ -154,6 +156,18 @@ userSchema.set("toJSON", {
         if (converted.role && converted.role.name) {
             // Replace 'role' object with just the role name
             converted.role = converted.role.name;
+        }
+
+        // Check if 'state' is an object and has a 'name' property
+        if (converted.state && converted.state.state) {
+            // Replace the 'state' object with just the 'state' value
+            converted.state = converted.state.state;
+        }
+
+        // Check if 'city' is an object and has a 'name' property
+        if (converted.city && converted.city.city) {
+            // Replace the 'city' object with just the 'city' value
+            converted.city = converted.city.city;
         }
     },
 });

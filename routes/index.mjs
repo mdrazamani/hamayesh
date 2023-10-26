@@ -32,7 +32,7 @@ const router = express.Router();
 
 router.use("/", otherRoutes);
 router.use("/auth", authRoutes);
-router.use("/admin/users", authenticateJWT, authorizeRole("admin"), userRoutes);
+router.use("/admin/users", authenticateJWT, userRoutes);
 
 router.use("/supporters", SupporterRoutes);
 router.use("/organizers", OrganizerRoutes);

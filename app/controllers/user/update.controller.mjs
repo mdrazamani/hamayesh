@@ -4,7 +4,7 @@ import { update } from "../../services/user.service.mjs";
 
 export const updateController = async (req, res, next) => {
     try {
-        const updatedUser = await update(req.params.id, req.body, next);
+        const updatedUser = await update(req.params.id, req.body);
         if (updatedUser)
             res.respond(
                 constants.OK,

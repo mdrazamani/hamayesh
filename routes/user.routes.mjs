@@ -6,7 +6,13 @@ import { deleteController } from "../app/controllers/user/delete.controller.mjs"
 import { indexController } from "../app/controllers/user/index.controller.mjs";
 import { showController } from "../app/controllers/user/show.controller.mjs";
 import { updateController } from "../app/controllers/user/update.controller.mjs";
-import { updateValidation } from "../app/validations/user.validation.mjs";
+import {
+    createValidation,
+    updateCurrent,
+    updateValidation,
+} from "../app/validations/user.validation.mjs";
+import { updateCurrentUserController } from "../app/controllers/user/updateCurrent.controller.mjs";
+import { authorizeRole } from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -136,7 +142,12 @@ const router = express.Router();
  *                 description: Social media profiles of the user (optional)
  */
 
-router.post("/", dynamicValidate(updateValidation), createController);
+router.post(
+    "/",
+    dynamicValidate(createValidation),
+    authorizeRole("admin"),
+    createController
+);
 
 /**
  * @swagger
@@ -180,7 +191,7 @@ router.delete("/:id", deleteController);
  *         description: Number of items per page
  */
 
-router.get("/", indexController);
+router.get("/", authorizeRole("admin"), indexController);
 
 /**
  * @swagger
@@ -200,7 +211,7 @@ router.get("/", indexController);
  *         description: User ID
  */
 
-router.get("/:id", showController);
+router.get("/:id", authorizeRole("admin"), showController);
 
 /**
  * @swagger
@@ -308,6 +319,103 @@ router.get("/:id", showController);
  *                 description: Social media profiles of the user (optional)
  */
 
-router.patch("/:id", dynamicValidate(updateValidation), updateController);
+router.patch(
+    "/:id",
+    dynamicValidate(updateValidation),
+    authorizeRole("admin"),
+    updateController
+);
+
+/**
+ * @swagger
+ * /api/v1/admin/users/update-current:
+ *   put:
+ *     tags: [Users]
+ *     summary: Update a user
+ *     description: Update user details.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/Authorization'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The user's phone number
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *               role:
+ *                  type: string
+ *                  description: The name of the user's role
+ *               profileImage:
+ *                 type: string
+ *                 description: The user's profile image (optional)
+ *               national_id:
+ *                 type: string
+ *                 description: The user's national ID
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender
+ *               study_field:
+ *                 type: string
+ *                 description: Field of study
+ *               degree:
+ *                 type: string
+ *                 description: The user's degree
+ *               institute:
+ *                 type: string
+ *                 description: The user's educational institute
+ *               state:
+ *                 type: string
+ *                 description: The user's state
+ *               city:
+ *                 type: string
+ *                 description: The user's city
+ *               job:
+ *                 type: string
+ *                 description: The user's current job (required)
+ *               bio:
+ *                 type: string
+ *                 description: A short bio about the user (optional)
+ *               socials:
+ *                 type: object // 'socials' is an object containing various social media links
+ *                 properties:
+ *                   facebook:
+ *                     type: string
+ *                     description: The user's Facebook profile URL (optional)
+ *                   twitter:
+ *                     type: string
+ *                     description: The user's Twitter profile URL (optional)
+ *                   linkedIn:
+ *                     type: string
+ *                     description: The user's LinkedIn profile URL (optional)
+ *                   whatsapp:
+ *                     type: string
+ *                     description: The user's WhatsApp number (optional)
+ *                   telegram:
+ *                     type: string
+ *                     description: The user's Telegram username (optional)
+ *                 description: Social media profiles of the user (optional)
+ */
+
+router.put(
+    "/update-current",
+    dynamicValidate(updateCurrent),
+    updateCurrentUserController
+);
 
 export default router;
