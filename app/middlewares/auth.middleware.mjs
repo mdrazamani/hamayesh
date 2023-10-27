@@ -46,6 +46,7 @@ export const authenticateJWT = async (req, res, next) => {
                 "/email-verified-check",
                 "/verify-token",
                 "/logout",
+                "/update-current",
             ].includes(req.path)
         ) {
             return res.respond(

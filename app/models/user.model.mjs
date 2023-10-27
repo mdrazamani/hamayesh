@@ -7,6 +7,8 @@ import APIError from "../../utils/errors.mjs";
 import constants from "../../utils/constants.mjs";
 import jwt from "jsonwebtoken";
 import { secret } from "../../config/index.mjs";
+import path from "path";
+import fs from "fs";
 
 const userSchema = new mongoose.Schema(
     {
@@ -231,6 +233,41 @@ userSchema.pre("save", async function (next) {
     }
     next(); // If there's no error, proceed to the next middleware or save operation
 });
+userSchema.pre("findOneAndUpdate", async function (next) {
+    try {
+        // 'this' refers to the query being executed.
+        const query = this;
+        const update = query.getUpdate();
+
+        // Check if the email is being updated
+        if (update.$set && update.email) {
+            // The user has changed their email, so we need to mark it as unverified
+            this.update({}, { emailVerifiedAt: null });
+        }
+
+        // Check if the profile image is being updated
+        if (update?.profileImage) {
+            // Retrieve the current document from the database
+            const currentDocument = await query.findOne(this.getQuery());
+
+            // Check if there's an existing profile image to delete
+            if (currentDocument && currentDocument.profileImage) {
+                const imagePath = path.join(
+                    process.cwd(),
+                    currentDocument.profileImage
+                );
+                await fs.promises.access(imagePath);
+                await fs.promises.unlink(imagePath);
+                // Log or handle the successful deletion if necessary
+            }
+        }
+        next();
+    } catch (error) {
+        // Log the error. You might want to handle this differently or even pass the error to 'next'
+        console.error("Error removing associated file: ", error);
+        next(error); // This will prevent the document from being removed in the case of an error
+    }
+});
 
 // Ensure the provided role name exists in the Role collection
 userSchema.pre("validate", async function (next) {
@@ -248,6 +285,11 @@ userSchema.pre("validate", async function (next) {
 
 userSchema.post("save", async function (doc, next) {
     try {
+        // 'this' refers to the document being processed
+        if (this.isModified("email")) {
+            // The user has changed their email, so we need to mark it as unverified
+            this.emailVerifiedAt = null;
+        }
         // Check if 'deletedAt' was set, indicating a soft delete operation
         if (doc.deletedAt) {
             // Delete the associated tokens

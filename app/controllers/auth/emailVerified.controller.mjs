@@ -96,7 +96,7 @@ export const emailVerifiedCheckController = async (req, res, next) => {
             type: "emailVerification",
         });
 
-        return res.respond(constants.OK, getMessage("success.success"));
+        return res.respond(constants.OK, getMessage("success.success"), user);
     } catch (error) {
         next(error);
     }
