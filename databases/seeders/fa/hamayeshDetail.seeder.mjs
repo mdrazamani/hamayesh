@@ -19,7 +19,7 @@ export const seedHamayeshDetailFA = async () => {
                 iscCode: "123659845",
                 aboutHtml: "<div><h1>این یه همایش معمولی نیست!</h1></div>",
                 poster: "path/to/poster",
-                headerImage: "path/to/headerImage",
+                headerImage: "public/uploads/headerImage/test.png",
                 eventAddress: {
                     state: state._id,
                     city: city._id,
@@ -32,8 +32,8 @@ export const seedHamayeshDetailFA = async () => {
                     files: [],
                 },
                 dates: {
-                    start: new Date(),
-                    end: new Date(),
+                    start: new Date(+new Date() + 10368000000),
+                    end: new Date(+new Date() + 10398000000),
                 },
             },
         ];

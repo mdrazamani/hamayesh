@@ -4,8 +4,7 @@ import { get } from "../../services/hamayeshDetail.service.mjs";
 
 export const showController = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const hamayesh = await get(id, next);
+        const hamayesh = await get();
         if (hamayesh)
             res.respond(constants.OK, getMessage("success.success"), hamayesh);
     } catch (error) {

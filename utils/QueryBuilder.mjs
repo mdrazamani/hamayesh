@@ -94,6 +94,7 @@ export class QueryBuilder {
     search() {
         if (this.queryString.search) {
             const searchTerm = sanitize(this.queryString.search); // Sanitize search term
+            // const searchQuery = { $text: { $search: searchTerm } };
             const searchQuery = { $text: { $search: searchTerm } };
             this.query = this.query.find(searchQuery);
         }

@@ -19,6 +19,28 @@ export const getAll = async (options) => {
     return await crudFactory.getAll(Organizer)(options);
 };
 
+export const getAllOrganazers = async (options) => {
+    const populateOptions = [
+        {
+            path: "details.address.state",
+            model: "State",
+            select: "state -_id",
+        },
+        {
+            path: "details.address.city",
+            model: "City",
+            select: "city -_id",
+        },
+    ];
+
+    const modifiedOptions = {
+        ...options,
+        populate: populateOptions,
+    };
+
+    return await crudFactory.getAll(Organizer)(modifiedOptions);
+};
+
 export const deleteDoc = async (id) => {
     return await crudFactory.delete(Organizer)(id);
 };

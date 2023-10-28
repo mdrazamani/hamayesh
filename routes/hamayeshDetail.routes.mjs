@@ -52,7 +52,7 @@ const router = express.Router();
  *         description: HamayeshDetail ID
  */
 
-router.get("/:id", showController);
+router.get("/", showController);
 
 /**
  * @swagger

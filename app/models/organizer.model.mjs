@@ -62,11 +62,11 @@ const OrganizerSchema = new mongoose.Schema(
 
 OrganizerSchema.index({
     name: "text",
+    isMain: 1,
 });
 
 OrganizerSchema.set("toJSON", {
     transform: (doc, converted) => {
-        delete converted._id;
         delete converted.__v;
     },
 });

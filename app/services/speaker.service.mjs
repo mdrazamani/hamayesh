@@ -17,7 +17,7 @@ export const getSpeaker = async (id) => {
     // Define population options
     const populateOptions = {
         path: "user",
-        select: "-__v", // excluding MongoDB's internal field '__v'
+        select: "firstName lastName profileImage socials", // excluding MongoDB's internal field '__v'
     };
 
     // Pass the populate options to the get method
@@ -28,7 +28,7 @@ export const getAllSpeakers = async (options) => {
     // Define population options
     const populateOptions = {
         path: "user",
-        select: "-__v", // excluding MongoDB's internal field '__v'
+        select: "firstName lastName profileImage socials",
     };
 
     // Include population options in the parameters passed to the factory method
