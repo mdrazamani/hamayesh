@@ -81,12 +81,13 @@ export class QueryBuilder {
     }
 
     paginate() {
-        // Assuming options.page and options.pageSize are integers. If they come from user input, validate these as well.
+        // Assuming options.page and options.items_per_page are integers. If they come from user input, validate these as well.
         const page = this.options.page > 0 ? this.options.page : 1; // Ensure page is a positive integer
-        const pageSize = this.options.pageSize > 0 ? this.options.pageSize : 10; // Ensure pageSize is a positive integer, and consider setting a maximum
+        const items_per_page =
+            this.options.items_per_page > 0 ? this.options.items_per_page : 10; // Ensure items_per_page is a positive integer, and consider setting a maximum
 
-        const skip = (page - 1) * pageSize;
-        this.query = this.query.skip(skip).limit(pageSize);
+        const skip = (page - 1) * items_per_page;
+        this.query = this.query.skip(skip).limit(items_per_page);
 
         return this;
     }

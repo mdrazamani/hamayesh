@@ -4,11 +4,11 @@ import { getAllUsers } from "../../services/user.service.mjs";
 
 export const indexController = async (req, res, next) => {
     try {
-        const { page = 1, pageSize = 10, ...query } = req.query;
+        const { page = 1, items_per_page = 10, ...query } = req.query;
 
         const users = await getAllUsers({
             page: Number(page),
-            pageSize: Number(pageSize),
+            items_per_page: Number(items_per_page),
             ...query,
         });
         if (users)

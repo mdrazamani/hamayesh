@@ -4,11 +4,11 @@ import { getAll } from "../../../services/newsCategory.service.mjs";
 
 export const indexController = async (req, res, next) => {
     try {
-        const { page = 1, pageSize = 10, ...query } = req.query;
+        const { page = 1, items_per_page = 10, ...query } = req.query;
 
         const newsCategories = await getAll({
             page: Number(page),
-            pageSize: Number(pageSize),
+            items_per_page: Number(items_per_page),
             ...query,
         });
         if (newsCategories)

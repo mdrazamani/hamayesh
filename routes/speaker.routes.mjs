@@ -108,7 +108,7 @@ router.delete("/:id", authenticateJWT, deleteSpeakerController);
  *           type: integer
  *         description: Page number
  *       - in: query
- *         name: pageSize
+ *         name: items_per_page
  *         schema:
  *           type: integer
  *         description: Number of items per page

@@ -6,11 +6,11 @@ import { getAllSecretariats } from "../../services/secretariat.service.mjs"; // 
 
 export const getAllSecretariatsController = async (req, res, next) => {
     try {
-        const { page = 1, pageSize = 10, ...query } = req.query;
+        const { page = 1, items_per_page = 10, ...query } = req.query;
 
         const secretariats = await getAllSecretariats({
             page: Number(page),
-            pageSize: Number(pageSize),
+            items_per_page: Number(items_per_page),
             ...query,
         });
         res.respond(constants.OK, getMessage("success.success"), secretariats);

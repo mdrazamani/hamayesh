@@ -115,7 +115,7 @@ router.post(
  *           type: integer
  *         description: Page number
  *       - in: query
- *         name: pageSize
+ *         name: items_per_page
  *         schema:
  *           type: integer
  *         description: Number of items per page
@@ -158,7 +158,7 @@ router.delete("/:id", authenticateJWT, deleteController);
  *           type: integer
  *         description: Page number
  *       - in: query
- *         name: pageSize
+ *         name: items_per_page
  *         schema:
  *           type: integer
  *         description: Number of items per page

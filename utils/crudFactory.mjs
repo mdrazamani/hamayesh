@@ -16,13 +16,13 @@ export default {
             const {
                 populate,
                 page = 1,
-                pageSize = 10,
+                items_per_page = 10,
                 ...otherParams
             } = queryParams;
 
             const queryBuilder = new QueryBuilder(Model, otherParams, {
                 page,
-                pageSize,
+                items_per_page,
                 populate, // pass populate here
             });
 
@@ -42,7 +42,7 @@ export default {
             const generatePaginationLinks = (
                 currentPage,
                 totalPages,
-                pageSize
+                items_per_page
             ) => {
                 const baseUrl = "/?page="; // Replace with your actual URL structure
                 const links = [];
@@ -81,7 +81,7 @@ export default {
             };
 
             // Calculate necessary pagination data
-            const totalPages = Math.ceil(totalDocuments / pageSize);
+            const totalPages = Math.ceil(totalDocuments / items_per_page);
             const currentPage = page;
             const firstPageUrl = "/?page=1"; // Replace with your actual URL structure
             const nextPageUrl =
@@ -96,17 +96,17 @@ export default {
                     pagination: {
                         page: currentPage,
                         first_page_url: firstPageUrl,
-                        from: (currentPage - 1) * pageSize + 1,
+                        from: (currentPage - 1) * items_per_page + 1,
                         last_page: totalPages,
                         links: generatePaginationLinks(
                             currentPage,
                             totalPages,
-                            pageSize
+                            items_per_page
                         ),
                         next_page_url: nextPageUrl,
-                        items_per_page: pageSize.toString(),
+                        items_per_page: items_per_page.toString(),
                         prev_page_url: prevPageUrl,
-                        to: currentPage * pageSize,
+                        to: currentPage * items_per_page,
                         total: totalDocuments,
                     },
                 },
