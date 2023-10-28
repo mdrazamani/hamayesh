@@ -38,13 +38,78 @@ export default {
             const paginatedResults = await queryBuilder.execute();
 
             const totalDocuments = await queryBuilder.totalDocuments();
+            // New function to generate pagination links
+            const generatePaginationLinks = (
+                currentPage,
+                totalPages,
+                pageSize
+            ) => {
+                const baseUrl = "/?page="; // Replace with your actual URL structure
+                const links = [];
 
+                // Previous link
+                if (currentPage > 1) {
+                    links.push({
+                        url: `${baseUrl}${currentPage - 1}`,
+                        label: "&laquo; Previous",
+                        active: false,
+                        page: currentPage - 1,
+                    });
+                }
+
+                // Individual page links
+                for (let i = 1; i <= totalPages; i++) {
+                    links.push({
+                        url: `${baseUrl}${i}`,
+                        label: `${i}`,
+                        active: i === currentPage,
+                        page: i,
+                    });
+                }
+
+                // Next link
+                if (currentPage < totalPages) {
+                    links.push({
+                        url: `${baseUrl}${currentPage + 1}`,
+                        label: "Next &raquo;",
+                        active: false,
+                        page: currentPage + 1,
+                    });
+                }
+
+                return links;
+            };
+
+            // Calculate necessary pagination data
+            const totalPages = Math.ceil(totalDocuments / pageSize);
+            const currentPage = page;
+            const firstPageUrl = "/?page=1"; // Replace with your actual URL structure
+            const nextPageUrl =
+                currentPage < totalPages ? `/?page=${currentPage + 1}` : null;
+            const prevPageUrl =
+                currentPage > 1 ? `/?page=${currentPage - 1}` : null;
+
+            // Structure the final response
             const response = {
-                items: paginatedResults,
-                total: totalDocuments,
-                pages: Math.ceil(totalDocuments / pageSize),
-                currentPage: page,
-                pageSize,
+                data: paginatedResults, // This should be your actual data array
+                payload: {
+                    pagination: {
+                        page: currentPage,
+                        first_page_url: firstPageUrl,
+                        from: (currentPage - 1) * pageSize + 1,
+                        last_page: totalPages,
+                        links: generatePaginationLinks(
+                            currentPage,
+                            totalPages,
+                            pageSize
+                        ),
+                        next_page_url: nextPageUrl,
+                        items_per_page: pageSize.toString(),
+                        prev_page_url: prevPageUrl,
+                        to: currentPage * pageSize,
+                        total: totalDocuments,
+                    },
+                },
             };
 
             return response;
