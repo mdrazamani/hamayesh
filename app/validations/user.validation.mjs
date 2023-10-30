@@ -64,25 +64,67 @@ export const updateValidation = () => ({
             })
             .optional(),
 
-        role: Joi.object({
-            id: Joi.string()
-                .required() // The role ID is required
-                .messages({
-                    "string.empty": getMessage("validation.role_id_required"),
-                    // additional error messages if needed
-                }),
+        role: Joi.string()
+            .min(2) // assuming a role name should at least have 2 characters
+            .max(20) // assuming a reasonable maximum length for a role name
+            .optional() // role name is a required field
+            .messages({
+                "string.empty": getMessage("validation.role_name_required"),
+                "string.min": getMessage("validation.role_name_min"),
+                "string.max": getMessage("validation.role_name_max"),
+                // additional error messages if needed
+            }),
 
-            name: Joi.string()
-                .min(2) // assuming a role name should at least have 2 characters
-                .max(100) // assuming a reasonable maximum length for a role name
-                .required() // role name is a required field
-                .messages({
-                    "string.empty": getMessage("validation.role_name_required"),
-                    "string.min": getMessage("validation.role_name_min"),
-                    "string.max": getMessage("validation.role_name_max"),
-                    // additional error messages if needed
-                }),
-        }).optional(), // The role object itself is required
+        password: Joi.string()
+            .min(8)
+            .pattern(/(?=.*[a-z])/)
+            .message(getMessage("validation.password_lowercase"))
+            .pattern(/(?=.*[A-Z])/)
+            .message(getMessage("validation.password_uppercase"))
+            .pattern(/(?=.*\d)/)
+            .message(getMessage("validation.password_digit"))
+            .pattern(/(?=.*[@$!%*?&#])/)
+            .message(getMessage("validation.password_special"))
+            .messages({
+                "string.min": getMessage("validation.password_min"),
+            }),
+
+        passwordConfirmation: Joi.any()
+            .equal(Joi.ref("password"))
+            .when("password", {
+                // condition based on the 'password' field
+                is: Joi.exist(), // if 'password' is provided
+                then: Joi.required(), // then 'passwordConfirmation' must be required
+                otherwise: Joi.optional().allow(""), // otherwise, it's optional and can be an empty string
+            })
+            .messages({
+                "any.only": getMessage(
+                    "validation.password_confirmation_match"
+                ),
+                "any.required": getMessage(
+                    "validation.password_confirmation_required"
+                ),
+            }),
+
+        // role: Joi.object({
+        //     id: Joi.string()
+        //         .required() // The role ID is required
+        //         .messages({
+        //             "string.empty": getMessage("validation.role_id_required"),
+        //             // additional error messages if needed
+        //         }),
+
+        //     name: Joi.string()
+        //         .min(2) // assuming a role name should at least have 2 characters
+        //         .max(100) // assuming a reasonable maximum length for a role name
+        //         .required() // role name is a required field
+        //         .messages({
+        //             "string.empty": getMessage("validation.role_name_required"),
+        //             "string.min": getMessage("validation.role_name_min"),
+        //             "string.max": getMessage("validation.role_name_max"),
+        //             // additional error messages if needed
+        //         }),
+        // }).optional(), // The role object itself is required
 
         study_field: Joi.string()
             .messages({
@@ -303,6 +345,37 @@ export const updateCurrent = () => ({
                 // additional error messages if needed
             }),
 
+        password: Joi.string()
+            .min(8)
+            .pattern(/(?=.*[a-z])/)
+            .message(getMessage("validation.password_lowercase"))
+            .pattern(/(?=.*[A-Z])/)
+            .message(getMessage("validation.password_uppercase"))
+            .pattern(/(?=.*\d)/)
+            .message(getMessage("validation.password_digit"))
+            .pattern(/(?=.*[@$!%*?&#])/)
+            .message(getMessage("validation.password_special"))
+            .messages({
+                "string.min": getMessage("validation.password_min"),
+            }),
+
+        passwordConfirmation: Joi.any()
+            .equal(Joi.ref("password"))
+            .when("password", {
+                // condition based on the 'password' field
+                is: Joi.exist(), // if 'password' is provided
+                then: Joi.required(), // then 'passwordConfirmation' must be required
+                otherwise: Joi.optional().allow(""), // otherwise, it's optional and can be an empty string
+            })
+            .messages({
+                "any.only": getMessage(
+                    "validation.password_confirmation_match"
+                ),
+                "any.required": getMessage(
+                    "validation.password_confirmation_required"
+                ),
+            }),
+
         // Add validation for social media links
         socials: Joi.object({
             facebook: Joi.string()
@@ -423,25 +496,41 @@ export const createValidation = () => ({
             })
             .required(),
 
-        role: Joi.object({
-            id: Joi.string()
-                .required() // The role ID is required
-                .messages({
-                    "string.empty": getMessage("validation.role_id_required"),
-                    // additional error messages if needed
-                }),
+        role: Joi.string()
+            .min(2) // assuming a role name should at least have 2 characters
+            .max(20) // assuming a reasonable maximum length for a role name
+            .required() // role name is a required field
+            .messages({
+                "string.empty": getMessage("validation.role_name_required"),
+                "string.min": getMessage("validation.role_name_min"),
+                "string.max": getMessage("validation.role_name_max"),
+                // additional error messages if needed
+            }),
 
-            name: Joi.string()
-                .min(2) // assuming a role name should at least have 2 characters
-                .max(100) // assuming a reasonable maximum length for a role name
-                .required() // role name is a required field
-                .messages({
-                    "string.empty": getMessage("validation.role_name_required"),
-                    "string.min": getMessage("validation.role_name_min"),
-                    "string.max": getMessage("validation.role_name_max"),
-                    // additional error messages if needed
-                }),
-        }).required(), // The role object itself is required
+        password: Joi.string()
+            .min(8)
+            .required()
+            .pattern(/(?=.*[a-z])/)
+            .message(getMessage("validation.password_lowercase"))
+            .pattern(/(?=.*[A-Z])/)
+            .message(getMessage("validation.password_uppercase"))
+            .pattern(/(?=.*\d)/)
+            .message(getMessage("validation.password_digit"))
+            .pattern(/(?=.*[@$!%*?&#])/)
+            .message(getMessage("validation.password_special"))
+            .messages({
+                "string.min": getMessage("validation.password_min"),
+            })
+            .required(),
+
+        passwordConfirmation: Joi.string()
+            .valid(Joi.ref("password"))
+            .required()
+            .messages({
+                "any.only": getMessage(
+                    "validation.password_confirmation_match"
+                ),
+            }),
 
         study_field: Joi.string()
             .messages({

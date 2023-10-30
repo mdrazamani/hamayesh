@@ -30,6 +30,7 @@ export class QueryBuilder {
         const excludedFields = [
             "page",
             "sort",
+            "order",
             "limit",
             "fields",
             "search",
@@ -57,14 +58,32 @@ export class QueryBuilder {
     }
 
     sort() {
-        if (this.queryString.sort) {
-            // Validate and sanitize sort field to ensure it's a legitimate field
-            const sortBy = sanitize(this.queryString.sort.split(",").join(" ")); // Prevent NoSQL injection in sort field
-            this.query.sort(sortBy);
+        // Extract sort and order from queryString
+        const sortField = this.queryString.sort;
+        const sortOrder = this.queryString.order;
+
+        if (sortField) {
+            // Ensure the sort field is in lowercase for consistency
+            const field = sanitize(sortField.toLowerCase());
+
+            // Check the sortOrder and apply the appropriate sorting method
+            if (sortOrder === "asc") {
+                // For ascending order, we use the field name directly
+                this.query = this.query.sort({ [field]: 1 });
+            } else if (sortOrder === "desc") {
+                // For descending order, in Mongoose, we often prefix with "-" for descending
+                this.query = this.query.sort({ [field]: -1 });
+            } else {
+                // If no valid order is specified, you might want to set a default or handle it as an error.
+                // Here we're setting a default descending order if the order parameter is invalid.
+                this.query = this.query.sort({ [field]: 1 });
+            }
         } else {
-            this.query.sort("-createdAt");
+            // Default sort option if no sort field is specified
+            this.query = this.query.sort("-createdAt");
         }
-        return this;
+
+        return this; // for method chaining
     }
 
     limitFields() {

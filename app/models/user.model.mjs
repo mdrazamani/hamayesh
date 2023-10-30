@@ -233,14 +233,56 @@ userSchema.pre("save", async function (next) {
     }
     next(); // If there's no error, proceed to the next middleware or save operation
 });
+
+// This middleware will intercept findOneAndUpdate operations.
+userSchema.pre("findOneAndUpdate", async function (next) {
+    // 'this' now refers to the query, not the document being updated.
+    const update = this.getUpdate();
+
+    // Check if the role name is being updated
+    if (update?.role && typeof update?.role === "string") {
+        // Role name provided, fetch the corresponding role document
+        try {
+            const roleDoc = await Role.findOne({ name: update.role });
+
+            if (!roleDoc) {
+                // If the role with the provided name doesn't exist, return an error.
+                throw new Error("Invalid role name provided");
+            }
+
+            // If the role exists, update the role field with the correct structure
+            update.role = {
+                id: roleDoc._id, // the actual role ID from the role document
+                name: roleDoc.name, // the role name (same as provided)
+            };
+
+            // Proceed with the update operation
+            next();
+        } catch (error) {
+            // If an error occurs (e.g., the role doesn't exist), pass the error to the next middleware
+            next(error);
+        }
+    } else {
+        // If the role is not being updated, proceed with the update operation
+        next();
+    }
+});
+
 userSchema.pre("findOneAndUpdate", async function (next) {
     try {
         // 'this' refers to the query being executed.
         const query = this;
         const update = query.getUpdate();
 
+        if (update?.$set && update.password) {
+            this.update(
+                {},
+                { password: await bcrypt.hash(update.password, 10) }
+            );
+        }
+
         // Check if the email is being updated
-        if (update.$set && update.email) {
+        if (update?.$set && update.email) {
             // The user has changed their email, so we need to mark it as unverified
             this.update({}, { emailVerifiedAt: null });
         }

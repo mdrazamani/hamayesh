@@ -39,23 +39,23 @@ export default {
 
             const totalDocuments = await queryBuilder.totalDocuments();
             // New function to generate pagination links
+            // New function to generate pagination links
             const generatePaginationLinks = (
                 currentPage,
                 totalPages,
-                items_per_page
+                pageSize
             ) => {
                 const baseUrl = "/?page="; // Replace with your actual URL structure
                 const links = [];
 
-                // Previous link
-                if (currentPage > 1) {
-                    links.push({
-                        url: `${baseUrl}${currentPage - 1}`,
-                        label: "&laquo; Previous",
-                        active: false,
-                        page: currentPage - 1,
-                    });
-                }
+                // "Previous" link - should always be present
+                links.push({
+                    url:
+                        currentPage > 1 ? `${baseUrl}${currentPage - 1}` : null,
+                    label: "&laquo; Previous",
+                    active: false,
+                    page: currentPage > 1 ? currentPage - 1 : null,
+                });
 
                 // Individual page links
                 for (let i = 1; i <= totalPages; i++) {
@@ -67,15 +67,16 @@ export default {
                     });
                 }
 
-                // Next link
-                if (currentPage < totalPages) {
-                    links.push({
-                        url: `${baseUrl}${currentPage + 1}`,
-                        label: "Next &raquo;",
-                        active: false,
-                        page: currentPage + 1,
-                    });
-                }
+                // "Next" link - should always be present
+                links.push({
+                    url:
+                        currentPage < totalPages
+                            ? `${baseUrl}${currentPage + 1}`
+                            : null,
+                    label: "Next &raquo;",
+                    active: false,
+                    page: currentPage < totalPages ? currentPage + 1 : null,
+                });
 
                 return links;
             };
