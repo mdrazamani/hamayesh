@@ -64,14 +64,34 @@ if (Debug_mode === "development") {
     app.use(morgan("dev"));
 }
 
-// Limit requests from same API
-const limiter = rateLimit({
+// Rate limiter for GET requests
+const getLimiter = rateLimit({
+    trustProxy: false,
+    max: 1000,
+    windowMs: 60 * 1 * 1000,
+    message:
+        "Too many GET requests from this IP, please try again in a minute!",
+});
+
+// Rate limiter for non-GET requests
+const nonGetLimiter = rateLimit({
     trustProxy: false,
     max: 10,
     windowMs: 60 * 1 * 1000,
     message: "Too many requests from this IP, please try again in a minute!",
 });
-app.use("/api", limiter);
+
+// Middleware to apply the appropriate rate limiter
+const customLimiter = (req, res, next) => {
+    if (req.method === "GET") {
+        getLimiter(req, res, next);
+    } else {
+        nonGetLimiter(req, res, next);
+    }
+};
+
+// Use the customLimiter middleware in your Express app
+app.use("/api", customLimiter);
 
 // Sending Response best practice for debugging
 // app.use((req, res, next) => {

@@ -71,15 +71,41 @@ export const authenticateJWT = async (req, res, next) => {
     }
 };
 
-// Middleware for Role-based Authorization
-export const authorizeRole = (...allowedRoles) => {
+// Middleware for Role-based Authorization with Field-specific Access
+export const authorizeRole = (allowedFieldsByRole) => {
     return (req, res, next) => {
-        if (req.user && !allowedRoles.includes(req.user.role.name)) {
+        const userRole = req.user.role.name;
+
+        // If the role is not specified in the allowedFieldsByRole, deny access
+        if (allowedFieldsByRole[userRole] === undefined) {
             return res.respond(
                 constants.FORBIDDEN,
                 getMessage("errors.forbidden")
             ); // 403 Forbidden
         }
-        next();
+
+        // If no fields are provided for the role (empty string), grant full access
+        if (allowedFieldsByRole[userRole] === "") {
+            next();
+            return;
+        }
+
+        // Parse the allowed fields for the role
+        const allowedFields = allowedFieldsByRole[userRole].split(",");
+
+        // Check if the fields being updated are allowed
+        const updateFields = Object.keys(req.body);
+        const isUpdateAllowed = updateFields.every((field) =>
+            allowedFields.includes(field)
+        );
+
+        if (isUpdateAllowed) {
+            next();
+        } else {
+            return res.respond(
+                constants.FORBIDDEN,
+                getMessage("errors.forbidden")
+            ); // 403 Forbidden
+        }
     };
 };

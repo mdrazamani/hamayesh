@@ -145,7 +145,9 @@ const router = express.Router();
 router.post(
     "/",
     dynamicValidate(createValidation),
-    authorizeRole("admin"),
+    authorizeRole({
+        admin: "", // Full access
+    }),
     createController
 );
 
@@ -167,7 +169,13 @@ router.post(
  *         description: User ID
  */
 
-router.delete("/:id", deleteController);
+router.delete(
+    "/:id",
+    authorizeRole({
+        admin: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -191,7 +199,14 @@ router.delete("/:id", deleteController);
  *         description: Number of items per page
  */
 
-router.get("/", authorizeRole("admin"), indexController);
+router.get(
+    "/",
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
+    indexController
+);
 
 /**
  * @swagger
@@ -211,7 +226,13 @@ router.get("/", authorizeRole("admin"), indexController);
  *         description: User ID
  */
 
-router.get("/:id", authorizeRole("admin"), showController);
+router.get(
+    "/:id",
+    authorizeRole({
+        admin: "", // Full access
+    }),
+    showController
+);
 
 /**
  * @swagger
@@ -322,7 +343,9 @@ router.get("/:id", authorizeRole("admin"), showController);
 router.patch(
     "/:id",
     dynamicValidate(updateValidation),
-    authorizeRole("admin"),
+    authorizeRole({
+        admin: "", // Full access
+    }),
     updateController
 );
 

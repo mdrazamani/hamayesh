@@ -126,7 +126,9 @@
 		"role_name_required": "validation.role_name_required",
 		"role_name_min": "validation.role_name_min",
 		"role_name_max": "validation.role_name_max",
-		"password_confirmation_required": "validation.password_confirmation_required"
+		"password_confirmation_required": "validation.password_confirmation_required",
+		"invalid_user_id": "validation.invalid_user_id",
+		"user_required": "validation.user_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

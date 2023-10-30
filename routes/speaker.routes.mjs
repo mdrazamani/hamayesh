@@ -9,7 +9,10 @@ import {
     speakerValidation,
     speakerUpdateValidation,
 } from "../app/validations/speaker.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -69,6 +72,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
     dynamicValidate(speakerValidation),
     createSpeakerController
 );
@@ -90,7 +97,15 @@ router.post(
  *           type: string
  *         description: Speaker ID
  */
-router.delete("/:id", authenticateJWT, deleteSpeakerController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
+    deleteSpeakerController
+);
 
 /**
  * @swagger
@@ -167,6 +182,10 @@ router.get("/:id", getSpeakerController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
     dynamicValidate(speakerUpdateValidation),
     updateSpeakerController
 );

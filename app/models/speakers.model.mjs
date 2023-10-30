@@ -25,7 +25,9 @@ const speakerSchema = new mongoose.Schema(
 
 speakerSchema.set("toJSON", {
     transform: (doc, converted) => {
+        delete converted._id;
         delete converted.__v;
+        converted.id = doc._id;
     },
 });
 // If you need any indexing for efficient querying, add here

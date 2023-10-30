@@ -6,7 +6,10 @@ import { indexController } from "../app/controllers/supporter/index.controller.m
 import { showController } from "../app/controllers/supporter/show.controller.mjs";
 import { updateController } from "../app/controllers/supporter/update.controller.mjs";
 import { supporterValidationSchema } from "../app/validations/supporter.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -74,6 +77,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
     dynamicValidate(supporterValidationSchema),
     createController
 );
@@ -96,7 +103,15 @@ router.post(
  *         description: supporter ID
  */
 
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -182,6 +197,10 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "",
+    }),
     dynamicValidate(supporterValidationSchema),
     updateController
 );
