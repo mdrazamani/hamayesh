@@ -23,6 +23,7 @@
 		"isMainOrganize": "یک سازمان اصلی یافت شد",
 		"deletion_failed": "حذف با شکست مواجه شد",
 		"cannot_delete_self": "شما نمیتوانید کاربر خود را حذف کنید",
+		"cannot_update_self": "شما نمیتوانید کاربر خود را ویرایش کنید",
 		"secretariat_exists": "دبیرخانه از قبل وجود دارد",
 		"update_failed": "به روز رسانی با شکست مواجه شد",
 		"invalid_or_expired_token": "توکن نامعتبر یا منقضی است",
@@ -124,7 +125,8 @@
 		"role_id_required": "validation.role_id_required",
 		"role_name_required": "validation.role_name_required",
 		"role_name_min": "validation.role_name_min",
-		"role_name_max": "validation.role_name_max"
+		"role_name_max": "validation.role_name_max",
+		"password_confirmation_required": "validation.password_confirmation_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
