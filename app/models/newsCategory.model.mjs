@@ -33,6 +33,7 @@ const NewsCategorySchema = new mongoose.Schema(
 NewsCategorySchema.index({
     title: "text",
     slug: "text",
+    level: "text",
 });
 
 NewsCategorySchema.set("toJSON", {

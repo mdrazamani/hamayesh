@@ -83,7 +83,7 @@ const router = express.Router();
 
 router.post(
     "/",
-    authenticateJWT,
+    // authenticateJWT,
     dynamicValidate(newsCommentValidationSchema),
     createController
 );

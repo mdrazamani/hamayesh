@@ -29,6 +29,7 @@ import { seedAxieFA } from "./fa/axie.seeder.mjs";
 import { seedHamayeshDetailFA } from "./fa/hamayeshDetail.seeder.mjs";
 import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
+import { seedGalleries } from "./gallery.seeder.mjs";
 
 const seedDatabase = async () => {
     try {
@@ -38,6 +39,7 @@ const seedDatabase = async () => {
         await seedCity();
         await seedRoles();
         await seedDailyVisit();
+        await seedGalleries();
 
         if (Language == "fa") {
             await seedUsersFA();
