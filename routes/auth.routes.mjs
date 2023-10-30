@@ -199,7 +199,6 @@ router.post("/logout", authenticateJWT, logoutController);
 router.post(
     "/verify-token",
     authenticateJWT,
-    authorizeRole("admin", "user"),
     dynamicValidate(getVerifyTokenSchema),
     verifyTokenController
 );
