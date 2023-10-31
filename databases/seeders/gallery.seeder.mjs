@@ -1,36 +1,29 @@
 import Gallery from "../../app/models/gallery.model.mjs"; // Adjust the import as per your file structure
 
 export const seedGalleries = async () => {
-    // Predefined list of galleries to add to the database
-    const galleries = [
-        {
-            category: "Nature",
-            slug: "nature-gallery",
-            images: [
-                {
-                    path: "/path/to/nature1.jpg", // This should be the path where your image is stored
-                    title: "Beautiful Landscape",
-                },
-                // ... more images
-            ],
-            description: "A collection of beautiful nature landscapes",
+    const numberOfGalleries = 100; // Adjust as needed
+    const numberOfImagesPerGallery = 50; // Adjust as needed
+
+    // Generate galleries
+    const galleries = [];
+    for (let i = 0; i < numberOfGalleries; i++) {
+        const gallery = {
+            category: `Category ${i}`,
+            slug: `category-${i}-gallery`,
+            images: [],
+            description: `Description for Category ${i}`,
             isActive: true,
-        },
-        {
-            category: "Architecture",
-            slug: "architecture-gallery",
-            images: [
-                {
-                    path: "/path/to/architecture1.jpg",
-                    title: "Modern Building",
-                },
-                // ... more images
-            ],
-            description: "Stunning modern architecture from around the world",
-            isActive: true,
-        },
-        // ... more gallery objects
-    ];
+        };
+
+        for (let j = 0; j < numberOfImagesPerGallery; j++) {
+            gallery.images.push({
+                path: `public/uploads/headerImage/test.png`,
+                title: `Title for image ${j} in category ${i}`,
+            });
+        }
+
+        galleries.push(gallery);
+    }
 
     try {
         // Clear the existing galleries (Be careful with this in a production environment)
