@@ -29,6 +29,15 @@ const QuestionSchema = new mongoose.Schema(
 QuestionSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted.__v;
+        delete converted._id;
+        converted.id = doc._id;
+
+        // Remove _id from each item in the items array
+        if (converted.items && Array.isArray(converted.items)) {
+            converted.items.forEach((item) => {
+                delete item._id;
+            });
+        }
     },
 });
 

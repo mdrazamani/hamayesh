@@ -8,6 +8,7 @@ import { updateController } from "../app/controllers/question/update.controller.
 import {
     addItemValidationSchema,
     questionValidationSchema,
+    questionValidationSchemaUpdate,
     updateItemValidationSchema,
 } from "../app/validations/question.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
@@ -200,7 +201,7 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
-    dynamicValidate(questionValidationSchema),
+    dynamicValidate(questionValidationSchemaUpdate),
     updateController
 );
 

@@ -38,6 +38,35 @@ export const questionValidationSchema = () => ({
     }).options({ abortEarly: false }),
 });
 
+export const questionValidationSchemaUpdate = () => ({
+    body: Joi.object({
+        title: Joi.string().messages({
+            "string.empty": getMessage("validation.title_required"),
+        }),
+        description: Joi.string().messages({
+            "string.empty": getMessage("validation.description_required"),
+        }),
+        // 'items' are now optional at this level because they can be managed separately.
+        // This change assumes you could create a question without items and add them later.
+        items: Joi.array()
+            .items(
+                Joi.object({
+                    question: Joi.string().messages({
+                        "string.empty": getMessage(
+                            "validation.question_required"
+                        ),
+                    }),
+                    response: Joi.string().messages({
+                        "string.empty": getMessage(
+                            "validation.response_required"
+                        ),
+                    }),
+                })
+            )
+            .optional(), // 'items' is optional during the creation of a question
+    }).options({ abortEarly: false }),
+});
+
 // For adding a new item to the 'items' array of a question
 export const addItemValidationSchema = () => ({
     body: Joi.object({
