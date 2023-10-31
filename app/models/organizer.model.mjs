@@ -90,7 +90,27 @@ OrganizerSchema.index({
 
 OrganizerSchema.set("toJSON", {
     transform: (doc, converted) => {
+        delete converted._id;
         delete converted.__v;
+        converted.id = doc._id;
+        // Check if 'state' is an object and has a 'name' property
+        if (
+            converted.details.address.state &&
+            converted.details.address.state.state
+        ) {
+            // Replace the 'state' object with just the 'state' value
+            converted.details.address.state =
+                converted.details.address.state.state;
+        }
+        // Check if 'city' is an object and has a 'name' property
+        if (
+            converted.details.address.city &&
+            converted.details.address.city.city
+        ) {
+            // Replace the 'city' object with just the 'city' value
+            converted.details.address.city =
+                converted.details.address.city.city;
+        }
     },
 });
 

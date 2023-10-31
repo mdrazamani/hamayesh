@@ -5,7 +5,10 @@ import { deleteController } from "../app/controllers/organizer/delete.controller
 import { indexController } from "../app/controllers/organizer/index.controller.mjs";
 import { showController } from "../app/controllers/organizer/show.controller.mjs";
 import { updateController } from "../app/controllers/organizer/update.controller.mjs";
-import { organizerValidationSchema } from "../app/validations/organizer.validation.mjs";
+import {
+    organizerUpdateValidationSchema,
+    organizerValidationSchema,
+} from "../app/validations/organizer.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
 
 /**
@@ -247,7 +250,7 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
-    dynamicValidate(organizerValidationSchema),
+    dynamicValidate(organizerUpdateValidationSchema),
     updateController
 );
 
