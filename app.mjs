@@ -76,7 +76,7 @@ const getLimiter = rateLimit({
 // Rate limiter for non-GET requests
 const nonGetLimiter = rateLimit({
     trustProxy: false,
-    max: 10,
+    max: 100,
     windowMs: 60 * 1 * 1000,
     message: "Too many requests from this IP, please try again in a minute!",
 });

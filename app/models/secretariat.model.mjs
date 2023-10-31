@@ -37,6 +37,8 @@ secretariatSchema.index({ title: "text" }); // example compound index
 secretariatSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted.__v;
+        delete converted._id;
+        converted.id = doc._id;
     },
 });
 

@@ -128,7 +128,12 @@
 		"role_name_max": "validation.role_name_max",
 		"password_confirmation_required": "validation.password_confirmation_required",
 		"invalid_user_id": "validation.invalid_user_id",
-		"user_required": "validation.user_required"
+		"user_required": "validation.user_required",
+		"boss_min": "validation.boss_min",
+		"boss_max": "validation.boss_max",
+		"boss_required": "validation.boss_required",
+		"invalid_secretariat_type": "validation.invalid_secretariat_type",
+		"type_required": "validation.type_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
