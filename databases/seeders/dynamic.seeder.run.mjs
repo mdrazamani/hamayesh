@@ -52,6 +52,8 @@ const seeders = {
     // افزودن هر seeder دیگری که مورد نیاز است
 };
 
+console.log(Language);
+
 const seedSpecificCollection = async (collectionName) => {
     try {
         dbconnection();

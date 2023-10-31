@@ -11,9 +11,7 @@ export const seedNewsFA = async () => {
     let createdTags = await seedNewsTagsFA();
     let tagIds = createdTags.map((tag) => tag._id);
 
-    const user = await User.findOne({
-        $or: [{ firstName: "Mohammadreza" }, { firstName: "محمدرضا" }],
-    });
+    const user = await User.findOne();
 
     // Create news data, incorporating the comment IDs
     const newsData = [

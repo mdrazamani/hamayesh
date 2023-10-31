@@ -2,7 +2,7 @@ import express from "express";
 import { dynamicValidate } from "../utils/validate.mjs";
 import { newsTagValidationSchema } from "../app/validations/newsTag.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
-import { createController } from "../app/controllers/news/newsComment/create.controller.mjs";
+import { createController } from "../app/controllers/news/newsTag/create.controller.mjs";
 import { deleteController } from "../app/controllers/news/newsTag/delete.controller.mjs";
 import { indexController } from "../app/controllers/news/newsTag/index.controller.mjs";
 import { showController } from "../app/controllers/news/newsTag/show.controller.mjs";

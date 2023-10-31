@@ -11,7 +11,7 @@ export const seedNews = async () => {
     let createdTags = await seedNewsTags();
     let tagIds = createdTags.map((tag) => tag._id);
 
-    const user = await User.findOne({ firstName: "Mohammadreza" });
+    const user = await User.findOne();
 
     // Create news data, incorporating the comment IDs
     const newsData = [
