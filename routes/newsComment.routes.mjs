@@ -6,7 +6,10 @@ import { indexController } from "../app/controllers/news/newsComment/index.contr
 import { showController } from "../app/controllers/news/newsComment/show.controller.mjs";
 import { updateController } from "../app/controllers/news/newsComment/update.controller.mjs";
 import { newsCommentValidationSchema } from "../app/validations/newsComment.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 import { likeController } from "../app/controllers/news/newsComment/like.controller.mjs";
 
 /**
@@ -105,7 +108,12 @@ router.post(
  *           type: string
  *         description: NewsComment ID
  */
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({ admin: "", executive: "" }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -128,7 +136,35 @@ router.delete("/:id", authenticateJWT, deleteController);
  *           type: integer
  *         description: Number of items per page
  */
-router.get("/", indexController);
+router.get(
+    "/",
+    authenticateJWT,
+    authorizeRole({ admin: "", executive: "" }),
+    indexController
+);
+
+/**
+ * @swagger
+ * /api/v1/news-comments/comments:
+ *   get:
+ *     tags: [NewsComments]
+ *     summary: Retrieve NewsComment
+ *     description: Retrieve a list of NewsComment with pagination.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *       - in: query
+ *         name: items_per_page
+ *         schema:
+ *           type: integer
+ *         description: Number of items per page
+ */
+router.get("/comments", indexController);
 
 /**
  * @swagger
@@ -147,7 +183,12 @@ router.get("/", indexController);
  *           type: string
  *         description: NewsComment id
  */
-router.get("/:id", showController);
+router.get(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({ admin: "", executive: "" }),
+    showController
+);
 
 /**
  * @swagger
@@ -203,6 +244,7 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({ admin: "", executive: "" }),
     dynamicValidate(newsCommentValidationSchema),
     updateController
 );

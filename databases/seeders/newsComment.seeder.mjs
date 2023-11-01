@@ -9,7 +9,7 @@ export const seedNewsComments = async () => {
             userLastName: "Doe",
             userEmail: "john.doe@example.com",
             userIp: "192.168.1.2",
-            status: true,
+            status: false,
         },
         {
             comment: "I love the content here!",
@@ -27,7 +27,7 @@ export const seedNewsComments = async () => {
             userLastName: "Johnson",
             userEmail: "bob.johnson@example.com",
             userIp: "192.168.1.4",
-            status: true,
+            status: false,
         },
         {
             comment: "Great job on this article!",

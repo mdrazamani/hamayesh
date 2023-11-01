@@ -6,6 +6,10 @@ export const indexController = async (req, res, next) => {
     try {
         const { page = 1, items_per_page = 10, ...query } = req.query;
 
+        if (!req.user) {
+            query.status = true;
+        }
+
         const newsComments = await getAll({
             page: Number(page),
             items_per_page: Number(items_per_page),

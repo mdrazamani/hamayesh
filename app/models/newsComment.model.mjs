@@ -35,10 +35,18 @@ NewsCommentSchema.index({
     comment: "text",
 });
 
+// // Query middleware to exclude soft-deleted users
+// NewsCommentSchema.pre(/^find/, function (next) {
+//     this.find({ status: { $eq: true } });
+
+//     next();
+// });
+
 NewsCommentSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
+        converted.id = doc._id;
     },
 });
 
