@@ -166,5 +166,7 @@
 	},
 	"errprs": {
 		"user_not_found": "کاربر پیدا نشد!"
-	}
+	},
+	"A category cannot be its own parent.": "A category cannot be its own parent.",
+	"A category cannot set one of its children as its parent.": "A category cannot set one of its children as its parent."
 }

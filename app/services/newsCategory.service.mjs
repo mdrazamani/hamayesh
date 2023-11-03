@@ -6,11 +6,11 @@ import APIError from "../../utils/errors.mjs";
 import NewsCategory from "../models/newsCategory.model.mjs";
 
 export const create = async (data) => {
-    if (data.parent) {
-        console.log(Object(data.parent));
-        const parent = await NewsCategory.findOne({ _id: data.parent });
-        data.level = parent.level + 1;
-    }
+    // if (data.parent) {
+    //     console.log(Object(data.parent));
+    //     const parent = await NewsCategory.findOne({ _id: data.parent });
+    //     data.level = parent.level + 1;
+    // }
 
     return await crudFactory.create(NewsCategory)(data);
 };

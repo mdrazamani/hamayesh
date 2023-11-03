@@ -5,7 +5,10 @@ import { deleteController } from "../app/controllers/news/newsComment/delete.con
 import { indexController } from "../app/controllers/news/newsComment/index.controller.mjs";
 import { showController } from "../app/controllers/news/newsComment/show.controller.mjs";
 import { updateController } from "../app/controllers/news/newsComment/update.controller.mjs";
-import { newsCommentValidationSchema } from "../app/validations/newsComment.validation.mjs";
+import {
+    newsCommentUpdateValidationSchema,
+    newsCommentValidationSchema,
+} from "../app/validations/newsComment.validation.mjs";
 import {
     authenticateJWT,
     authorizeRole,
@@ -245,7 +248,7 @@ router.patch(
     "/:id",
     authenticateJWT,
     authorizeRole({ admin: "", executive: "" }),
-    dynamicValidate(newsCommentValidationSchema),
+    dynamicValidate(newsCommentUpdateValidationSchema),
     updateController
 );
 
