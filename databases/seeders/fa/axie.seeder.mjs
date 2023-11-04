@@ -87,7 +87,25 @@ export const seedAxieFA = async () => {
             },
         ];
 
-        await Axie.insertMany(childAxies);
+        const createdChildAxies = await Axie.insertMany(childAxies);
+        const childIds = createdChildAxies.map((axie) => axie._id);
+
+        const grandChildAxies = [
+            {
+                title: "زیرآکسی #1",
+                description: "توضیحات برای زیرآکسی #1",
+                parent: childIds[0],
+                level: 3,
+            },
+            {
+                title: "زیرآکسی #2",
+                description: "توضیحات برای زیرآکسی #2",
+                parent: childIds[1],
+                level: 3,
+            },
+        ];
+
+        await Axie.insertMany(grandChildAxies);
         console.log("آکسی‌ها با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن آکسی:", error);

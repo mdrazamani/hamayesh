@@ -1,7 +1,21 @@
 import mongoose from "mongoose";
 
-const ArticleFormats = ["pdf", "doc", "sheet"];
-// const costTypes = ["register"];
+const ArticleFormats = [
+    "pdf", // PDF
+    "doc", // Microsoft Word
+    "docx", // Microsoft Word (newer format)
+    "ppt", // Microsoft PowerPoint
+    "pptx", // Microsoft PowerPoint (newer format)
+    "odt", // OpenDocument Text
+    "ods", // OpenDocument Spreadsheet
+    "odp", // OpenDocument Presentation
+    "rtf", // Rich Text Format
+    "txt", // Plain text
+    "xls", // Microsoft Excel
+    "xlsx", // Microsoft Excel (newer format)
+    "tex", // LaTeX
+    "epub", // Electronic publication (eBook format)
+];
 
 const hamayeshDetailSchema = new mongoose.Schema(
     {
@@ -68,6 +82,9 @@ const hamayeshDetailSchema = new mongoose.Schema(
                         enum: ArticleFormats,
                     },
                     description: {
+                        type: String,
+                    },
+                    path: {
                         type: String,
                     },
                 },

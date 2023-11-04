@@ -4,7 +4,19 @@ import { getAllGrouped } from "../../services/axie.service.mjs";
 
 export const indexOrderedController = async (req, res, next) => {
     try {
-        const axies = await getAllGrouped();
+        const { page = 1, items_per_page = 1000, ...query } = req.query;
+
+        // const axies = await getAll({
+        //     page: Number(page),
+        //     items_per_page: Number(items_per_page),
+        //     ...query,
+        // });
+
+        const axies = await getAllGrouped({
+            page: Number(page),
+            items_per_page: Number(items_per_page),
+            ...query,
+        });
         if (axies)
             res.respond(constants.OK, getMessage("success.success"), axies);
     } catch (error) {
