@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const NewsSchema = new mongoose.Schema(
     {
@@ -60,7 +61,17 @@ NewsSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
+        converted.id = doc._id;
     },
+});
+
+// This pre-save middleware will run before saving a new document or updating an existing one
+NewsSchema.pre("save", function (next) {
+    // Only create/update the slug if the title is modified (or is new)
+    if (this.isModified("title") || this.isNew) {
+        this.slug = slugify(this.title, { lower: true });
+    }
+    next();
 });
 
 const News = mongoose.model("News", NewsSchema);
