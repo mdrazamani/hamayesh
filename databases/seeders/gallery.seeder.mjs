@@ -1,8 +1,8 @@
 import Gallery from "../../app/models/gallery.model.mjs"; // Adjust the import as per your file structure
 
 export const seedGalleries = async () => {
-    const numberOfGalleries = 100; // Adjust as needed
-    const numberOfImagesPerGallery = 50; // Adjust as needed
+    const numberOfGalleries = 6; // Adjust as needed
+    const numberOfImagesPerGallery = 23; // Adjust as neededy
 
     // Generate galleries
     const galleries = [];

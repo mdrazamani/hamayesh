@@ -26,62 +26,62 @@ export const seedAxieFA = async () => {
 
         const childAxies = [
             {
-                title: "آکسی #11",
-                description: "توضیحات برای آکسی #11",
+                title: "محور #11",
+                description: "توضیحات برای محور #11",
                 parent: parentIds[0],
                 level: 2,
             },
             {
-                title: "آکسی #12",
-                description: "توضیحات برای آکسی #12",
+                title: "محور #12",
+                description: "توضیحات برای محور #12",
                 parent: parentIds[1],
                 level: 2,
             },
             {
-                title: "آکسی #13",
-                description: "توضیحات برای آکسی #13",
+                title: "محور #13",
+                description: "توضیحات برای محور #13",
                 parent: parentIds[1],
                 level: 2,
             },
             {
-                title: "آکسی #14",
-                description: "توضیحات برای آکسی #14",
+                title: "محور #14",
+                description: "توضیحات برای محور #14",
                 parent: parentIds[2],
                 level: 2,
             },
             {
-                title: "آکسی #15",
-                description: "توضیحات برای آکسی #15",
+                title: "محور #15",
+                description: "توضیحات برای محور #15",
                 parent: parentIds[0],
                 level: 2,
             },
             {
-                title: "آکسی #16",
-                description: "توضیحات برای آکسی #16",
+                title: "محور #16",
+                description: "توضیحات برای محور #16",
                 parent: parentIds[2],
                 level: 2,
             },
             {
-                title: "آکسی #17",
-                description: "توضیحات برای آکسی #17",
+                title: "محور #17",
+                description: "توضیحات برای محور #17",
                 parent: parentIds[2],
                 level: 2,
             },
             {
-                title: "آکسی #18",
-                description: "توضیحات برای آکسی #18",
+                title: "محور #18",
+                description: "توضیحات برای محور #18",
                 parent: parentIds[0],
                 level: 2,
             },
             {
-                title: "آکسی #19",
-                description: "توضیحات برای آکسی #19",
+                title: "محور #19",
+                description: "توضیحات برای محور #19",
                 parent: parentIds[1],
                 level: 2,
             },
             {
-                title: "آکسی #20",
-                description: "توضیحات برای آکسی #20",
+                title: "محور #20",
+                description: "توضیحات برای محور #20",
                 parent: parentIds[1],
                 level: 2,
             },
@@ -92,22 +92,22 @@ export const seedAxieFA = async () => {
 
         const grandChildAxies = [
             {
-                title: "زیرآکسی #1",
-                description: "توضیحات برای زیرآکسی #1",
+                title: "زیرمحور #1",
+                description: "توضیحات برای زیرمحور #1",
                 parent: childIds[0],
                 level: 3,
             },
             {
-                title: "زیرآکسی #2",
-                description: "توضیحات برای زیرآکسی #2",
+                title: "زیرمحور #2",
+                description: "توضیحات برای زیرمحور #2",
                 parent: childIds[1],
                 level: 3,
             },
         ];
 
         await Axie.insertMany(grandChildAxies);
-        console.log("آکسی‌ها با موفقیت seed شدند!");
+        console.log("محور‌ها با موفقیت seed شدند!");
     } catch (error) {
-        console.error("خطا در seed کردن آکسی:", error);
+        console.error("خطا در seed کردن محور:", error);
     }
 };

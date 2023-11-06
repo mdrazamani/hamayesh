@@ -10,15 +10,25 @@ export const seedSpeakersFA = async () => {
             return;
         }
 
+        const title = [
+            "آینده هوش مصنوعی",
+            "سفر در زمان با هوش مصنوعی",
+            "خرید و فروش ملک با ارز دیجیتال",
+            "پلاک خوان ماشین",
+            "شناسایی دود با پردازش تصویر",
+            "راه و شهر سازی با توسعه ماشین",
+            "ساخت انواع توربین های بادی و خورشیدی توسط ربات",
+        ];
+
         const speakers = [];
 
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < users.length; i++) {
             const topic = casual.sentence;
 
             speakers.push({
-                title: `سخنرانی در مورد ${topic}`,
-                description: casual.text,
-                user: users[i]._id,
+                title: title[i % title.length],
+                description: "توضیح کوتاه و خلاصه در مورد نفرات سخنران",
+                user: users[i].id,
             });
         }
 

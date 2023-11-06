@@ -3,37 +3,36 @@ import Supporter from "../../../app/models/supporter.model.mjs";
 export const seedSupportersFA = async () => {
     const supporters = [
         {
-            name: "کمپانی کولیزان",
-            logo: "تست",
+            name: "دانشگاه آزاد گوهردشت",
+            logo: "public/uploads/supporters/hami1.jpg",
             supportType: "Financial",
             link: "www.colizan.com",
         },
         {
-            name: "شرکت مثال",
-            logo: "تست",
+            name: "نیروی انتظامی",
+            logo: "public\\uploads\\supporters\\hami2.png",
             supportType: "Financial",
             link: "www.example.com",
         },
         {
-            name: "سازمان حامی",
-            logo: "تست",
+            name: "دانشگاه فردوسی مشهد",
+            logo: "public\\uploads\\supporters\\hami3.png",
             supportType: "Financial",
             link: "www.supporter.org",
         },
         {
-            name: "شرکت دیگر",
-            logo: "تست",
+            name: "دانشگاه صنعتی اصفحان",
+            logo: "public\\uploads\\supporters\\hami4.png",
             supportType: "Academic",
             link: "www.anothercompany.com",
         },
-        // ... افزودن حامی‌های نمونه دیگر
     ];
 
     try {
         await Supporter.deleteMany({});
         await Supporter.insertMany(supporters);
-        console.log("حامی‌ها با موفقیت seed شدند!");
+        console.log("supporters added successfully");
     } catch (error) {
-        console.error("خطا در seed کردن حامی‌ها:", error);
+        console.error("error in supporters", error);
     }
 };

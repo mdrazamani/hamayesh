@@ -1,5 +1,8 @@
 // userService.mjs
 
+import mongoose from "mongoose";
+const { Types } = mongoose;
+
 import { getMessage } from "../../config/i18nConfig.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
@@ -20,7 +23,9 @@ export const update = async (id, data) => {
 };
 
 export const get = async (id) => {
-    return await crudFactory.get(NewsCategory)(id);
+    if (Types.ObjectId.isValid(id))
+        return await crudFactory.get(NewsCategory)(id);
+    else return await crudFactory.getBySlug(NewsCategory)(id);
 };
 
 export const getAll = async (options) => {

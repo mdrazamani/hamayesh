@@ -1,30 +1,36 @@
 import NewsTag from "../../../app/models/newsTag.model.mjs";
 
 export const seedNewsTagsFA = async () => {
-    // تعریف برخی از تگ‌های ابتدایی
+    // Define some initial tags
     const tags = [
-        { title: "تکنولوژی", slug: "technology" },
-        { title: "علم", slug: "science" },
-        { title: "سلامتی", slug: "health" },
-        { title: "ورزش", slug: "sports" },
-        { title: "سرگرمی", slug: "entertainment" },
-        // اضافه کردن تگ‌های بیشتر به تعداد نیازمندی...
+        // ...existing tags...
+        { title: "هوش مصنوعی", slug: "artificial-intelligence" },
+        { title: "یادگیری ماشین", slug: "machine-learning" },
+        { title: "روباتیک", slug: "robotics" },
+        { title: "پردازش زبان طبیعی", slug: "natural-language-processing" },
+        { title: "بینایی ماشین", slug: "computer-vision" },
+        { title: "بلاک چین", slug: "blockchain" },
+        { title: "ارزهای دیجیتال", slug: "cryptocurrency" },
+        { title: "امنیت بلاک چین", slug: "blockchain-security" },
+        { title: "قراردادهای هوشمند", slug: "smart-contracts" },
+        { title: "توکن‌ها", slug: "tokens" },
+        // Add more tags as needed...
     ];
 
     let createdTags;
     try {
-        // درج تگ‌ها در پایگاه داده
+        // Insert tags into the database
         await NewsTag.deleteMany({});
         createdTags = await NewsTag.insertMany(tags);
-        console.log("تگ‌های اخبار با موفقیت seed شدند!");
+        console.log("news tag seeded successfully");
     } catch (error) {
-        console.error("خطا در seed کردن تگ‌های اخبار:", error);
-        // اگر seed کردن ناموفق باشد، باید فرآیند را متوقف کنیم یا خطا را به‌صورت مناسب اداره کنیم
+        console.error("news tag error", error);
+        // If the seeding fails, we need to stop the process or handle the error appropriately
         throw error;
     }
 
-    // شامل شناسه‌های جدید MongoDB ObjectIds تگ‌های ایجاد شده
+    // Includes the new MongoDB ObjectIds of the created tags
     return createdTags;
 };
 
-// این تابع می‌تواند برای seed کردن چندین تگ به صورت یکجا اجرا شود.
+// This function can be executed to seed multiple tags in one go.

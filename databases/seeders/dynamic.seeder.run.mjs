@@ -30,6 +30,7 @@ import { seedAxieFA } from "./fa/axie.seeder.mjs";
 import { seedHamayeshDetailFA } from "./fa/hamayeshDetail.seeder.mjs";
 import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
+import { seedSlidersFA } from "./fa/slider.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -37,6 +38,7 @@ const seeders = {
     users: Language === "fa" ? seedUsersFA : seedUsers,
     roles: seedRoles,
     supporters: Language === "fa" ? seedSupportersFA : seedSupporters,
+    sliders: Language === "fa" ? seedSlidersFA : seedSupporters,
     organizers: Language === "fa" ? seedOrganizersFA : seedOrganizers,
     questions: Language === "fa" ? seedQuestionsFA : seedQuestions,
     hamayeshDetail:

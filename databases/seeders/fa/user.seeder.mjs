@@ -21,108 +21,100 @@ function generateNationalId() {
 export const seedUsersFA = async () => {
     const adminRole = await Role.findOne({ name: "admin" });
     const userRole = await Role.findOne({ name: "user" });
-
     const state = await State.findOne({ state: "البرز" });
     const city = await City.findOne({ city: "کرج" });
 
-    const users2 = [];
-    const users = [
-        {
-            firstName: "محمدرضا",
-            lastName: "زمانی",
-            phoneNumber: "09108494221",
-            password: await bcrypt.hash("Password123@", 10),
-            email: "mohsen.rezvani.rad33@gmail.com",
-            emailVerifiedAt: null,
-            role: {
-                id: adminRole._id,
-                name: adminRole.name,
-            },
-            profileImage: null,
-            lastLoginAt: null,
-            national_id: "0012345678",
-            gender: "male",
-            study_field: "علوم کامپیوتر",
-            degree: "کارشناسی ارشد",
-            institute: "موسسه فناوری",
-            country: "ایران",
-            job: "دکتری هوش مصنوعی",
-            state: state._id,
-            city: city._id,
-            deletedAt: null,
-        },
+    const degrees = ["کارشناسی", "کارشناسی ارشد", "دکتری"];
+    const jobs = ["دکتری هوش مصنوعی", "مهندس بلاک چین", "مهندس نرم‌افزار"];
 
-        {
-            firstName: "محسن",
-            lastName: "رضوانی",
-            phoneNumber: "09330111568",
-            password: await bcrypt.hash("Password123@", 10),
-            email: "rezvani@example.com",
-            emailVerifiedAt: null,
-            role: {
-                id: userRole._id,
-                name: userRole.name,
-            },
-            profileImage: null,
-            lastLoginAt: null,
-            national_id: "0012345679",
-            gender: "male",
-            study_field: "علوم کامپیوتر",
-            degree: "کارشناسی ارشد",
-            institute: "موسسه فناوری",
-            country: "ایران",
-            job: "مهندس بلاک چین",
-            state: state._id,
-            city: city._id,
-            deletedAt: null,
-        },
+    const users = [
+        // ... Your hardcoded users
     ];
 
-    for (let i = 0; i < 50; i++) {
-        const gender = casual.random_element(["male", "female"]);
+    const firstNames = [
+        "علی",
+        "محمد",
+        "حسین",
+        "فاطمه",
+        "زهرا",
+        "محسن",
+        "محمدرضا",
+    ];
+    const lastNames = [
+        "رضوی",
+        "صادقی",
+        "حسینی",
+        "موسوی",
+        "جعفری",
+        "رضوانی",
+        "زمانی",
+    ];
 
-        users.push({
-            firstName: casual.first_name,
-            lastName: casual.last_name,
-            phoneNumber: casual.phone,
-            password: await bcrypt.hash("Password123@", 10),
-            email: casual.email,
+    const images = [
+        "public\\uploads\\personal\\prsonal1.jpg",
+        "public\\uploads\\personal\\prsonal2.jpg",
+        "public\\uploads\\personal\\prsonal3.jpg",
+        "public\\uploads\\personal\\prsonal4.jpg",
+        "public\\uploads\\personal\\prsonal5.jpg",
+        "public\\uploads\\personal\\prsonal6.jpg",
+        "public\\uploads\\personal\\prsonal7.jpg",
+    ];
+    const emails = [
+        "ali@example.com",
+        "mohammad@example.com",
+        "hossein@example.com",
+        "fateme@example.com",
+        "zahra@example.com",
+        "mahdi@example.com",
+        "reza@example.com",
+    ];
+    const phoneNumbers = [
+        "09120000001",
+        "09120000002",
+        "09120000003",
+        "09120000004",
+        "09120000005",
+        "09120000006",
+        "09120000007",
+    ];
+
+    for (let i = 0; i < 7; i++) {
+        const user = {
+            firstName: firstNames[i],
+            lastName: lastNames[i],
+            phoneNumber: phoneNumbers[i],
+            password: await bcrypt.hash("1029Mmd1029@", 10),
+            email: emails[i],
             emailVerifiedAt: null,
-            role: {
-                id: userRole._id,
-                name: userRole.name,
-            },
-            profileImage: casual.url,
+            role: i === 0 ? adminRole : userRole,
+            profileImage: images[i % images.length],
             lastLoginAt: null,
             national_id: generateNationalId(),
-            gender: gender,
-
-            // ...
-            study_field: casual.random_element([
-                "علوم کامپیوتر",
-                "مهندسی نرم‌افزار",
-                "هوش مصنوعی",
-                "مهندسی شبکه",
-            ]),
-            degree: casual.random_element([
-                "کارشناسی",
-                "کارشناسی ارشد",
-                "دکتری",
-            ]),
-            institute: casual.company_name,
-            country: "ایران",
-            job: casual.title,
+            gender: i % 2 === 0 ? "male" : "female",
+            study_field: "علوم کامپیوتر",
+            degree: degrees[i % degrees.length],
+            institute: "موسسه فناوری",
+            job: jobs[i % jobs.length],
             state: state._id,
             city: city._id,
             deletedAt: null,
-        });
+            socials: {
+                facebook: null,
+                twitter: null,
+                linkedIn: null,
+                whatsapp: phoneNumbers[i],
+                telegram: null,
+            },
+            bio: "این یک توضیح کوتاه در مورد کاربر است.",
+        };
+        users.push(user);
     }
 
     try {
         await User.deleteMany({});
         await User.insertMany(users);
-        console.log("کاربران با موفقیت seed شدند!");
+        console.log("users added");
     } catch (error) {
-        console.error("خطا در seed کردن کاربران:", error);
+        console.error("error in user", error);
     }
 };

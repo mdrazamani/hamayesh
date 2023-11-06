@@ -1,5 +1,8 @@
 // userService.mjs
 
+import mongoose from "mongoose";
+const { Types } = mongoose;
+
 import crudFactory from "../../utils/crudFactory.mjs";
 import NewsTag from "../models/newsTag.model.mjs";
 
@@ -12,7 +15,8 @@ export const update = async (id, data) => {
 };
 
 export const get = async (id) => {
-    return await crudFactory.get(NewsTag)(id);
+    if (Types.ObjectId.isValid(id)) return await crudFactory.get(NewsTag)(id);
+    else return await crudFactory.getBySlug(NewsTag)(id);
 };
 
 export const getAll = async (options) => {

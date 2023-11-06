@@ -122,15 +122,19 @@ hamayeshDetailSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
+
+        if (
+            converted.eventAddress.state &&
+            converted.eventAddress.state.state
+        ) {
+            converted.eventAddress.state = converted.eventAddress.state.state;
+        }
+
+        if (converted.eventAddress.city && converted.eventAddress.city.city) {
+            converted.eventAddress.city = converted.eventAddress.city.city;
+        }
     },
 });
-
-//پیدا کردن بدون نیاز به id
-// we need to this............................................................................................................
-// hamayeshDetailSchema.pre(/^find/, function (next) {
-//     this.findOne();
-//     next();
-// });
 
 const HamayeshDetail = mongoose.model("HamayeshDetail", hamayeshDetailSchema);
 
