@@ -26,7 +26,7 @@ export class QueryBuilder {
 
     filter() {
         // Sanitization and preparing filter conditions
-        const queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
+        let queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
         const excludedFields = [
             "page",
             "sort",
@@ -38,6 +38,13 @@ export class QueryBuilder {
         ];
         excludedFields.forEach((el) => delete queryObj[el]);
 
+        // Decode any encoded dots in the query parameter keys
+        queryObj = Object.keys(queryObj).reduce((acc, key) => {
+            const decodedKey = key.replace(/%2E/g, ".");
+            acc[decodedKey] = queryObj[key];
+            return acc;
+        }, {});
+
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(
             /\b(gte|gt|lte|lt|eq)\b/g,
@@ -47,7 +54,7 @@ export class QueryBuilder {
         const additionalFilters = JSON.parse(queryStr);
         const currentFilters = this.query.getFilter();
 
-        // Ensure no sensitive fields can be queried, for example:
+        // Ensure no sensitive fields can be queried
         delete additionalFilters["sensitiveField1"];
         delete additionalFilters["sensitiveField2"];
 
@@ -56,7 +63,6 @@ export class QueryBuilder {
         this.query.find(combinedFilters);
         return this;
     }
-
     sort() {
         // Extract sort and order from queryString
         const sortField = this.queryString.sort;

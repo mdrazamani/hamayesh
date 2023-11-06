@@ -5,7 +5,10 @@ import { deleteController } from "../app/controllers/article/articleCategory/del
 import { indexController } from "../app/controllers/article/articleCategory/index.controller.mjs";
 import { showController } from "../app/controllers/article/articleCategory/show.controller.mjs";
 import { updateController } from "../app/controllers/article/articleCategory/update.controller.mjs";
-import { articleCategoryValidationSchema } from "../app/validations/articleCategory.validation.mjs";
+import {
+    articleCategoryValidationSchema,
+    articleUpdateCategoryValidationSchema,
+} from "../app/validations/articleCategory.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
 
 /**
@@ -186,7 +189,7 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
-    dynamicValidate(articleCategoryValidationSchema),
+    dynamicValidate(articleUpdateCategoryValidationSchema),
     updateController
 );
 

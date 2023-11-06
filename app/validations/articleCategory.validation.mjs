@@ -33,4 +33,36 @@ export const articleCategoryValidationSchema = () => ({
     }).options({ abortEarly: false }), // to handle all errors at once
 });
 
+export const articleUpdateCategoryValidationSchema = () => ({
+    body: Joi.object({
+        title: Joi.string()
+            .min(2)
+            .max(100)
+            .messages({
+                "string.min": getMessage("validation.title_min"),
+                "string.max": getMessage("validation.title_max"),
+                "string.empty": getMessage("validation.title_required"),
+                "any.required": getMessage("validation.title_required"),
+            }),
+        description: Joi.string()
+            .allow(null, "") // allows an optional, empty or null description
+            .optional()
+            .messages({
+                "string.empty": getMessage("validation.description_empty"),
+            }),
+        referees: Joi.array()
+            .items(
+                Joi.string()
+                    .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
+                    .message(getMessage("validation.invalid_referee"))
+            )
+            .optional()
+            .messages({
+                "array.base": getMessage("validation.referees_invalid"),
+            }),
+    }).options({ abortEarly: false }), // to handle all errors at once
+});
+
+// the rest of your code remains unchanged
+
 // the rest of your code remains unchanged

@@ -51,7 +51,7 @@ router.use("/news-tags", NewsTag);
 
 router.use("/daily-visits", DailyVisit);
 
-router.use("/article-Categories", ArticleCategory);
+router.use("/article-categories", ArticleCategory);
 router.use("/articles", Article);
 
 export default router;

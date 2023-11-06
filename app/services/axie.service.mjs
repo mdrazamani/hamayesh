@@ -7,11 +7,11 @@ import Axie from "../models/axie.model.mjs";
 import constants from "../../utils/constants.mjs";
 
 export const create = async (data) => {
-    if (data.parent) {
-        console.log(Object(data.parent));
-        const parent = await Axie.findOne({ _id: data.parent });
-        data.level = parent.level + 1;
-    }
+    // if (data.parent) {
+    //     console.log(Object(data.parent));
+    //     const parent = await Axie.findOne({ _id: data.parent });
+    //     data.level = parent.level + 1;
+    // }
 
     return await crudFactory.create(Axie)(data);
 };

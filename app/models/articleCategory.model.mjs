@@ -27,6 +27,7 @@ ArticleCategorySchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
+        converted.id = doc._id;
     },
 });
 

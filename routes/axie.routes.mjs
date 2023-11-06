@@ -5,7 +5,10 @@ import { deleteController } from "../app/controllers/axie/delete.controller.mjs"
 import { indexController } from "../app/controllers/axie/index.controller.mjs";
 import { showController } from "../app/controllers/axie/show.controller.mjs";
 import { updateController } from "../app/controllers/axie/update.controller.mjs";
-import { axieValidationSchema } from "../app/validations/axie.validation.mjs";
+import {
+    axieUpdateValidationSchema,
+    axieValidationSchema,
+} from "../app/validations/axie.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
 import { indexOrderedController } from "../app/controllers/axie/indexOrdered.controller.mjs";
 
@@ -214,7 +217,7 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
-    dynamicValidate(axieValidationSchema),
+    dynamicValidate(axieUpdateValidationSchema),
     updateController
 );
 

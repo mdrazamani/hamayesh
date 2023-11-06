@@ -134,7 +134,9 @@
 		"boss_max": "validation.boss_max",
 		"boss_required": "validation.boss_required",
 		"invalid_secretariat_type": "validation.invalid_secretariat_type",
-		"type_required": "validation.type_required"
+		"type_required": "validation.type_required",
+		"invalid_referee": "validation.invalid_referee",
+		"referees_invalid": "validation.referees_invalid"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
