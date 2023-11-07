@@ -31,6 +31,7 @@ import { seedHamayeshDetailFA } from "./fa/hamayeshDetail.seeder.mjs";
 import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
 import { seedSlidersFA } from "./fa/slider.seeder.mjs";
+import { seedGalleries } from "./gallery.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -41,8 +42,9 @@ const seeders = {
     sliders: Language === "fa" ? seedSlidersFA : seedSupporters,
     organizers: Language === "fa" ? seedOrganizersFA : seedOrganizers,
     questions: Language === "fa" ? seedQuestionsFA : seedQuestions,
-    hamayeshDetail:
-        Language === "fa" ? seedHamayeshDetailFA : seedHamayeshDetail,
+    galleries: Language === "fa" ? seedGalleries : seedGalleries,
+    hamayeshDetail: seedHamayeshDetailFA,
+    // Language === "fa" ? seedHamayeshDetailFA : seedHamayeshDetail,
     axies: Language === "fa" ? seedAxieFA : seedAxie,
     secretariats: Language === "fa" ? seedSecretariatsFA : seedSecretariats,
     speakers: Language === "fa" ? seedSpeakersFA : seedSpeakers,

@@ -2,7 +2,10 @@ import express from "express";
 import { dynamicValidate } from "../utils/validate.mjs";
 import { showController } from "../app/controllers/hamayeshDetail/show.controller.mjs";
 import { updateController } from "../app/controllers/hamayeshDetail/update.controller.mjs";
-import { hamayeshDetailValidationSchema } from "../app/validations/hamayeshDetail.validation.mjs";
+import {
+    hamayeshDetailUpdateValidationSchema,
+    hamayeshDetailValidationSchema,
+} from "../app/validations/hamayeshDetail.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
 
 /**
@@ -126,9 +129,9 @@ router.get("/", showController);
  */
 
 router.patch(
-    "/:id",
+    "/",
     authenticateJWT,
-    dynamicValidate(hamayeshDetailValidationSchema),
+    dynamicValidate(hamayeshDetailUpdateValidationSchema),
     updateController
 );
 
