@@ -143,6 +143,24 @@ userSchema.pre(/^find/, function (next) {
     next();
 });
 
+userSchema.virtual("faRole").get(function () {
+    if (this.role && this.role.name) {
+        // Replace this logic with how you map role names to their corresponding faNames
+        // For example, you can use a dictionary or a switch statement.
+        const roleNamesToFaNams = {
+            user: "کاربر",
+            admin: "ادمین",
+            referee: "داور",
+            executive: "کاربر اجرایی",
+            scientific: "کاربر علمی",
+            // Add more role mappings as needed
+        };
+
+        return roleNamesToFaNams[this.role.name] || "کاربر";
+    }
+    return "کاربر"; // Or handle this case as you prefer
+});
+
 userSchema.set("toJSON", {
     virtuals: true, // ensures virtual fields are included
     transform: (doc, converted) => {
@@ -151,6 +169,7 @@ userSchema.set("toJSON", {
         delete converted.__v; // if you want to remove the version key
         delete converted.deletedAt;
         // conditionally add the api_token to the output if it exists
+
         if (doc._api_token) {
             converted.api_token = doc._api_token;
         }

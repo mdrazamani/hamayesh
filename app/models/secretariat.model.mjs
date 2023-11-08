@@ -35,6 +35,7 @@ const secretariatSchema = new mongoose.Schema(
 secretariatSchema.index({ title: "text" }); // example compound index
 
 secretariatSchema.set("toJSON", {
+    virtuals: true, // ensures virtual fields are included
     transform: (doc, converted) => {
         delete converted.__v;
         delete converted._id;
@@ -42,6 +43,21 @@ secretariatSchema.set("toJSON", {
     },
 });
 
+secretariatSchema.virtual("faType").get(function () {
+    if (this.type) {
+        // Replace this logic with how you map role names to their corresponding faNames
+        // For example, you can use a dictionary or a switch statement.
+        const roleNamesToFaNams = {
+            executive: "دبیرخانه اجرایی",
+            academic: "دبیرخانه علمی",
+            policy: "دبیرخانه سیاستگذاری",
+            conferance: "دبیرخانه کنفرانس",
+        };
+
+        return roleNamesToFaNams[this.type] || "دبیرخانه";
+    }
+    return "دبیرخانه"; // Or handle this case as you prefer
+});
 // Pre-save hook to execute before saving a new document
 secretariatSchema.pre("save", async function (next) {
     const secretariat = this;

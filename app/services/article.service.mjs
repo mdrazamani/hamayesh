@@ -3,6 +3,19 @@ import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import Article from "../models/article.model.mjs";
 
+const populateOptions = [
+    {
+        path: "category",
+        model: "ArticleCategory",
+        select: "-__v",
+    },
+    {
+        path: "userId",
+        model: "User",
+        select: "-__v",
+    },
+];
+
 export const create = async (data) => {
     return await crudFactory.create(Article)(data);
 };
@@ -22,11 +35,16 @@ export const update = async (id, data, user) => {
 };
 
 export const get = async (id) => {
-    return await crudFactory.get(Article)(id);
+    return await crudFactory.get(Article)(id, {
+        populate: populateOptions,
+    });
 };
 
 export const getAll = async (options) => {
-    return await crudFactory.getAll(Article)(options);
+    return await crudFactory.getAll(Article)({
+        ...options,
+        populate: populateOptions,
+    });
 };
 
 export const deleteDoc = async (id) => {

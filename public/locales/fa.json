@@ -136,7 +136,11 @@
 		"invalid_secretariat_type": "validation.invalid_secretariat_type",
 		"type_required": "validation.type_required",
 		"invalid_referee": "validation.invalid_referee",
-		"referees_invalid": "validation.referees_invalid"
+		"referees_invalid": "validation.referees_invalid",
+		"start_required": "validation.start_required",
+		"invalid_category": "validation.invalid_category",
+		"invalid_userId": "validation.invalid_userId",
+		"userId_required": "validation.userId_required"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
