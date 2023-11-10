@@ -23,32 +23,8 @@ const ArticleSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        articleFiles: [
-            {
-                title: {
-                    type: String,
-                },
-                mimetype: {
-                    type: String,
-                },
-                size: {
-                    type: Number,
-                },
-            },
-        ],
-        presentationFiles: [
-            {
-                title: {
-                    type: String,
-                },
-                mimetype: {
-                    type: String,
-                },
-                size: {
-                    type: Number,
-                },
-            },
-        ],
+        articleFiles: [String],
+        presentationFiles: [String],
         status: {
             type: String,
             enum: ArticleStatus,

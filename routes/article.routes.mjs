@@ -7,6 +7,7 @@ import { showController } from "../app/controllers/article/show.controller.mjs";
 import { updateController } from "../app/controllers/article/update.controller.mjs";
 import { articleValidationSchema } from "../app/validations/article.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import { downloadController } from "../app/controllers/article/download.controller.mjs";
 
 /**
  * @swagger
@@ -171,7 +172,7 @@ router.delete("/:id", authenticateJWT, deleteController);
  *         description: Number of items per page
  */
 
-router.get("/", indexController);
+router.get("/", authenticateJWT, indexController);
 
 /**
  * @swagger
@@ -281,8 +282,14 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
-    dynamicValidate(articleValidationSchema),
+    // dynamicValidate(articleValidationSchema),
     updateController
 );
 
+router.get(
+    "/download/all/:id",
+    authenticateJWT,
+    // dynamicValidate(articleValidationSchema),
+    downloadController
+);
 export default router;

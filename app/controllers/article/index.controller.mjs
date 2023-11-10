@@ -9,6 +9,7 @@ export const indexController = async (req, res, next) => {
         const articles = await getAll({
             page: Number(page),
             items_per_page: Number(items_per_page),
+            ...(req.user.role.name === "user" ? { userId: req.user.id } : {}),
             ...query,
         });
         if (articles)
