@@ -24,6 +24,25 @@ export class QueryBuilder {
         }
     }
 
+    processFilters(combinedFilters) {
+        const processedFilters = {};
+
+        for (const key in combinedFilters) {
+            if (combinedFilters.hasOwnProperty(key)) {
+                const value = combinedFilters[key];
+
+                if (/\s*\|\|\s*/.test(value)) {
+                    const values = value.split(/\s*\|\|\s*/);
+                    processedFilters[key] = { $in: values };
+                } else {
+                    processedFilters[key] = value;
+                }
+            }
+        }
+
+        return processedFilters;
+    }
+
     filter() {
         // Sanitization and preparing filter conditions
         let queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
@@ -60,7 +79,7 @@ export class QueryBuilder {
 
         const combinedFilters = { ...currentFilters, ...additionalFilters };
 
-        this.query.find(combinedFilters);
+        this.query.find(this.processFilters(combinedFilters));
         return this;
     }
     sort() {

@@ -2,6 +2,7 @@ import { getMessage } from "../../config/i18nConfig.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import Article from "../models/article.model.mjs";
+import ArticleCategory from "../models/articleCategory.model.mjs";
 import HamayeshDetail from "../models/hamayeshDetail.model.mjs";
 
 const populateOptions = [
@@ -46,6 +47,26 @@ export const getAll = async (options) => {
         ...options,
         populate: populateOptions,
     });
+};
+
+const categoryIdMaker = (categories) => {
+    return categories.map((cat) => cat._id).join(" || ");
+};
+
+export const getAllReferee = async (options, refereeId) => {
+    const categories = await ArticleCategory.find({ referees: refereeId });
+
+    return await crudFactory.getAll(Article)({
+        ...options,
+        ...{ category: categoryIdMaker(categories) },
+        populate: populateOptions,
+    });
+
+    // let articles = [];
+    // categories.forEach((cat) => {
+    //     const article = Article.find({ category: cat });
+    //     articles.push(article);
+    // });
 };
 
 export const deleteDoc = async (id) => {

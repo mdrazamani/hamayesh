@@ -47,7 +47,7 @@ const ArticleSchema = new mongoose.Schema(
 
 ArticleSchema.index({
     title: "text",
-    slug: "text",
+    category: "text",
 });
 
 ArticleSchema.set("toJSON", {
