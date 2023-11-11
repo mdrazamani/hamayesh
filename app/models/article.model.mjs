@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import HamayeshDetail from "./hamayeshDetail.model.mjs";
 import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
+import constants from "../../utils/constants.mjs";
 
 const ArticleStatus = ["success", "pending", "failed"];
 
@@ -60,12 +61,12 @@ ArticleSchema.set("toJSON", {
 ArticleSchema.pre("save", async function (next) {
     const hamayesh = await HamayeshDetail.findOne();
 
-    if (hamayesh.dates.startArticle > Date.now()) {
-        throw new APIError({
-            message: getMessage("errors.startArticle"),
-            status: constants.BAD_REQUEST,
-        });
-    }
+    // if (hamayesh.dates.startArticle > Date.now()) {
+    //     throw new APIError({
+    //         message: getMessage("errors.startArticle"),
+    //         status: constants.BAD_REQUEST,
+    //     });
+    // }
 
     if (hamayesh.dates.endArticle < Date.now()) {
         throw new APIError({

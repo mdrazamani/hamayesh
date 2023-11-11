@@ -29,7 +29,8 @@
 		"invalid_or_expired_token": "توکن نامعتبر یا منقضی است",
 		"executing_query": "errors.executing_query",
 		"getAllGrouped": "errors.getAllGrouped",
-		"commentIsAre": "نظر شما برای این خبر قبلا ثبت شده است"
+		"commentIsAre": "نظر شما برای این خبر قبلا ثبت شده است",
+		"startArticle": "errors.startArticle"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
