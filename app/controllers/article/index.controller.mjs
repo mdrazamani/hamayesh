@@ -17,11 +17,14 @@ export const indexController = async (req, res, next) => {
                 ...query,
             });
         } else {
-            articles = await getAllReferee({
-                page: Number(page),
-                items_per_page: Number(items_per_page),
-                ...query,
-            });
+            articles = await getAllReferee(
+                {
+                    page: Number(page),
+                    items_per_page: Number(items_per_page),
+                    ...query,
+                },
+                req.user.id
+            );
         }
 
         if (articles)
