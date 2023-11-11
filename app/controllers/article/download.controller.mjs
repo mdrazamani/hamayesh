@@ -2,16 +2,9 @@ import archiver from "archiver";
 
 import Article from "../../models/article.model.mjs";
 import path from "path";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { createPath, createFilePath } from "../../../config/tools.mjs";
-
-// Get the current directory
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
 
 // Function to create a ZIP file
-const createZip = async (files, res) => {
+const createZip = async (articleFiles, presentationFiles, res) => {
     const archive = archiver("zip", {
         zlib: { level: 9 }, // Set compression level
     });
@@ -19,10 +12,16 @@ const createZip = async (files, res) => {
     // Pipe the ZIP file to the response object
     archive.pipe(res);
 
-    // Add files to the ZIP
-    files.forEach((file) => {
-        // const filePath = path.join(__dirname, "..", file);
-        archive.file(file, { name: path.basename(file) });
+    // Add article files to the ZIP in the 'article' folder
+    articleFiles.forEach((file) => {
+        const filePath = path.join("article", path.basename(file));
+        archive.file(file, { name: filePath });
+    });
+
+    // Add presentation files to the ZIP in the 'presentation' folder
+    presentationFiles.forEach((file) => {
+        const filePath = path.join("presentation", path.basename(file));
+        archive.file(file, { name: filePath });
     });
 
     // Finalize the ZIP and send it
@@ -39,14 +38,14 @@ export const downloadController = async (req, res, next) => {
         }
 
         // Combine articleFiles and presentationFiles into one array
-        const allFiles = [
-            ...article.articleFiles,
-            ...article.presentationFiles,
-        ];
+        // const allFiles = [
+        //     ...article.articleFiles,
+        //     ...article.presentationFiles,
+        // ];
 
-        if (allFiles.length === 0) {
-            return res.status(404).json({ message: "No files found" });
-        }
+        // if (allFiles.length === 0) {
+        //     return res.status(404).json({ message: "No files found" });
+        // }
 
         // Set the response headers for downloading a ZIP file
         res.setHeader("Content-Type", "application/zip");
@@ -55,7 +54,7 @@ export const downloadController = async (req, res, next) => {
             `attachment; filename=articleFiles.zip`
         );
 
-        await createZip(allFiles, res);
+        await createZip(article.articleFiles, article.presentationFiles, res);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });

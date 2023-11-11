@@ -28,35 +28,12 @@ export const seedArticlesFA = async () => {
             category: categories[0]._id, // Assign a category ID
             userId: users[0]._id, // Assign a user ID
             articleFiles: [
-                {
-                    title: "مقاله تحقیقاتی",
-                    mimetype: "application/pdf",
-                    size: 400,
-                },
-                {
-                    title: "نمودارهای داده",
-                    mimetype: "image/png",
-                    size: 250,
-                },
-                {
-                    title: "داده‌های تجربی",
-                    mimetype: "application/zip",
-                    size: 800,
-                },
-                // ... other files
+                "public\\uploads\\articleFiles\\test33.pdf",
+                "public\\uploads\\articleFiles\\test34.pdf",
             ],
             presentationFiles: [
-                {
-                    title: "اسلاید دسته",
-                    mimetype: "application/vnd.ms-powerpoint",
-                    size: 1000,
-                },
-                {
-                    title: "ویدیوی پرزنتیشن",
-                    mimetype: "video/mp4",
-                    size: 1200,
-                },
-                // ... other files
+                "public\\uploads\\articleFiles\\per.pdf",
+                "public\\uploads\\articleFiles\\tasis.pdf",
             ],
             status: "success", // or "در انتظار", or "ناموفق"
             arbitration: {
@@ -70,27 +47,8 @@ export const seedArticlesFA = async () => {
                 "بررسی آخرین پیشرفت‌های هوش مصنوعی و کاربردهای واقعی آن‌ها.",
             category: categories[0]._id,
             userId: users[1]._id,
-            articleFiles: [
-                {
-                    title: "مقاله تحقیقاتی",
-                    mimetype: "application/pdf",
-                    size: 350,
-                },
-                {
-                    title: "نمونه‌های کد هوش مصنوعی",
-                    mimetype: "text/plain",
-                    size: 600,
-                },
-                // ... other files
-            ],
-            presentationFiles: [
-                {
-                    title: "اسلایدهای دموی هوش مصنوعی",
-                    mimetype: "application/vnd.ms-powerpoint",
-                    size: 800,
-                },
-                // ... other files
-            ],
+            articleFiles: [],
+            presentationFiles: [],
             status: "success",
             arbitration: {
                 refereeId: users[0]._id,
@@ -102,22 +60,8 @@ export const seedArticlesFA = async () => {
             description: "صعود پزشکی از راه دور و تأثیر آن در بهداشت مدرن.",
             category: categories[1]._id,
             userId: users[0]._id,
-            articleFiles: [
-                {
-                    title: "مقاله تحقیقاتی",
-                    mimetype: "application/pdf",
-                    size: 450,
-                },
-                // ... other files
-            ],
-            presentationFiles: [
-                {
-                    title: "مطالعات موردی پزشکی از راه دور",
-                    mimetype: "application/vnd.ms-powerpoint",
-                    size: 950,
-                },
-                // ... other files
-            ],
+            articleFiles: [],
+            presentationFiles: [],
             status: "pending",
             arbitration: {
                 refereeId: users[0]._id,
