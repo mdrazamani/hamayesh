@@ -20,24 +20,18 @@ export const seedHamayeshDetailFA = async () => {
                     "همایش بین‌المللی پیشرفت‌ها و نوآوری‌ها در صنعت نفت و گاز با هدف گردآوری متخصصان، دانشمندان و پیشگامان صنعت از سراسر جهان برگزار گردید. در این رویداد سه‌روزه، بیش از ۵۰ سخنرانی تخصصی، کارگاه‌های آموزشی و پنل‌های بحث و گفتگو در زمینه‌های مختلفی از جمله اکتشاف و تولید، فرآوری و پالایش، ایمنی و محیط زیست، اقتصاد نفت و گاز، و نوآوری‌های فناورانه در این صنعت انجام شد.",
                 iscCode: "123659845",
                 aboutHtml: `<div class="container" style="text-align: right; direction: rtl">
-
                 <header class="conference-header" style="margin-bottom: 20px;">
                     <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #005792;">نهمین همایش بین‌المللی نفت و گاز</h1>
                     <p style="font-size: 1.1em; color: #666;">یک رویداد فاخر برای نمایش پیشرفت‌های اخیر و بحث در مورد آینده صنعت</p>
                 </header>
-            
                 <section class="section" style="margin-bottom: 20px;">
                     <h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;">درباره همایش</h2>
                     <p style="text-indent: 40px;">نهمین همایش بین‌المللی نفت و گاز با هدف گردهم‌آوری متخصصین، تحلیل‌گران، و پیشروان صنعت از سرتاسر جهان برای اشتراک گذاری دانش، تجربیات و دستاوردهای جدید، به عنوان بزرگترین رویداد تخصصی منطقه در حوزه انرژی برگزار می‌شود.</p>
                 </section>
-            
                 <section class="section" style="margin-bottom: 20px;">
                     <h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;">موضوعات کلیدی</h2>
                     <p style="text-indent: 40px;">این همایش به موضوعاتی چون <span style="color: #d35400; font-weight: bold;">استراتژی‌های اکتشاف و تولید</span>، <span style="color: #d35400; font-weight: bold;">تکنولوژی‌های نوین در پالایش</span>، <span style="color: #d35400; font-weight: bold;">مدیریت پروژه‌های نفتی</span>، و <span style="color: #d35400; font-weight: bold;">چالش‌های زیست محیطی</span> می‌پردازد.</p>
                 </section>
-            
-                <!-- Additional sections can be added here -->
-            
                 <footer class="conference-footer">
                     <p style="text-align: center; font-size: 1.1em;">برای کسب اطلاعات بیشتر و ثبت نام در همایش، لطفا به وب‌سایت ما مراجعه کنید.</p>
                 </footer>
