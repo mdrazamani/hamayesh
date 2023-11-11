@@ -61,12 +61,12 @@ ArticleSchema.set("toJSON", {
 ArticleSchema.pre("save", async function (next) {
     const hamayesh = await HamayeshDetail.findOne();
 
-    // if (hamayesh.dates.startArticle > Date.now()) {
-    //     throw new APIError({
-    //         message: getMessage("errors.startArticle"),
-    //         status: constants.BAD_REQUEST,
-    //     });
-    // }
+    if (hamayesh.dates.startArticle > Date.now()) {
+        throw new APIError({
+            message: getMessage("errors.startArticle"),
+            status: constants.BAD_REQUEST,
+        });
+    }
 
     if (hamayesh.dates.endArticle < Date.now()) {
         throw new APIError({

@@ -137,9 +137,10 @@ export const hamayeshDetailUpdateValidationSchema = () => ({
                         title: Joi.string().optional().allow(""),
                         image: Joi.string().optional().allow(""),
                         format: Joi.string()
-                            .valid("pdf", "doc", "sheet")
+                            .valid("pdf", "doc", "pptx", "ppt")
                             .optional(),
                         description: Joi.string().optional().allow(""),
+                        path: Joi.string().required().allow(""),
                     })
                 )
                 .optional(),

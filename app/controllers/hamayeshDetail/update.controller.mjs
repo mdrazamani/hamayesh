@@ -4,8 +4,7 @@ import { update } from "../../services/hamayeshDetail.service.mjs";
 
 export const updateController = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const hamayeshDetail = await update(id, req.body, next);
+        const hamayeshDetail = await update(req.body);
         if (hamayeshDetail)
             res.respond(
                 constants.OK,

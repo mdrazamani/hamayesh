@@ -133,6 +133,13 @@ hamayeshDetailSchema.set("toJSON", {
         if (converted.eventAddress.city && converted.eventAddress.city.city) {
             converted.eventAddress.city = converted.eventAddress.city.city;
         }
+
+        // Remove _id from writingArticles.files
+        if (converted.writingArticles && converted.writingArticles.files) {
+            converted.writingArticles.files.forEach((file) => {
+                delete file._id;
+            });
+        }
     },
 });
 
