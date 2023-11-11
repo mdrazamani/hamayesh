@@ -13,8 +13,9 @@ export const seedHamayeshDetailFA = async () => {
 
         const hamayeshDetails = [
             {
-                faTitle: "نهمین همایش بین المللی نفت و گاز",
-                enTitle: "The Ninth International Conference on Oil and Gas",
+                faTitle: "نهمین همایش بین المللی هوش مصنوعی و بلاک چین",
+                enTitle:
+                    "The Ninth International Conference on AI and Blockchain",
                 description:
                     "همایش بین‌المللی پیشرفت‌ها و نوآوری‌ها در صنعت نفت و گاز با هدف گردآوری متخصصان، دانشمندان و پیشگامان صنعت از سراسر جهان برگزار گردید. در این رویداد سه‌روزه، بیش از ۵۰ سخنرانی تخصصی، کارگاه‌های آموزشی و پنل‌های بحث و گفتگو در زمینه‌های مختلفی از جمله اکتشاف و تولید، فرآوری و پالایش، ایمنی و محیط زیست، اقتصاد نفت و گاز، و نوآوری‌های فناورانه در این صنعت انجام شد.",
                 iscCode: "123659845",

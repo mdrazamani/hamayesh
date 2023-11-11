@@ -2,9 +2,38 @@
 
 import crudFactory from "../../utils/crudFactory.mjs";
 import NewsComment from "../models/newsComment.model.mjs";
+import News from "../models/news.model.mjs";
+import APIError from "../../utils/errors.mjs";
+import constants from "../../utils/constants.mjs";
+import { getMessage } from "../../config/i18nConfig.mjs";
 
 export const create = async (data) => {
-    return await crudFactory.create(NewsComment)(data);
+    const news = await News.findOne({ _id: data.newsId });
+
+    let flag = true;
+    for (const comment of news?.comments || []) {
+        const newsComment = await NewsComment.findOne({ _id: comment });
+
+        if (
+            newsComment.userIp == data.userIp ||
+            newsComment.userEmail == data.userEmail
+        ) {
+            flag = false;
+            break;
+        }
+    }
+
+    if (flag) {
+        const entity = new NewsComment(data);
+        const add = await entity.save();
+        await crudFactory.addNested(News)(news._id, "comments", entity._id);
+        return add;
+    } else {
+        throw new APIError({
+            message: getMessage("errors.commentIsAre"),
+            status: constants.BAD_REQUEST,
+        });
+    }
 };
 
 export const update = async (id, data) => {

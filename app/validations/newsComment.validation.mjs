@@ -28,6 +28,10 @@ export const newsCommentValidationSchema = () => ({
             .messages({
                 "string.email": "Email must be a valid email address",
             }),
+        newsId: Joi.string().alphanum().optional().messages({
+            "string.alphanum":
+                "newsId must only contain alphanumeric characters",
+        }),
         userIp: Joi.string()
             .ip({
                 version: ["ipv4", "ipv6"],
@@ -60,8 +64,7 @@ export const newsCommentUpdateValidationSchema = () => ({
             .max(100) // You can decide the appropriate max length
             .optional() // Assuming this is not required based on your schema
             .allow(""), // If you want to allow an empty string
-        status: Joi.bool()
-        .optional(), // Assuming this is not required based on your schema
+        status: Joi.bool().optional(), // Assuming this is not required based on your schema
         userLastName: Joi.string()
             .max(100) // Decide the appropriate max length
             .optional() // Same as above

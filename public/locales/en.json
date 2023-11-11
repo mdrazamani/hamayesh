@@ -25,7 +25,8 @@
         "cannot_delete_self": "You cannot delete yourself",
         "secretariat_exists": "Secretariat already exists",
         "update_failed": "Update failed",
-        "invalid_or_expired_token": "Invalid or expired token"
+        "invalid_or_expired_token": "Invalid or expired token",
+        "commentIsAre": "Your comment for this news has already been registered."
     },
     "validation": {
         "tokenExpired": "Password reset token has expired.",

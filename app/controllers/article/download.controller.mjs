@@ -4,10 +4,11 @@ import Article from "../../models/article.model.mjs";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { createPath, createFilePath } from "../../../config/tools.mjs";
 
 // Get the current directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 // Function to create a ZIP file
 const createZip = async (files, res) => {
@@ -20,8 +21,8 @@ const createZip = async (files, res) => {
 
     // Add files to the ZIP
     files.forEach((file) => {
-        const filePath = path.join(__dirname, "..", file);
-        archive.file(filePath, { name: path.basename(filePath) });
+        // const filePath = path.join(__dirname, "..", file);
+        archive.file(file, { name: path.basename(file) });
     });
 
     // Finalize the ZIP and send it
@@ -54,7 +55,7 @@ export const downloadController = async (req, res, next) => {
             `attachment; filename=articleFiles.zip`
         );
 
-        createZip(allFiles, res);
+        await createZip(allFiles, res);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });

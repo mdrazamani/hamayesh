@@ -20,6 +20,7 @@ function generateNationalId() {
 
 export const seedUsersFA = async () => {
     const adminRole = await Role.findOne({ name: "admin" });
+
     const userRole = await Role.findOne({ name: "user" });
     const state = await State.findOne({ state: "البرز" });
     const city = await City.findOne({ city: "کرج" });
@@ -60,7 +61,7 @@ export const seedUsersFA = async () => {
         "public\\uploads\\personal\\prsonal7.jpg",
     ];
     const emails = [
-        "ali@example.com",
+        "mdrazamani@gmail.com",
         "mohammad@example.com",
         "hossein@example.com",
         "fateme@example.com",
@@ -86,7 +87,17 @@ export const seedUsersFA = async () => {
             password: await bcrypt.hash("1029Mmd1029@", 10),
             email: emails[i],
             emailVerifiedAt: null,
-            role: i === 0 ? adminRole : userRole,
+            role:
+                i === 0
+                    ? {
+                          id: adminRole._id,
+                          name: adminRole.name, // Admin role name from the fetched role
+                      }
+                    : {
+                          id: userRole._id,
+                          name: userRole.name, // Admin role name from the fetched role
+                      },
+
             profileImage: images[i % images.length],
             lastLoginAt: null,
             national_id: generateNationalId(),

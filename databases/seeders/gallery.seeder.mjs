@@ -1,11 +1,28 @@
 import Gallery from "../../app/models/gallery.model.mjs"; // Adjust the import as per your file structure
 
 export const seedGalleries = async () => {
-    const numberOfGalleries = 6; // Adjust as needed
-    const numberOfImagesPerGallery = 23; // Adjust as neededy
+    const numberOfGalleries = 2; // Adjust as needed
+
+    const images = [
+        "public\\uploads\\galleries\\gallery1.jpg",
+        "public\\uploads\\galleries\\gallery2.jpg",
+        "public\\uploads\\galleries\\gallery3.jpg",
+        "public\\uploads\\galleries\\gallery4.jpg",
+        "public\\uploads\\galleries\\gallery5.jpg",
+        "public\\uploads\\galleries\\gallery6.jpg",
+        "public\\uploads\\galleries\\gallery7.jpg",
+        "public\\uploads\\galleries\\gallery8.jpg",
+        "public\\uploads\\galleries\\gallery9.jpg",
+        "public\\uploads\\galleries\\gallery10.jpg",
+        "public\\uploads\\galleries\\gallery11.jpg",
+        "public\\uploads\\galleries\\gallery12.jpg",
+        "public\\uploads\\galleries\\gallery13.jpg",
+        "public\\uploads\\galleries\\gallery14.jpg",
+    ];
 
     // Generate galleries
     const galleries = [];
+    let k = 0;
     for (let i = 0; i < numberOfGalleries; i++) {
         const gallery = {
             category: `Category ${i}`,
@@ -15,9 +32,9 @@ export const seedGalleries = async () => {
             isActive: true,
         };
 
-        for (let j = 0; j < numberOfImagesPerGallery; j++) {
+        for (let j = 0; j < (i == 0 ? 9 : 5); j++) {
             gallery.images.push({
-                path: `public/uploads/headerImage/test.png`,
+                path: images[k++],
                 title: `Title for image ${j} in category ${i}`,
             });
         }
