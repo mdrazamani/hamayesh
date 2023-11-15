@@ -86,6 +86,7 @@ const OrganizerSchema = new mongoose.Schema(
 OrganizerSchema.index({
     name: "text",
     isMain: 1,
+    link: "text",
 });
 
 OrganizerSchema.set("toJSON", {

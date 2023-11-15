@@ -48,6 +48,7 @@ const ArticleSchema = new mongoose.Schema(
 ArticleSchema.index({
     title: "text",
     category: "text",
+    status: "text",
 });
 
 ArticleSchema.set("toJSON", {

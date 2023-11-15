@@ -30,6 +30,7 @@ SupporterSchema.set("toJSON", {
         converted.id = doc._id;
     },
 });
+SupporterSchema.index({ name: "text", supportType: "text" });
 
 SupporterSchema.virtual("faType").get(function () {
     if (this.supportType) {

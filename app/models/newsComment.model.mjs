@@ -33,6 +33,10 @@ const NewsCommentSchema = new mongoose.Schema(
 
 NewsCommentSchema.index({
     comment: "text",
+    userLastName: "text",
+    userEmail: "text",
+    userIp: "text",
+    userFirstName: "text",
 });
 
 // // Query middleware to exclude soft-deleted users

@@ -40,6 +40,12 @@ SliderSchema.set("toJSON", {
     },
 });
 
+SliderSchema.index({
+    title: "text",
+    description: "text",
+    link: "link",
+});
+
 // Pre middleware that executes before the document is removed
 SliderSchema.pre("remove", async function (next) {
     try {

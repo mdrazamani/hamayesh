@@ -30,6 +30,9 @@ speakerSchema.set("toJSON", {
         converted.id = doc._id;
     },
 });
+
+speakerSchema.index({ title: "text" });
+
 // If you need any indexing for efficient querying, add here
 // speakerSchema.index({ /* fields to index */ });
 

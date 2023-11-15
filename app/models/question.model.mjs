@@ -26,6 +26,11 @@ const QuestionSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+QuestionSchema.index({
+    title: "text",
+    description: "text",
+});
+
 QuestionSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted.__v;
