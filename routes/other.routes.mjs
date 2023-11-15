@@ -5,6 +5,7 @@ import {
     getCitiesByState,
 } from "../app/controllers/others/country.controller.mjs";
 import { handleFileUpload } from "../app/controllers/others/fileUploader.controller.mjs";
+import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
 
 const router = express.Router();
 
@@ -58,7 +59,7 @@ const router = express.Router();
  *                   format: binary
  *                 description: The file(s) to upload
  */
-router.post("/upload", handleFileUpload);
+router.post("/upload", authenticateJWT, handleFileUpload);
 
 /**
  * @swagger

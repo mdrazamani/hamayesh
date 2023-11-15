@@ -5,7 +5,10 @@ import { deleteController } from "../app/controllers/supporter/delete.controller
 import { indexController } from "../app/controllers/supporter/index.controller.mjs";
 import { showController } from "../app/controllers/supporter/show.controller.mjs";
 import { updateController } from "../app/controllers/supporter/update.controller.mjs";
-import { supporterValidationSchema } from "../app/validations/supporter.validation.mjs";
+import {
+    supporterUpdateValidationSchema,
+    supporterValidationSchema,
+} from "../app/validations/supporter.validation.mjs";
 import {
     authenticateJWT,
     authorizeRole,
@@ -201,7 +204,7 @@ router.patch(
         admin: "", // Full access
         executive: "",
     }),
-    dynamicValidate(supporterValidationSchema),
+    dynamicValidate(supporterUpdateValidationSchema),
     updateController
 );
 

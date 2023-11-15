@@ -31,3 +31,30 @@ export const supporterValidationSchema = () => ({
             }),
     }).options({ abortEarly: false }),
 });
+
+export const supporterUpdateValidationSchema = () => ({
+    body: Joi.object({
+        name: Joi.string()
+            .min(2)
+            .max(100)
+            .messages({
+                "string.min": getMessage("validation.name_min"),
+                "string.max": getMessage("validation.name_max"),
+                "string.empty": getMessage("validation.name_required"),
+            }),
+        logo: Joi.string().messages({
+            "string.empty": getMessage("validation.logo_required"),
+        }),
+        supportType: Joi.string()
+            .valid("Financial", "Academic")
+            .messages({
+                "any.only": getMessage("validation.supportType_invalid"),
+            }),
+        link: Joi.string()
+            .uri()
+            .allow("")
+            .messages({
+                "string.uri": getMessage("validation.link_format"),
+            }),
+    }).options({ abortEarly: false }),
+});

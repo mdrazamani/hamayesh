@@ -30,7 +30,8 @@
 		"executing_query": "errors.executing_query",
 		"getAllGrouped": "errors.getAllGrouped",
 		"commentIsAre": "نظر شما برای این خبر قبلا ثبت شده است",
-		"startArticle": "errors.startArticle"
+		"startArticle": "errors.startArticle",
+		"File_upload_failed": "errors.File_upload_failed"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
