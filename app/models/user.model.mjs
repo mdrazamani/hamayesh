@@ -308,18 +308,27 @@ userSchema.pre("findOneAndUpdate", async function (next) {
 
         // Check if the profile image is being updated
         if (update?.profileImage) {
-            // Retrieve the current document from the database
             const currentDocument = await query.findOne(this.getQuery());
 
-            // Check if there's an existing profile image to delete
             if (currentDocument && currentDocument.profileImage) {
                 const imagePath = path.join(
                     process.cwd(),
                     currentDocument.profileImage
                 );
-                await fs.promises.access(imagePath);
-                await fs.promises.unlink(imagePath);
-                // Log or handle the successful deletion if necessary
+
+                try {
+                    await fs.promises.unlink(imagePath);
+                } catch (error) {
+                    // Check for the specific error ENOENT (No such file or directory)
+                    if (error.code !== "ENOENT") {
+                        throw error; // If it's any other error, rethrow it
+                    }
+                    // If it's ENOENT, just log it and continue, as the file is already not present
+                    console.log(
+                        "File already deleted or not found: ",
+                        imagePath
+                    );
+                }
             }
         }
         next();

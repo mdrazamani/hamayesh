@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import APIError from "../../utils/errors.mjs";
 import constants from "../../utils/constants.mjs";
+import path from "path";
+import fs from "fs";
 
 const OrganizerSchema = new mongoose.Schema(
     {
@@ -131,6 +133,41 @@ OrganizerSchema.pre("save", async function (next) {
     next();
 });
 
+OrganizerSchema.pre("findOneAndUpdate", async function (next) {
+    try {
+        const query = this;
+        const update = query.getUpdate();
+
+        if (update?.logo) {
+            const currentDocument = await query.findOne(this.getQuery());
+
+            if (currentDocument && currentDocument.logo) {
+                const imagePath = path.join(
+                    process.cwd(),
+                    currentDocument.logo
+                );
+
+                try {
+                    await fs.promises.unlink(imagePath);
+                } catch (error) {
+                    // Check for the specific error ENOENT (No such file or directory)
+                    if (error.code !== "ENOENT") {
+                        throw error; // If it's any other error, rethrow it
+                    }
+                    // If it's ENOENT, just log it and continue, as the file is already not present
+                    console.log(
+                        "File already deleted or not found: ",
+                        imagePath
+                    );
+                }
+            }
+        }
+        next();
+    } catch (error) {
+        console.error("Error in findOneAndUpdate middleware: ", error);
+        next(error);
+    }
+});
 const Organizer = mongoose.model("Organizer", OrganizerSchema);
 
 export default Organizer;

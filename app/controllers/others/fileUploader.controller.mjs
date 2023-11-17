@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const singleFileUploadFolders = ["profile", "avatar", "cover"]; // Add more folder names as needed
+// const singleFileUploadFolders = ["profile", "organizer_logo", "supporter_logo"]; // Add more folder names as needed
 
 export const handleFileUpload = async (req, res, next) => {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -19,7 +19,7 @@ export const handleFileUpload = async (req, res, next) => {
 
     const userId = req.user.id; // Assuming user ID is available
     const propertyName = Object.keys(req.files)[0]; // Extracting the property name, e.g., "profile"
-    const isSingleFileUpload = singleFileUploadFolders.includes(propertyName);
+    // const isSingleFileUpload = singleFileUploadFolders.includes(propertyName);
 
     // Path for user-specific and property-specific directory
     const userUploadDirectory = path.join(
@@ -32,20 +32,43 @@ export const handleFileUpload = async (req, res, next) => {
         userId
     );
 
+    // const specificUploadDirectory = path.join(
+    //     userUploadDirectory,
+    //     propertyName
+    // );
+
     try {
         // Ensure user-specific folder exists
         if (!fs.existsSync(userUploadDirectory)) {
             fs.mkdirSync(userUploadDirectory, { recursive: true });
-        } else if (isSingleFileUpload) {
-            // If single file upload, clear existing files in the directory
-            const existingFiles = fs.readdirSync(userUploadDirectory);
-            for (const file of existingFiles) {
-                const filePath = path.join(userUploadDirectory, file);
-                if (fs.lstatSync(filePath).isFile()) {
-                    fs.unlinkSync(filePath);
-                }
-            }
         }
+        // if (isSingleFileUpload) {
+        //     // Get the most recent file in the specific subdirectory
+        //     const existingFiles = fs
+        //         .readdirSync(specificUploadDirectory)
+        //         .map((fileName) => {
+        //             const filePath = path.join(
+        //                 specificUploadDirectory,
+        //                 fileName
+        //             );
+        //             return {
+        //                 name: fileName,
+        //                 time: fs.statSync(filePath).mtime.getTime(),
+        //                 path: filePath,
+        //             };
+        //         });
+
+        //     // Sort files by modification time in descending order
+        //     existingFiles.sort((a, b) => b.time - a.time);
+
+        //     // Delete the most recent file
+        //     if (
+        //         existingFiles.length > 0 &&
+        //         fs.lstatSync(existingFiles[0].path).isFile()
+        //     ) {
+        //         fs.unlinkSync(existingFiles[0].path);
+        //     }
+        // }
 
         const files = req.files;
         let Results = {};

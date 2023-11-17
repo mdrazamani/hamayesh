@@ -64,6 +64,42 @@ SliderSchema.pre("remove", async function (next) {
     }
 });
 
+SliderSchema.pre("findOneAndUpdate", async function (next) {
+    try {
+        const query = this;
+        const update = query.getUpdate();
+
+        if (update?.image) {
+            const currentDocument = await query.findOne(this.getQuery());
+
+            if (currentDocument && currentDocument.image) {
+                const imagePath = path.join(
+                    process.cwd(),
+                    currentDocument.image
+                );
+
+                try {
+                    await fs.unlink(imagePath);
+                } catch (error) {
+                    // Check for the specific error ENOENT (No such file or directory)
+                    if (error.code !== "ENOENT") {
+                        throw error; // If it's any other error, rethrow it
+                    }
+                    // If it's ENOENT, just log it and continue, as the file is already not present
+                    console.log(
+                        "File already deleted or not found: ",
+                        imagePath
+                    );
+                }
+            }
+        }
+        next();
+    } catch (error) {
+        console.error("Error in findOneAndUpdate middleware: ", error);
+        next(error);
+    }
+});
+
 const Slider = mongoose.model("Slider", SliderSchema);
 
 export default Slider;
