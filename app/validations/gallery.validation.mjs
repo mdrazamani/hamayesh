@@ -9,16 +9,17 @@ export const createGalleryValidationSchema = () => ({
         description: Joi.string().messages({
             "string.empty": getMessage("validation.description_required"),
         }),
+        isActive: Joi.boolean().required(),
         category: Joi.string()
             .required()
             .messages({
                 "string.empty": getMessage("validation.category_required"),
             }),
-        slug: Joi.string()
-            .required()
-            .messages({
-                "string.empty": getMessage("validation.slug_required"),
-            }),
+        // slug: Joi.string()
+        //     .required()
+        //     .messages({
+        //         "string.empty": getMessage("validation.slug_required"),
+        //     }),
         images: Joi.array()
             .items(
                 Joi.object({
@@ -44,6 +45,8 @@ export const updateGalleryValidationSchema = () => ({
         title: Joi.string().optional(),
         description: Joi.string().optional(),
         category: Joi.string().optional(),
+        isActive: Joi.boolean().optional(),
+
         slug: Joi.string().optional(),
         images: Joi.array().optional(),
     }).options({ abortEarly: false }),

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import fs from "fs/promises";
 import path from "path";
+import slugify from "slugify";
 const GallerySchema = new mongoose.Schema(
     {
         category: {
@@ -9,7 +10,6 @@ const GallerySchema = new mongoose.Schema(
         },
         slug: {
             type: String,
-            required: true,
             unique: true, // slugs should be unique
         },
         images: [
@@ -35,6 +35,22 @@ const GallerySchema = new mongoose.Schema(
     },
     { timestamps: true } // Enables automatic createdAt and updatedAt timestamps
 );
+
+GallerySchema.pre("save", function (next) {
+    // Only create/update the slug if the title is modified (or is new)
+    if (this.isModified("category") || this.isNew) {
+        this.slug = slugify(this.category, { lower: true });
+    }
+    next();
+});
+
+GallerySchema.set("toJSON", {
+    transform: (doc, converted) => {
+        delete converted._id;
+        delete converted.__v;
+        converted.id = doc._id;
+    },
+});
 
 // Pre middleware that executes before the document is removed
 GallerySchema.pre("remove", async function (next) {
