@@ -4,8 +4,12 @@ import {
     getAllSates,
     getCitiesByState,
 } from "../app/controllers/others/country.controller.mjs";
+import { getAllEvent } from "../app/controllers/others/eventLog.controller.mjs";
 import { handleFileUpload } from "../app/controllers/others/fileUploader.controller.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 const router = express.Router();
 
@@ -73,6 +77,24 @@ router.post("/upload", authenticateJWT, handleFileUpload);
  *       - $ref: '#/components/parameters/AuthorizationHeader'
  */
 router.get("/countries", getAllCountries);
+
+/**
+ * @swagger
+ * /api/v1/countries:
+ *   get:
+ *     tags: [Countries]
+ *     summary: Retrieve a list of all countries
+ *     description: This endpoint retrieves a list of all countries.
+ *     parameters:
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+router.get(
+    "/activity-log",
+    authenticateJWT,
+    authorizeRole({ admin: "" }),
+    getAllEvent
+);
 
 /**
  * @swagger

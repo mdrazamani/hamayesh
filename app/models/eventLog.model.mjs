@@ -40,6 +40,9 @@ const EventLogSchema = new mongoose.Schema(
             required: true,
             expires: 2 * 60 * 60 * 1000, // This will remove the document when the current date and time is >= expiresAt
         },
+        status: {
+            type: Number,
+        },
     },
     { timestamps: true }
 );

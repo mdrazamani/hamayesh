@@ -25,37 +25,48 @@ const initCollectionName = (route) => {
 };
 
 export const logEvent = async (req, res, next) => {
+    const originalSend = res.send;
+    let logged = false;
+
+    // Override the res.send method to capture the response status
+    res.send = function (data) {
+        if (!logged) {
+            const statusCode = this.statusCode; // Capture the status code
+            logEventToDatabase(req, statusCode); // Call the log function
+            logged = true;
+        }
+        return originalSend.apply(this, arguments);
+    };
+
+    next();
+};
+
+const logEventToDatabase = async (req, statusCode) => {
     try {
         const action = initAction(req.method);
-
         const collectionName = initCollectionName(req.url);
         const path = req.originalUrl;
         const method = req.method;
-
         let userId;
-        if (req.user) userId = req.user._id;
-        else {
-            const authHeader = req.headers.authorization;
 
-            if (!authHeader) {
-                userId = null;
-            } else {
+        // User identification logic
+        if (req.user) {
+            userId = req.user._id;
+        } else {
+            const authHeader = req.headers.authorization;
+            if (authHeader) {
                 const authHeaderParts = authHeader.split(" ");
                 if (
-                    authHeaderParts.length !== 2 ||
-                    authHeaderParts[0] !== "Bearer"
+                    authHeaderParts.length === 2 &&
+                    authHeaderParts[0] === "Bearer"
                 ) {
-                    return res.respond(
-                        constants.UNAUTHORIZED,
-                        getMessage("errors.unauthorized")
+                    const apiToken = authHeaderParts[1];
+                    const decoded = jwt.verify(apiToken, secret);
+                    const user = await User.findById(decoded.id).populate(
+                        "role"
                     );
+                    userId = user._id;
                 }
-
-                const apiToken = authHeaderParts[1];
-
-                const decoded = jwt.verify(apiToken, secret);
-                const user = await User.findById(decoded.id).populate("role");
-                userId = user._id;
             }
         }
 
@@ -64,10 +75,11 @@ export const logEvent = async (req, res, next) => {
 
         const newEvent = new EventLog({
             collectionName,
-            userId: userId,
+            userId,
             path,
             method,
             action,
+            status: statusCode, // Added status code
             ipAddress,
             userAgent,
             date: new Date(),
@@ -75,11 +87,8 @@ export const logEvent = async (req, res, next) => {
         });
 
         await newEvent.save();
-
         console.info("Event logged successfully:", newEvent);
-
-        next();
     } catch (error) {
-        next(error);
+        console.error("Error logging event:", error);
     }
 };
