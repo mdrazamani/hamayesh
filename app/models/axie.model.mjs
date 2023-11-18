@@ -1,14 +1,31 @@
 import mongoose from "mongoose";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const AxieSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            unique: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
         parent: {
             type: mongoose.Schema.Types.ObjectId,
@@ -22,8 +39,11 @@ const AxieSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(AxieSchema, lang, AxieSchema.obj.fa);
+
 AxieSchema.index({
-    title: "text",
+    "fa.title": "text",
+    "en.title": "text",
 });
 
 AxieSchema.set("toJSON", {
@@ -31,7 +51,22 @@ AxieSchema.set("toJSON", {
         delete converted.__v;
         delete converted._id;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, AxieSchema.obj.fa);
     },
+});
+
+AxieSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, AxieSchema.obj.fa);
+    next();
+});
+
+AxieSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, AxieSchema.obj.fa);
+    next();
 });
 
 // Pre-save middleware to handle level assignment

@@ -2,14 +2,32 @@ import mongoose from "mongoose";
 import fs from "fs/promises";
 import path from "path";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const SliderSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String, // You can make it required based on your requirement
+            },
         },
-        description: {
-            type: String, // You can make it required based on your requirement
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String, // You can make it required based on your requirement
+            },
         },
         image: {
             type: String,
@@ -32,18 +50,37 @@ const SliderSchema = new mongoose.Schema(
     { timestamps: true } // This will create 'createdAt' and 'updatedAt' fields automatically
 );
 
+addVirtualFields(SliderSchema, lang, SliderSchema.obj.fa);
+
+SliderSchema.index({
+    "fa.title": "text",
+    "en.title": "text",
+    "fa.description": "text",
+    "en.description": "text",
+    link: "link",
+});
+
 SliderSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, SliderSchema.obj.fa);
     },
 });
 
-SliderSchema.index({
-    title: "text",
-    description: "text",
-    link: "link",
+SliderSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, SliderSchema.obj.fa);
+    next();
+});
+
+SliderSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, SliderSchema.obj.fa);
+    next();
 });
 
 // Pre middleware that executes before the document is removed

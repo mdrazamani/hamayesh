@@ -4,16 +4,34 @@ import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
 import constants from "../../utils/constants.mjs";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const ArticleStatus = ["success", "pending", "failed"];
 
 const ArticleSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
@@ -45,8 +63,11 @@ const ArticleSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(ArticleSchema, lang, ArticleSchema.obj.fa);
+
 ArticleSchema.index({
-    title: "text",
+    "fa.title": "text",
+    "en.title": "text",
     category: "text",
     status: "text",
 });
@@ -56,7 +77,22 @@ ArticleSchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, ArticleSchema.obj.fa);
     },
+});
+
+ArticleSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, ArticleSchema.obj.fa);
+    next();
+});
+
+ArticleSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, ArticleSchema.obj.fa);
+    next();
 });
 
 ArticleSchema.pre("save", async function (next) {

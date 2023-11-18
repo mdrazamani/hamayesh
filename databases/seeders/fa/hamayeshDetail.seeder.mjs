@@ -1,6 +1,7 @@
 import HamayeshDetail from "../../../app/models/hamayeshDetail.model.mjs";
 import State from "../../../app/models/state.model.mjs";
 import City from "../../../app/models/city.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedHamayeshDetailFA = async () => {
     try {
@@ -19,24 +20,24 @@ export const seedHamayeshDetailFA = async () => {
                 description:
                     "همایش بین‌المللی پیشرفت‌ها و نوآوری‌ها در صنعت نفت و گاز با هدف گردآوری متخصصان، دانشمندان و پیشگامان صنعت از سراسر جهان برگزار گردید. در این رویداد سه‌روزه، بیش از ۵۰ سخنرانی تخصصی، کارگاه‌های آموزشی و پنل‌های بحث و گفتگو در زمینه‌های مختلفی از جمله اکتشاف و تولید، فرآوری و پالایش، ایمنی و محیط زیست، اقتصاد نفت و گاز، و نوآوری‌های فناورانه در این صنعت انجام شد.",
                 iscCode: "123659845",
-                aboutHtml: `<div class="container" style="text-align: right; direction: rtl">
-                <header class="conference-header" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #005792;">نهمین همایش بین‌المللی نفت و گاز</h1>
-                    <p style="font-size: 1.1em; color: #666;">یک رویداد فاخر برای نمایش پیشرفت‌های اخیر و بحث در مورد آینده صنعت</p>
-                </header>
-                <section class="section" style="margin-bottom: 20px;">
-                    <h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;">درباره همایش</h2>
-                    <p style="text-indent: 40px;">نهمین همایش بین‌المللی نفت و گاز با هدف گردهم‌آوری متخصصین، تحلیل‌گران، و پیشروان صنعت از سرتاسر جهان برای اشتراک گذاری دانش، تجربیات و دستاوردهای جدید، به عنوان بزرگترین رویداد تخصصی منطقه در حوزه انرژی برگزار می‌شود.</p>
-                </section>
-                <section class="section" style="margin-bottom: 20px;">
-                    <h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;">موضوعات کلیدی</h2>
-                    <p style="text-indent: 40px;">این همایش به موضوعاتی چون <span style="color: #d35400; font-weight: bold;">استراتژی‌های اکتشاف و تولید</span>، <span style="color: #d35400; font-weight: bold;">تکنولوژی‌های نوین در پالایش</span>، <span style="color: #d35400; font-weight: bold;">مدیریت پروژه‌های نفتی</span>، و <span style="color: #d35400; font-weight: bold;">چالش‌های زیست محیطی</span> می‌پردازد.</p>
-                </section>
-                <footer class="conference-footer">
-                    <p style="text-align: center; font-size: 1.1em;">برای کسب اطلاعات بیشتر و ثبت نام در همایش، لطفا به وب‌سایت ما مراجعه کنید.</p>
-                </footer>
-            </div>`,
-                poster: "public\\uploads\\poster\\poster.jpeg",
+                aboutHtml: `&lt;div class="container" style="text-align: right; direction: rtl"&gt;
+                &lt;header class="conference-header" style="margin-bottom: 20px;"&gt;
+                    &lt;h1 style="font-size: 2.5em; margin-bottom: 10px; color: #005792;"&gt;نهمین همایش بین‌المللی هوش مصنوعی و بلاک چین&lt;/h1&gt;
+                    &lt;p style="font-size: 1.1em; color: #666;"&gt;یک رویداد فاخر برای نمایش پیشرفت‌های اخیر و بحث در مورد آینده صنعت&lt;/p&gt;
+                &lt;/header&gt;
+                &lt;section class="section" style="margin-bottom: 20px;"&gt;
+                    &lt;h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;"&gt;درباره همایش&lt;/h2&gt;
+                    &lt;p style="text-indent: 40px;"&gt;نهمین همایش بین‌المللی هوش مصنوعی و بلاک چین با هدف گردهم‌آوری متخصصین، تحلیل‌گران، و پیشروان صنعت از سرتاسر جهان برای اشتراک گذاری دانش، تجربیات و دستاوردهای جدید، به عنوان بزرگترین رویداد تخصصی منطقه در حوزه انرژی برگزار می‌شود.&lt;/p&gt;
+                &lt;/section&gt;
+                &lt;section class="section" style="margin-bottom: 20px;"&gt;
+                    &lt;h2 style="font-size: 1.8em; margin-bottom: 10px; color: #027368;"&gt;موضوعات کلیدی&lt;/h2&gt;
+                    &lt;p style="text-indent: 40px;"&gt;این همایش به موضوعاتی چون &lt;span style="color: #d35400; font-weight: bold;"&gt;استراتژی‌های اکتشاف و تولید&lt;/span&gt;، &lt;span style="color: #d35400; font-weight: bold;"&gt;تکنولوژی‌های نوین در پالایش&lt;/span&gt;، &lt;span style="color: #d35400; font-weight: bold;"&gt;مدیریت پروژه‌های نفتی&lt;/span&gt;، و &lt;span style="color: #d35400; font-weight: bold;"&gt;چالش‌های زیست محیطی&lt;/span&gt; می‌پردازد.&lt;/p&gt;
+                &lt;/section&gt;
+                &lt;footer class="conference-footer"&gt;
+                    &lt;p style="text-align: center; font-size: 1.1em;"&gt;برای کسب اطلاعات بیشتر و ثبت نام در همایش، لطفا به وب‌سایت ما مراجعه کنید.&lt;/p&gt;
+                &lt;/footer&gt;
+            &lt;/div&gt;`,
+                poster: "public/uploads/poster/poster.jpeg",
                 headerImage: "public/uploads/headerImage/test.png",
                 eventAddress: {
                     state: state._id,
@@ -46,41 +47,72 @@ export const seedHamayeshDetailFA = async () => {
                     latitude: 654321,
                 },
                 writingArticles: {
-                    description: `<article style="direction: rtl;><header><h1>دستورالعمل برای نوشتن مقالات</h1></header>
-                    <br/>
-                    <section><h2>مقدمه</h2><br/>
-                    <p>نوشتن مقالات یک هنر است که با تمرین و پیروی از برخی دستورالعمل‌های مشخص، می‌توانید در آن تبحر پیدا کنید. در این دستورالعمل سعی داریم تا نکات مهمی که باید در نوشتن مقالات رعایت کنید را بیان نماییم.</p>
-                    <br/></section><section><h2>انتخاب موضوع</h2><br/>
-                    <p>انتخاب موضوع مناسب اولین و مهم‌ترین قدم در نوشتن مقاله است. موضوع باید جذاب، به روز و مرتبط با علاقه‌مندی‌های شما باشد.</p>
-                    <br/></section><section><h2>تحقیق و جمع‌آوری اطلاعات</h2><br/>
-                    <p>پیش از شروع به نوشتن، تحقیقات کافی انجام دهید. استفاده از منابع معتبر و به روز، به ارتقاء کیفیت مقاله شما کمک می‌کند.</p>
-                    <br/></section><section><h2>طرح‌ریزی و سازماندهی</h2><br/>
-                    <p>یک طرح کلی از مقاله خود تهیه کنید. این کار به شما کمک می‌کند تا افکار خود را سازماندهی و مطمئن شوید که تمام نکات مهم را پوشش داده‌اید.</p>
-                    <br/></section><section><h2>نگارش</h2><br/>
-                    <p>با توجه به طرح خود شروع به نگارش کنید. مقدمه‌ای جذاب بنویسید، محتوا را به طور منطقی توسعه دهید و با نتیجه‌گیری قوی پایان بدهید.</p>
-                    <br/></section><section><h2>ویرایش و بازبینی</h2>
-                    <br/><p>پس از اتمام نگارش، متن خود را چندین بار ویرایش کنید. توجه به گرامر، املاء و سبک نگارش اهمیت زیادی دارد.</p>
-                    <br/></section><footer><br/>
-                    <p>امیدواریم که این دستورالعمل‌ها به شما در نوشتن مقالات بهتر کمک کنند. موفق باشید!</p>
-                    <br/></footer></article>`,
+                    description: `&lt;article&gt;
+                    &lt;header&gt;
+                        &lt;h1&gt;دستورالعمل برای نوشتن مقالات&lt;/h1&gt;
+                    &lt;/header&gt;
+                    &lt;br/&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;مقدمه&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;نوشتن مقالات یک هنر است که با تمرین و پیروی از برخی دستورالعمل‌های مشخص، می‌توانید در آن تبحر پیدا کنید. در این دستورالعمل سعی داریم تا نکات مهمی که باید در نوشتن مقالات رعایت کنید را بیان نماییم.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;انتخاب موضوع&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;انتخاب موضوع مناسب اولین و مهم‌ترین قدم در نوشتن مقاله است. موضوع باید جذاب، به روز و مرتبط با علاقه‌مندی‌های شما باشد.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;تحقیق و جمع‌آوری اطلاعات&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;پیش از شروع به نوشتن، تحقیقات کافی انجام دهید. استفاده از منابع معتبر و به روز، به ارتقاء کیفیت مقاله شما کمک می‌کند.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;طرح‌ریزی و سازماندهی&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;یک طرح کلی از مقاله خود تهیه کنید. این کار به شما کمک می‌کند تا افکار خود را سازماندهی و مطمئن شوید که تمام نکات مهم را پوشش داده‌اید.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;نگارش&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;با توجه به طرح خود شروع به نگارش کنید. مقدمه‌ای جذاب بنویسید، محتوا را به طور منطقی توسعه دهید و با نتیجه‌گیری قوی پایان بدهید.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;section&gt;
+                        &lt;h2&gt;ویرایش و بازبینی&lt;/h2&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;پس از اتمام نگارش، متن خود را چندین بار ویرایش کنید. توجه به گرامر، املاء و سبک نگارش اهمیت زیادی دارد.&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/section&gt;
+                    &lt;footer&gt;
+                        &lt;br/&gt;
+                        &lt;p&gt;امیدواریم که این دستورالعمل‌ها به شما در نوشتن مقالات بهتر کمک کنند. موفق باشید!&lt;/p&gt;
+                        &lt;br/&gt;
+                    &lt;/footer&gt;
+                &lt;/article&gt;
+                `,
                     files: [
                         {
                             title: "ورد",
-                            image: "public\\uploads\\writingArticles\\word.jpg",
+                            image: "public/uploads/writingArticles/word.jpg",
                             format: "doc",
                             description: "فایل word",
                             path: "",
                         },
                         {
                             title: "پاورپوینت",
-                            image: "public\\uploads\\writingArticles\\powerpoint.png",
+                            image: "public/uploads/writingArticles/powerpoint.png",
                             format: "ppt",
                             description: "فایل powerpoint",
                             path: "",
                         },
                         {
                             title: "پی دی اف",
-                            image: "public\\uploads\\writingArticles\\pdf.png",
+                            image: "public/uploads/writingArticles/pdf.png",
                             format: "pdf",
                             description: "فایل pdf",
                             path: "",
@@ -90,7 +122,7 @@ export const seedHamayeshDetailFA = async () => {
                 dates: {
                     start: new Date(+new Date() + 10368000000),
                     end: new Date(+new Date() + 10398000000),
-                    startArticle: new Date(+new Date() + 10498000000),
+                    startArticle: new Date(+new Date() - 10398000000),
                     endArticle: new Date(+new Date() + 10598000000),
                     refeeResult: new Date(+new Date() + 10698000000),
                     editArticle: new Date(+new Date() + 10798000000),
@@ -100,7 +132,8 @@ export const seedHamayeshDetailFA = async () => {
         ];
 
         await HamayeshDetail.deleteMany({});
-        await HamayeshDetail.insertMany(hamayeshDetails);
+        // await HamayeshDetail.insertMany(hamayeshDetails);
+        await insertDocumentsDynamically(HamayeshDetail, hamayeshDetails);
 
         console.log("HamayeshDetail seeded successfully!");
     } catch (error) {

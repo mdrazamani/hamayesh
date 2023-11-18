@@ -1,6 +1,7 @@
 // import statements
 import Secretariat from "../../../app/models/secretariat.model.mjs";
 import User from "../../../app/models/user.model.mjs"; // وارد کردن مدل User
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedSecretariatsFA = async () => {
     try {
@@ -25,7 +26,7 @@ export const seedSecretariatsFA = async () => {
                 description: "مسئول برنامه‌ریزی مالی و بودجه‌بندی است.",
                 boss: users[1]._id, // استفاده از شناسه‌ی کاربر بازیابی شده
                 users: [users[0]._id, users[1]._id], // آرایه‌ای از شناسه‌های کاربران
-                type: "conferance", // نوع معتبر از انتخاب‌های شما
+                type: "executive", // نوع معتبر از انتخاب‌های شما
             },
             {
                 title: "دبیرخانه سیاستگذاری",
@@ -35,12 +36,20 @@ export const seedSecretariatsFA = async () => {
                 users: [users[0]._id, users[1]._id], // آرایه‌ای از شناسه‌های کاربران
                 type: "policy", // نوع معتبر از انتخاب‌های شما
             },
+            {
+                title: "ریاست",
+                description: "رئیس محترم همایش",
+                boss: users[0]._id, // استفاده از شناسه‌ی کاربر بازیابی شده
+                // users: [], // آرایه‌ای از شناسه‌های کاربران
+                type: "conferance", // نوع معتبر از انتخاب‌های شما
+            },
             // ... دبیرخانه‌های نمونه دیگر
         ];
 
         // درج داده‌های نمونه در پایگاه داده‌ی شما
         await Secretariat.deleteMany({});
-        await Secretariat.insertMany(secretariats);
+        // await Secretariat.insertMany(secretariats);
+        await insertDocumentsDynamically(Secretariat, secretariats);
         console.log("دبیرخانه‌ها با موفقیت seed شدند!");
     } catch (error) {
         // رفع خطاهای درج

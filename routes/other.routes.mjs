@@ -1,4 +1,5 @@
 import express from "express";
+import { dynamicValidate } from "../utils/validate.mjs";
 import {
     getAllCountries,
     getAllSates,
@@ -10,6 +11,9 @@ import {
     authenticateJWT,
     authorizeRole,
 } from "../app/middlewares/auth.middleware.mjs";
+import { sendTicketController } from "../app/controllers/others/sendTicket.controller.mjs";
+import { messageValidationSchema } from "../app/validations/ticketEmail.validation.mjs";
+import { setLanguageController } from "../app/controllers/others/setLanguage.controller.mjs";
 
 const router = express.Router();
 
@@ -131,5 +135,29 @@ router.get("/states", getAllSates); // Get states by country
  *       - $ref: '#/components/parameters/AuthorizationHeader'
  */
 router.get("/states/:stateId/cities", getCitiesByState); // Get cities by state
+
+/**
+ * @swagger
+ * /api/v1/states/{stateId}/cities:
+ *   get:
+ *     tags: [Cities]
+ *     description: Retrieve a list of cities by state
+ *     parameters:
+ *       - in: path
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the state
+ *       - $ref: '#/components/parameters/AcceptLanguage'
+ *       - $ref: '#/components/parameters/AuthorizationHeader'
+ */
+router.post(
+    "/ticket/:id",
+    dynamicValidate(messageValidationSchema),
+    sendTicketController
+); // Get cities by state
+
+router.post("/set-language", setLanguageController);
 
 export default router;

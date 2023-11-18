@@ -4,12 +4,32 @@ import constants from "../../utils/constants.mjs";
 import path from "path";
 import fs from "fs";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const OrganizerSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
-            unique: true,
+        fa: {
+            name: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
+        },
+        en: {
+            name: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
         logo: {
             type: String,
@@ -43,9 +63,6 @@ const OrganizerSchema = new mongoose.Schema(
                 latitude: {
                     type: Number,
                 },
-            },
-            description: {
-                type: String,
             },
             emails: [
                 {
@@ -85,8 +102,11 @@ const OrganizerSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(OrganizerSchema, lang, OrganizerSchema.obj.fa);
+
 OrganizerSchema.index({
-    name: "text",
+    "fa.name": "text",
+    "en.name": "text",
     isMain: 1,
     link: "text",
 });
@@ -96,6 +116,10 @@ OrganizerSchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, OrganizerSchema.obj.fa);
+
         // Check if 'state' is an object and has a 'name' property
         if (
             converted.details.address.state &&
@@ -115,6 +139,18 @@ OrganizerSchema.set("toJSON", {
                 converted.details.address.city.city;
         }
     },
+});
+
+OrganizerSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, OrganizerSchema.obj.fa);
+    next();
+});
+
+OrganizerSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, OrganizerSchema.obj.fa);
+    next();
 });
 
 OrganizerSchema.pre("save", async function (next) {

@@ -24,14 +24,21 @@ import fileUpload from "./config/fileUpload.mjs";
 import { logEvent } from "./app/middlewares/eventLog.middleware.mjs";
 import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
 
+import bodyParser from "body-parser";
+const { json, urlencoded } = bodyParser;
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
 
+// max-input-string: 5mb
+app.use(json({ limit: "5mb" }));
+// app.use(urlencoded({ limit: "5mb", extended: true }));
+
 dbconnect();
 
 import { state } from "./utils/visits.mjs";
+
 resetAndSaveDailyVisits(state);
 app.use((req, res, next) => {
     state.dailyVisits += 1;
@@ -113,6 +120,7 @@ app.use("/api", customLimiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

@@ -61,9 +61,9 @@ export const organizerValidationSchema = () => ({
                     "string.email": getMessage("validation.email_format"),
                 }),
             phoneNumbers: Joi.array()
-                .items(
-                    Joi.string().pattern(/^[0-9]+$/) // This simple regex checks if the string contains only digits; adapt if needed.
-                )
+                // .items(
+                //     Joi.string().pattern(/^[0-9]+$/) // This simple regex checks if the string contains only digits; adapt if needed.
+                // )
                 .messages({
                     "string.pattern.base": getMessage(
                         "validation.phoneNumber_invalid"
@@ -83,10 +83,9 @@ export const organizerUpdateValidationSchema = () => ({
                 "string.max": getMessage("validation.name_max"),
                 "string.empty": getMessage("validation.name_required"),
             }),
-        logo: Joi.string()
-            .messages({
-                "string.empty": getMessage("validation.logo_required"),
-            }),
+        logo: Joi.string().messages({
+            "string.empty": getMessage("validation.logo_required"),
+        }),
         link: Joi.string()
             .uri()
             .allow("")
@@ -100,13 +99,9 @@ export const organizerUpdateValidationSchema = () => ({
             address: Joi.object({
                 state: Joi.string().optional().allow(null), // Assuming state is an ID, we validate it as a string; allow null if it can be optional.
                 city: Joi.string().optional().allow(null), // Same as state
-                address: Joi.string()
-                    .required()
-                    .messages({
-                        "string.empty": getMessage(
-                            "validation.address_required"
-                        ),
-                    }),
+                address: Joi.string().messages({
+                    "string.empty": getMessage("validation.address_required"),
+                }),
                 longitude: Joi.number()
                     .optional()
                     .allow(null)
@@ -131,9 +126,9 @@ export const organizerUpdateValidationSchema = () => ({
                     "string.email": getMessage("validation.email_format"),
                 }),
             phoneNumbers: Joi.array()
-                .items(
-                    Joi.string().pattern(/^[0-9]+$/) // This simple regex checks if the string contains only digits; adapt if needed.
-                )
+                // .items(
+                //     Joi.string().pattern(/^0+$/) // This simple regex checks if the string contains only digits; adapt if needed.
+                // )
                 .messages({
                     "string.pattern.base": getMessage(
                         "validation.phoneNumber_invalid"

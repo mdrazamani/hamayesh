@@ -2,15 +2,36 @@ import mongoose from "mongoose";
 import fs from "fs/promises";
 import path from "path";
 import slugify from "slugify";
+
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const GallerySchema = new mongoose.Schema(
     {
-        category: {
-            type: String,
-            required: true,
+        fa: {
+            category: {
+                type: String,
+            },
+            description: {
+                type: String, // You can make it required based on your requirement
+            },
+        },
+        en: {
+            category: {
+                type: String,
+            },
+            description: {
+                type: String, // You can make it required based on your requirement
+            },
         },
         slug: {
             type: String,
-            unique: true, // slugs should be unique
         },
         images: [
             {
@@ -23,9 +44,6 @@ const GallerySchema = new mongoose.Schema(
                 },
             },
         ],
-        description: {
-            type: String, // You can make it required based on your requirement
-        },
         // Additional fields you might consider
         isActive: {
             type: Boolean,
@@ -35,6 +53,14 @@ const GallerySchema = new mongoose.Schema(
     },
     { timestamps: true } // Enables automatic createdAt and updatedAt timestamps
 );
+
+addVirtualFields(GallerySchema, lang, GallerySchema.obj.fa);
+
+GallerySchema.index({
+    "fa.category": "text",
+    "en.category": "text",
+    slug: "text",
+});
 
 GallerySchema.pre("save", function (next) {
     // Only create/update the slug if the title is modified (or is new)
@@ -49,7 +75,22 @@ GallerySchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, GallerySchema.obj.fa);
     },
+});
+
+GallerySchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, GallerySchema.obj.fa);
+    next();
+});
+
+GallerySchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, GallerySchema.obj.fa);
+    next();
 });
 
 // Pre middleware that executes before the document is removed

@@ -1,16 +1,37 @@
 import mongoose from "mongoose";
+import constants from "../../utils/constants.mjs";
+import { getMessage } from "../../config/i18nConfig.mjs";
+
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+import APIError from "../../utils/errors.mjs";
+
+const lang = await loadLanguageSetting();
 
 const secretariatType = ["academic", "executive", "policy", "conferance"];
 const secretariatSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
-            required: true,
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
+
         boss: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User", // or another relevant model
@@ -32,7 +53,9 @@ const secretariatSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-secretariatSchema.index({ title: "text" }); // example compound index
+addVirtualFields(secretariatSchema, lang, secretariatSchema.obj.fa);
+
+secretariatSchema.index({ "fa.title": "text", "en.title": "text" }); // example compound index
 
 secretariatSchema.set("toJSON", {
     virtuals: true, // ensures virtual fields are included
@@ -40,7 +63,22 @@ secretariatSchema.set("toJSON", {
         delete converted.__v;
         delete converted._id;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, secretariatSchema.obj.fa);
     },
+});
+
+secretariatSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, secretariatSchema.obj.fa);
+    next();
+});
+
+secretariatSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, secretariatSchema.obj.fa);
+    next();
 });
 
 secretariatSchema.virtual("faType").get(function () {
@@ -61,6 +99,19 @@ secretariatSchema.virtual("faType").get(function () {
 // Pre-save hook to execute before saving a new document
 secretariatSchema.pre("save", async function (next) {
     const secretariat = this;
+
+    if (this.type === "conference") {
+        const existingConference = await this.constructor.findOne({
+            type: "conference",
+        });
+
+        if (
+            existingConference &&
+            existingConference._id.toString() !== this._id.toString()
+        ) {
+            throw new Error("There can only be one conference type");
+        }
+    }
 
     // If 'users' field is provided, ensure it contains unique IDs only
     if (secretariat.isModified("users")) {

@@ -5,6 +5,9 @@ import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import Axie from "../models/axie.model.mjs";
 import constants from "../../utils/constants.mjs";
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+
+const lang = await loadLanguageSetting();
 
 export const create = async (data) => {
     // if (data.parent) {
@@ -34,6 +37,8 @@ export const deleteDoc = async (id) => {
 
 export const getAllGrouped = async (options) => {
     try {
+        const alternativeLang = lang === "fa" ? "en" : "fa";
+
         const stages = [
             {
                 $match: {
@@ -85,8 +90,22 @@ export const getAllGrouped = async (options) => {
             {
                 $group: {
                     _id: "$_id",
-                    title: { $first: "$title" },
-                    description: { $first: "$description" },
+                    title: {
+                        $first: {
+                            $ifNull: [
+                                `$${lang}.title`,
+                                `$${alternativeLang}.title`,
+                            ],
+                        },
+                    },
+                    description: {
+                        $first: {
+                            $ifNull: [
+                                `$${lang}.description`,
+                                `$${alternativeLang}.description`,
+                            ],
+                        },
+                    },
                     children: { $push: "$children" },
                 },
             },
@@ -99,8 +118,18 @@ export const getAllGrouped = async (options) => {
                             in: {
                                 _id: "$$child._id",
                                 level: { $add: [1, "$$child.depth"] },
-                                title: "$$child.title",
-                                description: "$$child.description",
+                                title: {
+                                    $ifNull: [
+                                        `$$child.${lang}.title`,
+                                        `$$child.${alternativeLang}.title`,
+                                    ],
+                                },
+                                description: {
+                                    $ifNull: [
+                                        `$$child.${lang}.description`,
+                                        `$$child.${alternativeLang}.description`,
+                                    ],
+                                },
                                 parent: "$$child.parent",
                                 __v: "$$child.__v",
                                 createdAt: "$$child.createdAt",
@@ -117,9 +146,18 @@ export const getAllGrouped = async (options) => {
                                                     "$$grandChild.childDepth",
                                                 ],
                                             },
-                                            title: "$$grandChild.title",
-                                            description:
-                                                "$$grandChild.description",
+                                            title: {
+                                                $ifNull: [
+                                                    `$$grandChild.${lang}.title`,
+                                                    `$$grandChild.${alternativeLang}.title`,
+                                                ],
+                                            },
+                                            description: {
+                                                $ifNull: [
+                                                    `$$grandChild.${lang}.description`,
+                                                    `$$grandChild.${alternativeLang}.description`,
+                                                ],
+                                            },
                                             parent: "$$grandChild.parent",
                                             __v: "$$grandChild.__v",
                                             createdAt: "$$grandChild.createdAt",

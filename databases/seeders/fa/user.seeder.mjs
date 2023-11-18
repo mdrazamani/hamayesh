@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import Role from "../../../app/models/role.model.mjs";
 import State from "../../../app/models/state.model.mjs";
 import City from "../../../app/models/city.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 function generateNationalId() {
     const part1 = Math.floor(Math.random() * 999)
@@ -52,13 +53,13 @@ export const seedUsersFA = async () => {
     ];
 
     const images = [
-        "public\\uploads\\personal\\prsonal1.jpg",
-        "public\\uploads\\personal\\prsonal2.jpg",
-        "public\\uploads\\personal\\prsonal3.jpg",
-        "public\\uploads\\personal\\prsonal4.jpg",
-        "public\\uploads\\personal\\prsonal5.jpg",
-        "public\\uploads\\personal\\prsonal6.jpg",
-        "public\\uploads\\personal\\prsonal7.jpg",
+        "public/uploads/personal/prsonal1.jpg",
+        "public/uploads/personal/prsonal2.jpg",
+        "public/uploads/personal/prsonal3.jpg",
+        "public/uploads/personal/prsonal4.jpg",
+        "public/uploads/personal/prsonal5.jpg",
+        "public/uploads/personal/prsonal6.jpg",
+        "public/uploads/personal/prsonal7.jpg",
     ];
     const emails = [
         "mdrazamani@gmail.com",
@@ -123,7 +124,8 @@ export const seedUsersFA = async () => {
 
     try {
         await User.deleteMany({});
-        await User.insertMany(users);
+        // await User.insertMany(users);
+        await insertDocumentsDynamically(User, users);
         console.log("users added");
     } catch (error) {
         console.error("error in user", error);

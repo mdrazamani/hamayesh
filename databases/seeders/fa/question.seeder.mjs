@@ -1,4 +1,5 @@
 import Question from "../../../app/models/question.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedQuestionsFA = async () => {
     const questions = [
@@ -58,7 +59,8 @@ export const seedQuestionsFA = async () => {
 
     try {
         await Question.deleteMany({});
-        await Question.insertMany(questions);
+        // await Question.insertMany(questions);
+        await insertDocumentsDynamically(Question, questions);
         console.log("سوالات متداول همایش با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن سوالات متداول همایش:", error);

@@ -7,6 +7,9 @@ import { getMessage } from "../../config/i18nConfig.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import NewsCategory from "../models/newsCategory.model.mjs";
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+
+const lang = await loadLanguageSetting();
 
 export const create = async (data) => {
     // if (data.parent) {
@@ -57,10 +60,22 @@ export const getAllGrouped = async () => {
             },
             {
                 $project: {
-                    title: 1,
-                    description: 1,
+                    title: `$${lang}.title`,
+                    description: `$${lang}.description`,
                     level: 1,
-                    children: 1,
+                    children: {
+                        $map: {
+                            input: "$children",
+                            as: "child",
+                            in: {
+                                title: `$$child.${lang}.title`,
+                                description: `$$child.${lang}.description`,
+                                level: "$$child.level",
+                                image: "$$child.image",
+                                slug: "$$child.slug",
+                            },
+                        },
+                    },
                     image: 1,
                     slug: 1,
                 },

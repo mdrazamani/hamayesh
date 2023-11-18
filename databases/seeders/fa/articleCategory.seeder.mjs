@@ -1,4 +1,5 @@
 import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedArticleCategoryFA = async () => {
     const articleCategoriesData = [
@@ -57,7 +58,11 @@ export const seedArticleCategoryFA = async () => {
 
     try {
         await ArticleCategory.deleteMany({});
-        await ArticleCategory.insertMany(articleCategoriesData);
+        // await ArticleCategory.insertMany(articleCategoriesData);
+        await insertDocumentsDynamically(
+            ArticleCategory,
+            articleCategoriesData
+        );
         console.log("دسته‌های مقاله با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن دسته‌های مقاله:", error);

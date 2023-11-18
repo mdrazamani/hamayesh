@@ -1,6 +1,7 @@
 import Organizer from "../../../app/models/organizer.model.mjs";
 import State from "../../../app/models/state.model.mjs";
 import City from "../../../app/models/city.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedOrganizersFA = async () => {
     const state = await State.findOne({ state: "البرز" });
@@ -28,7 +29,7 @@ export const seedOrganizersFA = async () => {
         },
         {
             name: "دانشگاه فردوشی مشهد",
-            logo: "public\\uploads\\supporters\\hami3.png",
+            logo: "public/uploads/supporters/hami3.png",
             link: "www.colizan.com",
             isMain: false,
             details: {
@@ -46,7 +47,7 @@ export const seedOrganizersFA = async () => {
         },
         {
             name: "نیروی انتظامی",
-            logo: "public\\uploads\\supporters\\hami2.png",
+            logo: "public/uploads/supporters/hami2.png",
             link: "www.colizan.com",
             isMain: false,
             details: {
@@ -64,7 +65,7 @@ export const seedOrganizersFA = async () => {
         },
         {
             name: "داشنگاه صنعتی اصفحان",
-            logo: "public\\uploads\\supporters\\hami4.png",
+            logo: "public/uploads/supporters/hami4.png",
             link: "www.example.com",
             isMain: false,
             details: {
@@ -84,7 +85,8 @@ export const seedOrganizersFA = async () => {
 
     try {
         await Organizer.deleteMany({});
-        await Organizer.insertMany(organizers);
+        // await Organizer.insertMany(organizers);
+        await insertDocumentsDynamically(Organizer, organizers);
         console.log("سازمان‌ها با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن سازمان‌ها:", error);

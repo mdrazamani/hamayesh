@@ -2,22 +2,41 @@ import mongoose from "mongoose";
 import slugify from "slugify";
 import path from "path";
 import fs from "fs";
+
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const NewsSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            unique: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
+
         visitNumber: {
             type: Number,
         },
         slug: {
             type: String,
-            unique: true,
+            // unique: true,
         },
         writer: {
             type: mongoose.Schema.Types.ObjectId,
@@ -53,8 +72,11 @@ const NewsSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(NewsSchema, lang, NewsSchema.obj.fa);
+
 NewsSchema.index({
-    title: "text",
+    "fa.title": "text",
+    "en.title": "text",
     slug: "text",
 });
 
@@ -63,13 +85,28 @@ NewsSchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, NewsSchema.obj.fa);
     },
+});
+
+NewsSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, NewsSchema.obj.fa);
+    next();
+});
+
+NewsSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, NewsSchema.obj.fa);
+    next();
 });
 
 // This pre-save middleware will run before saving a new document or updating an existing one
 NewsSchema.pre("save", function (next) {
     // Only create/update the slug if the title is modified (or is new)
-    if (this.isModified("title") || this.isNew) {
+    if ((this.isModified("title") || this.isNew) && !this.slug) {
         this.slug = slugify(this.title, { lower: true });
     }
     next();

@@ -10,15 +10,62 @@ import { secret } from "../../config/index.mjs";
 import path from "path";
 import fs from "fs";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const userSchema = new mongoose.Schema(
     {
-        firstName: {
-            type: String,
-            required: true,
+        fa: {
+            firstName: {
+                type: String,
+            },
+            lastName: {
+                type: String,
+            },
+            degree: {
+                type: String,
+            },
+            institute: {
+                type: String,
+            },
+            bio: {
+                type: String,
+            },
+            job: {
+                type: String,
+            },
+            study_field: {
+                type: String,
+            },
         },
-        lastName: {
-            type: String,
-            required: true,
+        en: {
+            firstName: {
+                type: String,
+            },
+            lastName: {
+                type: String,
+            },
+            degree: {
+                type: String,
+            },
+            institute: {
+                type: String,
+            },
+            bio: {
+                type: String,
+            },
+            job: {
+                type: String,
+            },
+            study_field: {
+                type: String,
+            },
         },
         phoneNumber: {
             type: String,
@@ -69,18 +116,6 @@ const userSchema = new mongoose.Schema(
             required: true,
             enum: ["male", "female"],
         },
-        study_field: {
-            type: String,
-            required: true,
-        },
-        degree: {
-            type: String,
-            required: true,
-        },
-        institute: {
-            type: String,
-            required: true,
-        },
         state: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
@@ -91,16 +126,6 @@ const userSchema = new mongoose.Schema(
             required: true,
             ref: "City",
         },
-
-        bio: {
-            type: String,
-        },
-
-        job: {
-            type: String,
-            required: true,
-        },
-
         socials: {
             facebook: {
                 type: String,
@@ -128,10 +153,14 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(userSchema, lang, userSchema.obj.fa);
+
 userSchema.index({
-    firstName: "text",
+    "fa.firstName": "text",
+    "en.firstName": "text",
+    "fa.lastName": "text",
+    "en.lastName": "text",
     email: "text",
-    lastName: "text",
     phoneNumber: "text",
 }); // Add this if these are the fields you want to search within.
 
@@ -170,6 +199,9 @@ userSchema.set("toJSON", {
         delete converted.deletedAt;
         // conditionally add the api_token to the output if it exists
 
+        //multiLanguage
+        toJSON(doc, converted, lang, userSchema.obj.fa);
+
         if (doc._api_token) {
             converted.api_token = doc._api_token;
         }
@@ -191,6 +223,18 @@ userSchema.set("toJSON", {
             converted.city = converted.city.city;
         }
     },
+});
+
+userSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, userSchema.obj.fa);
+    next();
+});
+
+userSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, userSchema.obj.fa);
+    next();
 });
 
 // Add this within your userSchema definition

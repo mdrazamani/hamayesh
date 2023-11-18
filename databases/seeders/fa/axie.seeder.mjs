@@ -1,4 +1,5 @@
 import Axie from "../../../app/models/axie.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedAxieFA = async () => {
     const parentAxies = [
@@ -21,7 +22,11 @@ export const seedAxieFA = async () => {
 
     try {
         await Axie.deleteMany({});
-        const createdParentAxies = await Axie.insertMany(parentAxies);
+        // const createdParentAxies = await Axie.insertMany(parentAxies);
+        const createdParentAxies = await insertDocumentsDynamically(
+            Axie,
+            parentAxies
+        );
         const parentIds = createdParentAxies.map((axie) => axie._id);
 
         const childAxies = [
@@ -87,7 +92,11 @@ export const seedAxieFA = async () => {
             },
         ];
 
-        const createdChildAxies = await Axie.insertMany(childAxies);
+        // const createdChildAxies = await Axie.insertMany(childAxies);
+        const createdChildAxies = await insertDocumentsDynamically(
+            Axie,
+            childAxies
+        );
         const childIds = createdChildAxies.map((axie) => axie._id);
 
         const grandChildAxies = [
@@ -105,7 +114,8 @@ export const seedAxieFA = async () => {
             },
         ];
 
-        await Axie.insertMany(grandChildAxies);
+        // await Axie.insertMany(grandChildAxies);
+        await insertDocumentsDynamically(Axie, grandChildAxies);
         console.log("محور‌ها با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن محور:", error);

@@ -1,16 +1,35 @@
 import mongoose from "mongoose";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const speakerSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            trim: true, // Ensures spaces are not counted towards the character count
+        fa: {
+            title: {
+                type: String,
+                trim: true, // Ensures spaces are not counted towards the character count
+            },
+            description: {
+                type: String,
+                trim: true, // Remove whitespace from both ends of a string
+            },
         },
-        description: {
-            type: String,
-            required: true,
-            trim: true, // Remove whitespace from both ends of a string
+        en: {
+            title: {
+                type: String,
+                trim: true, // Ensures spaces are not counted towards the character count
+            },
+            description: {
+                type: String,
+                trim: true, // Remove whitespace from both ends of a string
+            },
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -23,15 +42,32 @@ const speakerSchema = new mongoose.Schema(
     { timestamps: true } // Enables automatic createdAt and updatedAt timestamps
 );
 
+addVirtualFields(speakerSchema, lang, speakerSchema.obj.fa);
+
+speakerSchema.index({ "fa.title": "text", "en.title": "text" });
+
 speakerSchema.set("toJSON", {
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, speakerSchema.obj.fa);
     },
 });
 
-speakerSchema.index({ title: "text" });
+speakerSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, speakerSchema.obj.fa);
+    next();
+});
+
+speakerSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, speakerSchema.obj.fa);
+    next();
+});
 
 // If you need any indexing for efficient querying, add here
 // speakerSchema.index({ /* fields to index */ });

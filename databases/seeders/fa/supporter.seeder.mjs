@@ -1,4 +1,5 @@
 import Supporter from "../../../app/models/supporter.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedSupportersFA = async () => {
     const supporters = [
@@ -10,19 +11,19 @@ export const seedSupportersFA = async () => {
         },
         {
             name: "نیروی انتظامی",
-            logo: "public\\uploads\\supporters\\hami2.png",
+            logo: "public/uploads/supporters/hami2.png",
             supportType: "Financial",
             link: "www.example.com",
         },
         {
             name: "دانشگاه فردوسی مشهد",
-            logo: "public\\uploads\\supporters\\hami3.png",
+            logo: "public/uploads/supporters/hami3.png",
             supportType: "Financial",
             link: "www.supporter.org",
         },
         {
             name: "دانشگاه صنعتی اصفحان",
-            logo: "public\\uploads\\supporters\\hami4.png",
+            logo: "public/uploads/supporters/hami4.png",
             supportType: "Academic",
             link: "www.anothercompany.com",
         },
@@ -30,7 +31,8 @@ export const seedSupportersFA = async () => {
 
     try {
         await Supporter.deleteMany({});
-        await Supporter.insertMany(supporters);
+        // await Supporter.insertMany(supporters);
+        await insertDocumentsDynamically(Supporter, supporters);
         console.log("supporters added successfully");
     } catch (error) {
         console.error("error in supporters", error);

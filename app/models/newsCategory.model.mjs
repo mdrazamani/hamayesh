@@ -6,15 +6,32 @@ import APIError from "../../utils/errors.mjs";
 import path from "path";
 import fs from "fs";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const NewsCategorySchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            unique: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
+        en: {
+            title: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
         slug: {
             type: String,
@@ -36,19 +53,13 @@ const NewsCategorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(NewsCategorySchema, lang, NewsCategorySchema.obj.fa);
+
 NewsCategorySchema.index({
-    title: "text",
+    "fa.title": "text",
+    "en.title": "text",
     slug: "text",
     level: "text",
-});
-
-// This pre-save middleware will run before saving a new document or updating an existing one
-NewsCategorySchema.pre("save", function (next) {
-    // Only create/update the slug if the title is modified (or is new)
-    if (this.isModified("title") || this.isNew) {
-        this.slug = slugify(this.title, { lower: true });
-    }
-    next();
 });
 
 NewsCategorySchema.set("toJSON", {
@@ -56,7 +67,31 @@ NewsCategorySchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, NewsCategorySchema.obj.fa);
     },
+});
+
+NewsCategorySchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, NewsCategorySchema.obj.fa);
+    next();
+});
+
+NewsCategorySchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, NewsCategorySchema.obj.fa);
+    next();
+});
+
+// This pre-save middleware will run before saving a new document or updating an existing one
+NewsCategorySchema.pre("save", function (next) {
+    // Only create/update the slug if the title is modified (or is new)
+    if ((this.isModified("title") || this.isNew) && !this.slug) {
+        this.slug = slugify(this.title, { lower: true });
+    }
+    next();
 });
 
 // Pre-save middleware to handle level assignment

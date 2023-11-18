@@ -1,5 +1,6 @@
 import i18n from "i18n";
 import { Language } from "./index.mjs";
+import { loadLanguageSetting } from "./readLang.mjs";
 
 const languages = ["en", "fa"];
 
@@ -12,8 +13,9 @@ i18n.configure({
     header: "accept-language",
 });
 
-export const setLocaleMiddleware = (req, res, next) => {
-    const lang = req.headers["accept-language"] || "fa";
+export const setLocaleMiddleware = async (req, res, next) => {
+    // const lang = req.headers["accept-language"] || "fa";
+    const lang = await loadLanguageSetting();
 
     // Check if the specified language is supported, if not, fall back to default
     if (!languages.includes(lang)) {

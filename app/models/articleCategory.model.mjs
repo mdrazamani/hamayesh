@@ -1,13 +1,28 @@
 import mongoose from "mongoose";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const ArticleCategorySchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            unique: true,
+        fa: {
+            title: {
+                type: String,
+            },
+            description: { type: String },
         },
-        description: { type: String },
+        en: {
+            title: {
+                type: String,
+            },
+            description: { type: String },
+        },
         referees: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -19,8 +34,11 @@ const ArticleCategorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(ArticleCategorySchema, lang, ArticleCategorySchema.obj.fa);
+
 ArticleCategorySchema.index({
-    title: "text",
+    "fa.title": "text",
+    "en.title": "text",
 });
 
 ArticleCategorySchema.set("toJSON", {
@@ -28,7 +46,22 @@ ArticleCategorySchema.set("toJSON", {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, ArticleCategorySchema.obj.fa);
     },
+});
+
+ArticleCategorySchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, ArticleCategorySchema.obj.fa);
+    next();
+});
+
+ArticleCategorySchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, ArticleCategorySchema.obj.fa);
+    next();
 });
 
 const ArticleCategory = mongoose.model(

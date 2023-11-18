@@ -2,11 +2,26 @@ import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../config/modelChanger.mjs";
+
+const lang = await loadLanguageSetting();
+
 const SupporterSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
+        fa: {
+            name: {
+                type: String,
+            },
+        },
+        en: {
+            name: {
+                type: String,
+            },
         },
         logo: {
             type: String,
@@ -24,15 +39,37 @@ const SupporterSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+addVirtualFields(SupporterSchema, lang, SupporterSchema.obj.fa);
+
+SupporterSchema.index({
+    "fa.name": "text",
+    "en.name": "text",
+    supportType: "text",
+});
+
 SupporterSchema.set("toJSON", {
     virtuals: true, // ensures virtual fields are included
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
         converted.id = doc._id;
+
+        //multiLanguage
+        toJSON(doc, converted, lang, SupporterSchema.obj.fa);
     },
 });
-SupporterSchema.index({ name: "text", supportType: "text" });
+
+SupporterSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, SupporterSchema.obj.fa);
+    next();
+});
+
+SupporterSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, lang, SupporterSchema.obj.fa);
+    next();
+});
 
 SupporterSchema.virtual("faType").get(function () {
     if (this.supportType) {

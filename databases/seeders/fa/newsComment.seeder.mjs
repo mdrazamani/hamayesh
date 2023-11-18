@@ -1,4 +1,5 @@
 import NewsComment from "../../../app/models/newsComment.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedNewsCommentsFA = async () => {
     const commentsData = [
@@ -67,7 +68,11 @@ export const seedNewsCommentsFA = async () => {
     let createdComments;
     try {
         await NewsComment.deleteMany({});
-        createdComments = await NewsComment.insertMany(commentsData);
+        // createdComments = await NewsComment.insertMany(commentsData);
+        createdComments = await insertDocumentsDynamically(
+            NewsComment,
+            commentsData
+        );
         console.log("news comment seeded successfully");
     } catch (error) {
         console.error("news comment error", error);

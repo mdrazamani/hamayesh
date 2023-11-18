@@ -1,4 +1,5 @@
 import NewsCategory from "../../../app/models/newsCategory.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedNewsCategoriesFA = async () => {
     // Define the initial primary categories
@@ -7,13 +8,13 @@ export const seedNewsCategoriesFA = async () => {
         {
             title: "هوش مصنوعی",
             description: `
-                <p>آخرین <strong>پیشرفت‌ها</strong> و <em>نوآوری‌ها</em> در عرصه <mark>هوش مصنوعی</mark>، از یادگیری عمیق تا پردازش زبان طبیعی.</p>
-                <ul>
-                    <li>یادگیری ماشین</li>
-                    <li>روباتیک</li>
-                    <li>پردازش تصویر و بینایی ماشین</li>
-                </ul>
-                <p>مطالعه بیشتر در مورد تاثیرات هوش مصنوعی بر جامعه و اقتصاد <a href='#'>اینجا</a>.</p>
+            &lt;p&gt;آخرین &lt;strong&gt;پیشرفت‌ها&lt;/strong&gt; و &lt;em&gt;نوآوری‌ها&lt;/em&gt; در عرصه &lt;mark&gt;هوش مصنوعی&lt;/mark&gt;، از یادگیری عمیق تا پردازش زبان طبیعی.&lt;/p&gt;
+            &lt;ul&gt;
+                &lt;li&gt;یادگیری ماشین&lt;/li&gt;
+                &lt;li&gt;روباتیک&lt;/li&gt;
+                &lt;li&gt;پردازش تصویر و بینایی ماشین&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;p&gt;مطالعه بیشتر در مورد تاثیرات هوش مصنوعی بر جامعه و اقتصاد &lt;a href='#'&gt;اینجا&lt;/a&gt;.&lt;/p&gt;            
             `,
             slug: "artificial-intelligence",
             image: "آدرس-تصویر-هوش-مصنوعی",
@@ -22,14 +23,14 @@ export const seedNewsCategoriesFA = async () => {
         {
             title: "بلاک چین",
             description: `
-                <h2>بلاک چین و انقلاب دیجیتال</h2>
-                <p>کشف <strong>آخرین تکنولوژی‌ها</strong> و <em>راهکارهای</em> مرتبط با <mark>بلاک چین</mark> و ارزهای رمزپایه.</p>
-                <ol>
-                    <li>امنیت بلاک چین</li>
-                    <li>توسعه قراردادهای هوشمند</li>
-                    <li>نوآوری‌های ارز دیجیتال</li>
-                </ol>
-                <p>بررسی کاربردهای بلاک چین در صنایع مختلف <a href='#'>در اینجا</a>.</p>
+            &lt;h2&gt;بلاک چین و انقلاب دیجیتال&lt;/h2&gt;
+            &lt;p&gt;کشف &lt;strong&gt;آخرین تکنولوژی‌ها&lt;/strong&gt; و &lt;em&gt;راهکارهای&lt;/em&gt; مرتبط با &lt;mark&gt;بلاک چین&lt;/mark&gt; و ارزهای رمزپایه.&lt;/p&gt;
+            &lt;ol&gt;
+                &lt;li&gt;امنیت بلاک چین&lt;/li&gt;
+                &lt;li&gt;توسعه قراردادهای هوشمند&lt;/li&gt;
+                &lt;li&gt;نوآوری‌های ارز دیجیتال&lt;/li&gt;
+            &lt;/ol&gt;
+            &lt;p&gt;بررسی کاربردهای بلاک چین در صنایع مختلف &lt;a href='#'&gt;در اینجا&lt;/a&gt;.&lt;/p&gt;            
             `,
             slug: "blockchain",
             image: "آدرس-تصویر-بلاک-چین",
@@ -43,9 +44,15 @@ export const seedNewsCategoriesFA = async () => {
     try {
         await NewsCategory.deleteMany({});
         // Insert the primary categories into the database and retrieve them with generated IDs
-        const createdParentCategories = await NewsCategory.insertMany(
+        // const createdParentCategories = await NewsCategory.insertMany(
+        //     parentCategories
+        // );
+
+        const createdParentCategories = await insertDocumentsDynamically(
+            NewsCategory,
             parentCategories
         );
+
         createdCategories = createdParentCategories;
         // Extract the IDs of the primary categories
         const parentIds = createdParentCategories.map(
@@ -57,14 +64,14 @@ export const seedNewsCategoriesFA = async () => {
             {
                 title: "روباتیک",
                 description: `
-                    <h3>روباتیک و آینده تکنولوژی</h3>
-                    <p>با <strong>جدیدترین دستاوردها</strong> در زمینه <em>روباتیک</em> آشنا شوید:</p>
-                    <ul>
-                        <li>روبات‌های خدماتی</li>
-                        <li>سیستم‌های خودران</li>
-                        <li>روبات‌های صنعتی پیشرفته</li>
-                    </ul>
-                    <p>مقالات و تحلیل‌های عمیق در <a href='#'>بلاگ ما</a> مطالعه کنید.</p>
+                &lt;h3&gt;روباتیک و آینده تکنولوژی&lt;/h3&gt;
+                &lt;p&gt;با &lt;strong&gt;جدیدترین دستاوردها&lt;/strong&gt; در زمینه &lt;em&gt;روباتیک&lt;/em&gt; آشنا شوید:&lt;/p&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;روبات‌های خدماتی&lt;/li&gt;
+                    &lt;li&gt;سیستم‌های خودران&lt;/li&gt;
+                    &lt;li&gt;روبات‌های صنعتی پیشرفته&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;p&gt;مقالات و تحلیل‌های عمیق در &lt;a href='#'&gt;بلاگ ما&lt;/a&gt; مطالعه کنید.&lt;/p&gt;                
                 `,
                 slug: "robotics",
                 parent: parentIds[0], // Link to "Artificial Intelligence"
@@ -74,14 +81,14 @@ export const seedNewsCategoriesFA = async () => {
             {
                 title: "یادگیری ماشین",
                 description: `
-                    <h3>یادگیری ماشین و تحول دیجیتال</h3>
-                    <p>کشف <strong>نوآوری‌ها</strong> و <em>پژوهش‌های اخیر</em> در <mark>یادگیری ماشین</mark> از طریق:</p>
-                    <ol>
-                        <li>الگوریتم‌های پیشرفته</li>
-                        <li>کاربرد در صنایع مختلف</li>
-                        <li>تحولات اخیر در داده کاوی</li>
-                    </ol>
-                    <p>برای اطلاعات بیشتر، به <a href='#'>صفحه تخصصی ما</a> مراجعه کنید.</p>
+                &lt;h3&gt;یادگیری ماشین و تحول دیجیتال&lt;/h3&gt;
+                &lt;p&gt;کشف &lt;strong&gt;نوآوری‌ها&lt;/strong&gt; و &lt;em&gt;پژوهش‌های اخیر&lt;/em&gt; در &lt;mark&gt;یادگیری ماشین&lt;/mark&gt; از طریق:&lt;/p&gt;
+                &lt;ol&gt;
+                    &lt;li&gt;الگوریتم‌های پیشرفته&lt;/li&gt;
+                    &lt;li&gt;کاربرد در صنایع مختلف&lt;/li&gt;
+                    &lt;li&gt;تحولات اخیر در داده کاوی&lt;/li&gt;
+                &lt;/ol&gt;
+                &lt;p&gt;برای اطلاعات بیشتر، به &lt;a href='#'&gt;صفحه تخصصی ما&lt;/a&gt; مراجعه کنید.&lt;/p&gt;                
                 `,
                 slug: "machine-learning",
                 parent: parentIds[0], // Link to "Artificial Intelligence"
@@ -91,14 +98,14 @@ export const seedNewsCategoriesFA = async () => {
             {
                 title: "امنیت بلاک چین",
                 description: `
-                    <h3>امنیت در عصر بلاک چین</h3>
-                    <p>آموزش <strong>مفاهیم امنیتی</strong> و <em>بهترین شیوه‌ها</em> برای حفاظت از دارایی‌های دیجیتال:</p>
-                    <ul>
-                        <li>تکنیک‌های رمزنگاری</li>
-                        <li>امنیت قراردادهای هوشمند</li>
-                        <li>راهکارهای مقابله با کلاهبرداری</li>
-                    </ul>
-                    <p>بیشتر بدانید و با ما در <a href='#'>وبینارهای امنیتی</a> شرکت کنید.</p>
+                &lt;h3&gt;امنیت در عصر بلاک چین&lt;/h3&gt;
+                &lt;p&gt;آموزش &lt;strong&gt;مفاهیم امنیتی&lt;/strong&gt; و &lt;em&gt;بهترین شیوه‌ها&lt;/em&gt; برای حفاظت از دارایی‌های دیجیتال:&lt;/p&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;تکنیک‌های رمزنگاری&lt;/li&gt;
+                    &lt;li&gt;امنیت قراردادهای هوشمند&lt;/li&gt;
+                    &lt;li&gt;راهکارهای مقابله با کلاهبرداری&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;p&gt;بیشتر بدانید و با ما در &lt;a href='#'&gt;وبینارهای امنیتی&lt;/a&gt; شرکت کنید.&lt;/p&gt;                
                 `,
                 slug: "blockchain-security",
                 parent: parentIds[1], // Link to "Blockchain"
@@ -108,14 +115,14 @@ export const seedNewsCategoriesFA = async () => {
             {
                 title: "ارزهای دیجیتال",
                 description: `
-                    <h3>ارزهای دیجیتال و اقتصاد نوین</h3>
-                    <p>جدیدترین تحلیل‌های بازار <strong>ارزهای دیجیتال</strong> و <em>راهبردهای سرمایه‌گذاری</em>:</p>
-                    <ol>
-                        <li>نوسانات بازار</li>
-                        <li>انواع ارزهای رمزپایه</li>
-                        <li>آینده سرمایه‌گذاری دیجیتال</li>
-                    </ol>
-                    <p>تازه‌ترین خبرها و تحلیل‌ها را در <a href='#'>بخش اخبار ما</a> دنبال کنید.</p>
+                &lt;h3&gt;ارزهای دیجیتال و اقتصاد نوین&lt;/h3&gt;
+                &lt;p&gt;جدیدترین تحلیل‌های بازار &lt;strong&gt;ارزهای دیجیتال&lt;/strong&gt; و &lt;em&gt;راهبردهای سرمایه‌گذاری&lt;/em&gt;:&lt;/p&gt;
+                &lt;ol&gt;
+                    &lt;li&gt;نوسانات بازار&lt;/li&gt;
+                    &lt;li&gt;انواع ارزهای رمزپایه&lt;/li&gt;
+                    &lt;li&gt;آینده سرمایه‌گذاری دیجیتال&lt;/li&gt;
+                &lt;/ol&gt;
+                &lt;p&gt;تازه‌ترین خبرها و تحلیل‌ها را در &lt;a href='#'&gt;بخش اخبار ما&lt;/a&gt; دنبال کنید.&lt;/p&gt;                
                 `,
                 slug: "cryptocurrency",
                 parent: parentIds[1], // Link to "Blockchain"
@@ -126,7 +133,12 @@ export const seedNewsCategoriesFA = async () => {
         ];
 
         // Insert the subcategories into the database
-        const createdCategories2 = await NewsCategory.insertMany(
+        // const createdCategories2 = await NewsCategory.insertMany(
+        //     childCategories
+        // );
+
+        const createdCategories2 = await insertDocumentsDynamically(
+            NewsCategory,
             childCategories
         );
 

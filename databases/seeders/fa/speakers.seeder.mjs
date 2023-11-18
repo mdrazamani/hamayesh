@@ -1,6 +1,7 @@
 import casual from "casual";
 import Speaker from "../../../app/models/speakers.model.mjs";
 import User from "../../../app/models/user.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedSpeakersFA = async () => {
     try {
@@ -28,12 +29,13 @@ export const seedSpeakersFA = async () => {
             speakers.push({
                 title: title[i % title.length],
                 description: "توضیح کوتاه و خلاصه در مورد نفرات سخنران",
-                user: users[i].id,
+                user: users[i],
             });
         }
 
         await Speaker.deleteMany({});
-        await Speaker.insertMany(speakers);
+        // await Speaker.insertMany(speakers);
+        await insertDocumentsDynamically(Speaker, speakers);
         console.log("سخنران‌ها با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن سخنران‌ها:", error);

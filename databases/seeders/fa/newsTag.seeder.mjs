@@ -1,4 +1,5 @@
 import NewsTag from "../../../app/models/newsTag.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedNewsTagsFA = async () => {
     // Define some initial tags
@@ -21,7 +22,8 @@ export const seedNewsTagsFA = async () => {
     try {
         // Insert tags into the database
         await NewsTag.deleteMany({});
-        createdTags = await NewsTag.insertMany(tags);
+        // createdTags = await NewsTag.insertMany(tags);
+        createdTags = await insertDocumentsDynamically(NewsTag, tags);
         console.log("news tag seeded successfully");
     } catch (error) {
         console.error("news tag error", error);

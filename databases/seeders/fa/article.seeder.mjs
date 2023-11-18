@@ -1,6 +1,7 @@
 import Article from "../../../app/models/article.model.mjs"; // Adjust the import path as necessary
 import User from "../../../app/models/user.model.mjs";
 import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
+import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedArticlesFA = async () => {
     // Assuming users and categories are already seeded and we just need to fetch them.
@@ -28,12 +29,12 @@ export const seedArticlesFA = async () => {
             category: categories[0]._id, // Assign a category ID
             userId: users[0]._id, // Assign a user ID
             articleFiles: [
-                "public\\uploads\\articleFiles\\test33.pdf",
-                "public\\uploads\\articleFiles\\test34.pdf",
+                "public/uploads/articleFiles/test33.pdf",
+                "public/uploads/articleFiles/test34.pdf",
             ],
             presentationFiles: [
-                "public\\uploads\\articleFiles\\per.pdf",
-                "public\\uploads\\articleFiles\\tasis.pdf",
+                "public/uploads/articleFiles/per.pdf",
+                "public/uploads/articleFiles/tasis.pdf",
             ],
             status: "success", // or "در انتظار", or "ناموفق"
             arbitration: {
@@ -74,7 +75,8 @@ export const seedArticlesFA = async () => {
     // Insert the sample articles into the database
     try {
         await Article.deleteMany({});
-        await Article.insertMany(articlesData);
+        // await Article.insertMany(articlesData);
+        await insertDocumentsDynamically(Article, articlesData);
         console.log("مقالات با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن مقالات:", error);
