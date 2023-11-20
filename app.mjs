@@ -23,13 +23,18 @@ import i18n, { setLocaleMiddleware } from "./config/i18nConfig.mjs";
 import fileUpload from "./config/fileUpload.mjs";
 import { logEvent } from "./app/middlewares/eventLog.middleware.mjs";
 import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
-
 import bodyParser from "body-parser";
+import { state } from "./utils/visits.mjs";
+import { languageMiddleware } from "./app/middlewares/languageMiddleware.mjs";
+
 const { json, urlencoded } = bodyParser;
 //run jobs:
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
+
+app.use(cookieParser());
+app.use("/api/v1", languageMiddleware);
 
 // max-input-string: 5mb
 app.use(json({ limit: "5mb" }));
@@ -37,13 +42,13 @@ app.use(json({ limit: "5mb" }));
 
 dbconnect();
 
-import { state } from "./utils/visits.mjs";
-
 resetAndSaveDailyVisits(state);
 app.use((req, res, next) => {
     state.dailyVisits += 1;
     next();
 });
+
+// language
 
 app.use("/public", express.static("public"));
 
@@ -98,7 +103,7 @@ const customLimiter = (req, res, next) => {
 };
 
 // Use the customLimiter middleware in your Express app
-app.use("/api", customLimiter);
+// app.use("/api", customLimiter);
 
 // Sending Response best practice for debugging
 // app.use((req, res, next) => {

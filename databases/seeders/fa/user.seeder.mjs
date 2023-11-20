@@ -41,6 +41,7 @@ export const seedUsersFA = async () => {
         "زهرا",
         "محسن",
         "محمدرضا",
+        "محسن",
     ];
     const lastNames = [
         "رضوی",
@@ -50,6 +51,7 @@ export const seedUsersFA = async () => {
         "جعفری",
         "رضوانی",
         "زمانی",
+        "رضوانی",
     ];
 
     const images = [
@@ -60,6 +62,7 @@ export const seedUsersFA = async () => {
         "public/uploads/personal/prsonal5.jpg",
         "public/uploads/personal/prsonal6.jpg",
         "public/uploads/personal/prsonal7.jpg",
+        "public/uploads/personal/prsonal7.jpg",
     ];
     const emails = [
         "mdrazamani@gmail.com",
@@ -69,6 +72,7 @@ export const seedUsersFA = async () => {
         "zahra@example.com",
         "mahdi@example.com",
         "reza@example.com",
+        "mohsen.rezvani.rad33@gmail.com",
     ];
     const phoneNumbers = [
         "09120000001",
@@ -78,14 +82,16 @@ export const seedUsersFA = async () => {
         "09120000005",
         "09120000006",
         "09120000007",
+        "09120000008",
     ];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 8; i++) {
         const user = {
             firstName: firstNames[i],
             lastName: lastNames[i],
             phoneNumber: phoneNumbers[i],
-            password: await bcrypt.hash("1029Mmd1029@", 10),
+            // password: await bcrypt.hash("1029Mmd1029@", 10),
+            password: "1029Mmd1029@",
             email: emails[i],
             emailVerifiedAt: null,
             role:

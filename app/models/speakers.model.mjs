@@ -7,7 +7,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const speakerSchema = new mongoose.Schema(
     {
@@ -42,7 +42,7 @@ const speakerSchema = new mongoose.Schema(
     { timestamps: true } // Enables automatic createdAt and updatedAt timestamps
 );
 
-addVirtualFields(speakerSchema, lang, speakerSchema.obj.fa);
+addVirtualFields(speakerSchema, speakerSchema.obj.fa);
 
 speakerSchema.index({ "fa.title": "text", "en.title": "text" });
 
@@ -53,19 +53,19 @@ speakerSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, speakerSchema.obj.fa);
+        toJSON(doc, converted, speakerSchema.obj.fa);
     },
 });
 
 speakerSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, speakerSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, speakerSchema.obj.fa);
     next();
 });
 
 speakerSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, speakerSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, speakerSchema.obj.fa);
     next();
 });
 

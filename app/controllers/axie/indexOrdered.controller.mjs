@@ -6,12 +6,6 @@ export const indexOrderedController = async (req, res, next) => {
     try {
         const { page = 1, items_per_page = 1000, ...query } = req.query;
 
-        // const axies = await getAll({
-        //     page: Number(page),
-        //     items_per_page: Number(items_per_page),
-        //     ...query,
-        // });
-
         const axies = await getAllGrouped({
             page: Number(page),
             items_per_page: Number(items_per_page),

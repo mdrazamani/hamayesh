@@ -1,4 +1,7 @@
-export const toJSON = (doc, converted, lang, modelLangFields) => {
+import { loadLanguageSetting } from "./readLang.mjs";
+
+export const toJSON = (doc, converted, modelLangFields) => {
+    const lang = loadLanguageSetting();
     const otherLang = lang === "fa" ? "en" : "fa";
 
     Object.keys(modelLangFields).forEach((key) => {
@@ -13,7 +16,8 @@ export const toJSON = (doc, converted, lang, modelLangFields) => {
     delete converted.en;
 };
 
-export const addVirtualFields = (schema, lang, modelLangFields) => {
+export const addVirtualFields = (schema, modelLangFields) => {
+    const lang = loadLanguageSetting();
     Object.keys(modelLangFields).forEach((field) => {
         schema
             .virtual(field)
@@ -29,11 +33,9 @@ export const addVirtualFields = (schema, lang, modelLangFields) => {
     });
 };
 
-export const processLanguageFieldsInUpdate = (
-    update,
-    lang,
-    modelLangFields
-) => {
+export const processLanguageFieldsInUpdate = (update, modelLangFields) => {
+    const lang = loadLanguageSetting();
+
     let isModified = false;
 
     Object.keys(modelLangFields).forEach((field) => {

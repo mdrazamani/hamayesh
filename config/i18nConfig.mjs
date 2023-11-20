@@ -15,7 +15,7 @@ i18n.configure({
 
 export const setLocaleMiddleware = async (req, res, next) => {
     // const lang = req.headers["accept-language"] || "fa";
-    const lang = await loadLanguageSetting();
+    const lang = loadLanguageSetting();
 
     // Check if the specified language is supported, if not, fall back to default
     if (!languages.includes(lang)) {

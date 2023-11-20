@@ -7,7 +7,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const ArticleCategorySchema = new mongoose.Schema(
     {
@@ -34,7 +34,7 @@ const ArticleCategorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(ArticleCategorySchema, lang, ArticleCategorySchema.obj.fa);
+addVirtualFields(ArticleCategorySchema, ArticleCategorySchema.obj.fa);
 
 ArticleCategorySchema.index({
     "fa.title": "text",
@@ -48,19 +48,19 @@ ArticleCategorySchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, ArticleCategorySchema.obj.fa);
+        toJSON(doc, converted, ArticleCategorySchema.obj.fa);
     },
 });
 
 ArticleCategorySchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, ArticleCategorySchema.obj.fa);
+    processLanguageFieldsInUpdate(update, ArticleCategorySchema.obj.fa);
     next();
 });
 
 ArticleCategorySchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, ArticleCategorySchema.obj.fa);
+    processLanguageFieldsInUpdate(update, ArticleCategorySchema.obj.fa);
     next();
 });
 

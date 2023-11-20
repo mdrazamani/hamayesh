@@ -11,7 +11,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const ArticleStatus = ["success", "pending", "failed"];
 
@@ -63,7 +63,7 @@ const ArticleSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(ArticleSchema, lang, ArticleSchema.obj.fa);
+addVirtualFields(ArticleSchema, ArticleSchema.obj.fa);
 
 ArticleSchema.index({
     "fa.title": "text",
@@ -79,19 +79,19 @@ ArticleSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, ArticleSchema.obj.fa);
+        toJSON(doc, converted, ArticleSchema.obj.fa);
     },
 });
 
 ArticleSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, ArticleSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, ArticleSchema.obj.fa);
     next();
 });
 
 ArticleSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, ArticleSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, ArticleSchema.obj.fa);
     next();
 });
 

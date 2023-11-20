@@ -4,6 +4,7 @@ import { ValidationError } from "express-validation";
 import APIError from "../../utils/errors.mjs";
 import { Debug_mode } from "../../config/index.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
+import { currentLanguage } from "./languageMiddleware.mjs";
 
 export const unifiedResponseHandler = (req, res, next) => {
     res.respond = (
@@ -21,6 +22,7 @@ export const unifiedResponseHandler = (req, res, next) => {
             res.status(status).json({
                 status: "success",
                 message: message,
+                language: currentLanguage,
                 data: data,
             });
         }

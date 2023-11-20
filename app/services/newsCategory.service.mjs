@@ -9,8 +9,6 @@ import APIError from "../../utils/errors.mjs";
 import NewsCategory from "../models/newsCategory.model.mjs";
 import { loadLanguageSetting } from "../../config/readLang.mjs";
 
-const lang = await loadLanguageSetting();
-
 export const create = async (data) => {
     // if (data.parent) {
     //     console.log(Object(data.parent));
@@ -40,6 +38,8 @@ export const deleteDoc = async (id) => {
 };
 
 export const getAllGrouped = async () => {
+    const lang = loadLanguageSetting();
+
     try {
         const stages = [
             {

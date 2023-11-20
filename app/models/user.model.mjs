@@ -17,7 +17,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const userSchema = new mongoose.Schema(
     {
@@ -153,7 +153,7 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(userSchema, lang, userSchema.obj.fa);
+addVirtualFields(userSchema, userSchema.obj.fa);
 
 userSchema.index({
     "fa.firstName": "text",
@@ -200,7 +200,7 @@ userSchema.set("toJSON", {
         // conditionally add the api_token to the output if it exists
 
         //multiLanguage
-        toJSON(doc, converted, lang, userSchema.obj.fa);
+        toJSON(doc, converted, userSchema.obj.fa);
 
         if (doc._api_token) {
             converted.api_token = doc._api_token;
@@ -227,13 +227,13 @@ userSchema.set("toJSON", {
 
 userSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, userSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, userSchema.obj.fa);
     next();
 });
 
 userSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, userSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, userSchema.obj.fa);
     next();
 });
 

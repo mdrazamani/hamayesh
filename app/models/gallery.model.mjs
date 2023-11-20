@@ -10,7 +10,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const GallerySchema = new mongoose.Schema(
     {
@@ -54,7 +54,7 @@ const GallerySchema = new mongoose.Schema(
     { timestamps: true } // Enables automatic createdAt and updatedAt timestamps
 );
 
-addVirtualFields(GallerySchema, lang, GallerySchema.obj.fa);
+addVirtualFields(GallerySchema, GallerySchema.obj.fa);
 
 GallerySchema.index({
     "fa.category": "text",
@@ -77,19 +77,19 @@ GallerySchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, GallerySchema.obj.fa);
+        toJSON(doc, converted, GallerySchema.obj.fa);
     },
 });
 
 GallerySchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, GallerySchema.obj.fa);
+    processLanguageFieldsInUpdate(update, GallerySchema.obj.fa);
     next();
 });
 
 GallerySchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, GallerySchema.obj.fa);
+    processLanguageFieldsInUpdate(update, GallerySchema.obj.fa);
     next();
 });
 

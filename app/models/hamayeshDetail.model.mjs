@@ -7,7 +7,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const ArticleFormats = [
     "pdf", // PDF
@@ -28,12 +28,6 @@ const ArticleFormats = [
 
 const hamayeshDetailSchema = new mongoose.Schema(
     {
-        faTitle: {
-            type: String,
-        },
-        enTitle: {
-            type: String,
-        },
         fa: {
             description: {
                 type: String,
@@ -158,7 +152,7 @@ const hamayeshDetailSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(hamayeshDetailSchema, lang, hamayeshDetailSchema.obj.fa);
+addVirtualFields(hamayeshDetailSchema, hamayeshDetailSchema.obj.fa);
 
 hamayeshDetailSchema.set("toJSON", {
     transform: (doc, converted) => {
@@ -166,7 +160,7 @@ hamayeshDetailSchema.set("toJSON", {
         delete converted.__v;
 
         //multiLanguage
-        toJSON(doc, converted, lang, hamayeshDetailSchema.obj.fa);
+        toJSON(doc, converted, hamayeshDetailSchema.obj.fa);
 
         if (
             converted.eventAddress.state &&
@@ -179,8 +173,10 @@ hamayeshDetailSchema.set("toJSON", {
             converted.eventAddress.city = converted.eventAddress.city.city;
         }
 
-        if (!doc[lang].writingArticles?.description) {
-            const altLang = lang === "fa" ? "en" : "fa";
+        const lang2 = loadLanguageSetting();
+
+        if (!doc[lang2].writingArticles?.description) {
+            const altLang = lang2 === "fa" ? "en" : "fa";
             converted.writingArticles = doc[altLang].writingArticles;
         }
 
@@ -195,13 +191,13 @@ hamayeshDetailSchema.set("toJSON", {
 
 hamayeshDetailSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, hamayeshDetailSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, hamayeshDetailSchema.obj.fa);
     next();
 });
 
 hamayeshDetailSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, hamayeshDetailSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, hamayeshDetailSchema.obj.fa);
     next();
 });
 

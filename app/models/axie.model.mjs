@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 import { loadLanguageSetting } from "../../config/readLang.mjs";
 import {
     addVirtualFields,
@@ -7,7 +6,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+// let lang = loadLanguageSetting();
 
 const AxieSchema = new mongoose.Schema(
     {
@@ -39,7 +38,7 @@ const AxieSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(AxieSchema, lang, AxieSchema.obj.fa);
+addVirtualFields(AxieSchema, AxieSchema.obj.fa);
 
 AxieSchema.index({
     "fa.title": "text",
@@ -53,19 +52,19 @@ AxieSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, AxieSchema.obj.fa);
+        toJSON(doc, converted, AxieSchema.obj.fa);
     },
 });
 
 AxieSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, AxieSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, AxieSchema.obj.fa);
     next();
 });
 
 AxieSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, AxieSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, AxieSchema.obj.fa);
     next();
 });
 
@@ -186,6 +185,11 @@ AxieSchema.pre("findOneAndUpdate", async function (next) {
     }
     next();
 });
+
+// AxieSchema.pre("init", function () {
+//     lang = loadLanguageSetting();
+//     console.log("lang-model: ", lang);
+// });
 
 const Axie = mongoose.model("Axie", AxieSchema);
 

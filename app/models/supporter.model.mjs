@@ -9,7 +9,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const SupporterSchema = new mongoose.Schema(
     {
@@ -39,7 +39,7 @@ const SupporterSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(SupporterSchema, lang, SupporterSchema.obj.fa);
+addVirtualFields(SupporterSchema, SupporterSchema.obj.fa);
 
 SupporterSchema.index({
     "fa.name": "text",
@@ -55,19 +55,19 @@ SupporterSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, SupporterSchema.obj.fa);
+        toJSON(doc, converted, SupporterSchema.obj.fa);
     },
 });
 
 SupporterSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, SupporterSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, SupporterSchema.obj.fa);
     next();
 });
 
 SupporterSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, SupporterSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, SupporterSchema.obj.fa);
     next();
 });
 

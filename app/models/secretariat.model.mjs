@@ -10,7 +10,7 @@ import {
 } from "../../config/modelChanger.mjs";
 import APIError from "../../utils/errors.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const secretariatType = ["academic", "executive", "policy", "conferance"];
 const secretariatSchema = new mongoose.Schema(
@@ -53,7 +53,7 @@ const secretariatSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(secretariatSchema, lang, secretariatSchema.obj.fa);
+addVirtualFields(secretariatSchema, secretariatSchema.obj.fa);
 
 secretariatSchema.index({ "fa.title": "text", "en.title": "text" }); // example compound index
 
@@ -65,19 +65,19 @@ secretariatSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, secretariatSchema.obj.fa);
+        toJSON(doc, converted, secretariatSchema.obj.fa);
     },
 });
 
 secretariatSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, secretariatSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, secretariatSchema.obj.fa);
     next();
 });
 
 secretariatSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, secretariatSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, secretariatSchema.obj.fa);
     next();
 });
 

@@ -13,7 +13,6 @@ import {
 } from "../app/middlewares/auth.middleware.mjs";
 import { sendTicketController } from "../app/controllers/others/sendTicket.controller.mjs";
 import { messageValidationSchema } from "../app/validations/ticketEmail.validation.mjs";
-import { setLanguageController } from "../app/controllers/others/setLanguage.controller.mjs";
 
 const router = express.Router();
 
@@ -157,7 +156,5 @@ router.post(
     dynamicValidate(messageValidationSchema),
     sendTicketController
 ); // Get cities by state
-
-router.post("/set-language", setLanguageController);
 
 export default router;

@@ -87,8 +87,8 @@ const logEventToDatabase = async (req, statusCode) => {
         });
 
         await newEvent.save();
-        console.info("Event logged successfully:", newEvent);
+        // console.info("Event logged successfully:", newEvent);
     } catch (error) {
-        console.error("Error logging event:", error);
+        // console.error("Error logging event:", error);
     }
 };

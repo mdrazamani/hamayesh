@@ -6,7 +6,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const NewsCommentSchema = new mongoose.Schema(
     {
@@ -51,7 +51,7 @@ const NewsCommentSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(NewsCommentSchema, lang, NewsCommentSchema.obj.fa);
+addVirtualFields(NewsCommentSchema, NewsCommentSchema.obj.fa);
 
 NewsCommentSchema.index({
     "fa.comment": "text",
@@ -71,19 +71,19 @@ NewsCommentSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, NewsCommentSchema.obj.fa);
+        toJSON(doc, converted, NewsCommentSchema.obj.fa);
     },
 });
 
 NewsCommentSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, NewsCommentSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, NewsCommentSchema.obj.fa);
     next();
 });
 
 NewsCommentSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, NewsCommentSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, NewsCommentSchema.obj.fa);
     next();
 });
 

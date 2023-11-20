@@ -11,7 +11,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const OrganizerSchema = new mongoose.Schema(
     {
@@ -102,7 +102,7 @@ const OrganizerSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-addVirtualFields(OrganizerSchema, lang, OrganizerSchema.obj.fa);
+addVirtualFields(OrganizerSchema, OrganizerSchema.obj.fa);
 
 OrganizerSchema.index({
     "fa.name": "text",
@@ -118,7 +118,7 @@ OrganizerSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, OrganizerSchema.obj.fa);
+        toJSON(doc, converted, OrganizerSchema.obj.fa);
 
         // Check if 'state' is an object and has a 'name' property
         if (
@@ -143,13 +143,13 @@ OrganizerSchema.set("toJSON", {
 
 OrganizerSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, OrganizerSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, OrganizerSchema.obj.fa);
     next();
 });
 
 OrganizerSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, OrganizerSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, OrganizerSchema.obj.fa);
     next();
 });
 

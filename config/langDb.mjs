@@ -4,7 +4,7 @@
 // const connections = {};
 
 // export const langDbConnection = async () => {
-//     const lang = await loadLanguageSetting();
+//     const lang = loadLanguageSetting();
 
 //     if (!connections[lang]) {
 //         connections[lang] = mongoose.createConnection(

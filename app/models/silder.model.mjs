@@ -9,7 +9,7 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = await loadLanguageSetting();
+const lang = loadLanguageSetting();
 
 const SliderSchema = new mongoose.Schema(
     {
@@ -50,7 +50,7 @@ const SliderSchema = new mongoose.Schema(
     { timestamps: true } // This will create 'createdAt' and 'updatedAt' fields automatically
 );
 
-addVirtualFields(SliderSchema, lang, SliderSchema.obj.fa);
+addVirtualFields(SliderSchema, SliderSchema.obj.fa);
 
 SliderSchema.index({
     "fa.title": "text",
@@ -67,19 +67,19 @@ SliderSchema.set("toJSON", {
         converted.id = doc._id;
 
         //multiLanguage
-        toJSON(doc, converted, lang, SliderSchema.obj.fa);
+        toJSON(doc, converted, SliderSchema.obj.fa);
     },
 });
 
 SliderSchema.pre("findOneAndUpdate", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, SliderSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, SliderSchema.obj.fa);
     next();
 });
 
 SliderSchema.pre("updateOne", function (next) {
     let update = this.getUpdate();
-    processLanguageFieldsInUpdate(update, lang, SliderSchema.obj.fa);
+    processLanguageFieldsInUpdate(update, SliderSchema.obj.fa);
     next();
 });
 

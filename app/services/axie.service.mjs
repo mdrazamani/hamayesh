@@ -7,7 +7,7 @@ import Axie from "../models/axie.model.mjs";
 import constants from "../../utils/constants.mjs";
 import { loadLanguageSetting } from "../../config/readLang.mjs";
 
-const lang = await loadLanguageSetting();
+// const lang = loadLanguageSetting();
 
 export const create = async (data) => {
     // if (data.parent) {
@@ -28,6 +28,8 @@ export const get = async (id) => {
 };
 
 export const getAll = async (options) => {
+    const lang = loadLanguageSetting();
+
     return await crudFactory.getAll(Axie)(options);
 };
 
@@ -36,6 +38,7 @@ export const deleteDoc = async (id) => {
 };
 
 export const getAllGrouped = async (options) => {
+    const lang = loadLanguageSetting();
     try {
         const alternativeLang = lang === "fa" ? "en" : "fa";
 
