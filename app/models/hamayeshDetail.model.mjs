@@ -46,24 +46,27 @@ const hamayeshDetailSchema = new mongoose.Schema(
                     type: String,
                 },
                 files: [
-                    {
-                        title: {
-                            type: String,
+                    new mongoose.Schema(
+                        {
+                            title: {
+                                type: String,
+                            },
+                            image: {
+                                type: String,
+                            },
+                            format: {
+                                type: String,
+                                enum: ArticleFormats,
+                            },
+                            description: {
+                                type: String,
+                            },
+                            path: {
+                                type: String,
+                            },
                         },
-                        image: {
-                            type: String,
-                        },
-                        format: {
-                            type: String,
-                            enum: ArticleFormats,
-                        },
-                        description: {
-                            type: String,
-                        },
-                        path: {
-                            type: String,
-                        },
-                    },
+                        { _id: false }
+                    ), // Disable _id for each file document
                 ],
             },
             poster: {
@@ -85,24 +88,27 @@ const hamayeshDetailSchema = new mongoose.Schema(
                     type: String,
                 },
                 files: [
-                    {
-                        title: {
-                            type: String,
+                    new mongoose.Schema(
+                        {
+                            title: {
+                                type: String,
+                            },
+                            image: {
+                                type: String,
+                            },
+                            format: {
+                                type: String,
+                                enum: ArticleFormats,
+                            },
+                            description: {
+                                type: String,
+                            },
+                            path: {
+                                type: String,
+                            },
                         },
-                        image: {
-                            type: String,
-                        },
-                        format: {
-                            type: String,
-                            enum: ArticleFormats,
-                        },
-                        description: {
-                            type: String,
-                        },
-                        path: {
-                            type: String,
-                        },
-                    },
+                        { _id: false }
+                    ), // Disable _id for each file document
                 ],
             },
             poster: {

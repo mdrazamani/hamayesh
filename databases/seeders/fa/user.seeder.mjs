@@ -65,6 +65,7 @@ export const seedUsersFA = async () => {
         "public/uploads/personal/prsonal7.jpg",
     ];
     const emails = [
+        "mohsen.rezvani.rad33@gmail.com",
         "mdrazamani@gmail.com",
         "mohammad@example.com",
         "hossein@example.com",
@@ -72,7 +73,6 @@ export const seedUsersFA = async () => {
         "zahra@example.com",
         "mahdi@example.com",
         "reza@example.com",
-        "mohsen.rezvani.rad33@gmail.com",
     ];
     const phoneNumbers = [
         "09120000001",

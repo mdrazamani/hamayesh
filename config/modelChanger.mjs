@@ -17,14 +17,15 @@ export const toJSON = (doc, converted, modelLangFields) => {
 };
 
 export const addVirtualFields = (schema, modelLangFields) => {
-    const lang = loadLanguageSetting();
     Object.keys(modelLangFields).forEach((field) => {
         schema
             .virtual(field)
             .get(function () {
+                const lang = loadLanguageSetting(); // Load the setting here
                 return this[lang] && this[lang][field];
             })
             .set(function (value) {
+                const lang = loadLanguageSetting(); // Load the setting here
                 if (!this[lang]) {
                     this[lang] = {};
                 }

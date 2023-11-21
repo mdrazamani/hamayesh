@@ -20,7 +20,7 @@ export const seedUsers = async () => {
             firstName: "Mohammadreza",
             lastName: "Zamani",
             phoneNumber: "09108494221",
-            password: await bcrypt.hash("Password123@", 10),
+            password: "Aa123456@",
             email: "mohsen.rezvani.rad33@gmail.com", // changed to avoid confusion with 'john@example.com'
             emailVerifiedAt: null, // or new Date() if the email is considered verified
             role: {
@@ -45,7 +45,7 @@ export const seedUsers = async () => {
             firstName: "mohsen",
             lastName: "rezvani",
             phoneNumber: "09330111568",
-            password: await bcrypt.hash("Password123@", 10),
+            password: "Password123@",
             email: "rezvani@example.com", // changed to avoid confusion with 'john@example.com'
             emailVerifiedAt: null, // or new Date() if the email is considered verified
             role: {
