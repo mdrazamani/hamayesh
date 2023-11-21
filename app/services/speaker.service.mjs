@@ -1,5 +1,6 @@
 // speakerService.mjs
 
+import { loadLanguageSetting } from "../../config/readLang.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import Speaker from "../models/speakers.model.mjs";
 
@@ -25,6 +26,9 @@ export const getSpeaker = async (id) => {
 };
 
 export const getAllSpeakers = async (options) => {
+    const lang = loadLanguageSetting();
+    console.log("speaker-service: ", lang);
+
     // Define population options
     const populateOptions = {
         path: "user",

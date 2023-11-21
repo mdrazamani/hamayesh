@@ -2,6 +2,9 @@ import { loadLanguageSetting } from "./readLang.mjs";
 
 export const toJSON = (doc, converted, modelLangFields) => {
     const lang = loadLanguageSetting();
+
+    // console.log("speaker-toJSON: ", lang);
+
     const otherLang = lang === "fa" ? "en" : "fa";
 
     Object.keys(modelLangFields).forEach((key) => {
@@ -18,6 +21,9 @@ export const toJSON = (doc, converted, modelLangFields) => {
 
 export const addVirtualFields = (schema, modelLangFields) => {
     const lang = loadLanguageSetting();
+
+    console.log("addVirtualFields: ", lang);
+
     Object.keys(modelLangFields).forEach((field) => {
         schema
             .virtual(field)
@@ -36,18 +42,19 @@ export const addVirtualFields = (schema, modelLangFields) => {
 export const processLanguageFieldsInUpdate = (update, modelLangFields) => {
     const lang = loadLanguageSetting();
 
-    let isModified = false;
+    const updateWithSet = {};
 
-    Object.keys(modelLangFields).forEach((field) => {
-        if (update[field] != null) {
-            if (!update[lang]) update[lang] = {};
-            update[lang][field] = update[field];
-            delete update[field];
-            isModified = true;
+    Object.keys(update).forEach((field) => {
+        if (Object.keys(modelLangFields).includes(field)) {
+            updateWithSet[`${lang}.${field}`] = update[field];
         }
     });
 
-    return isModified;
+    if (Object.keys(updateWithSet).length > 0) {
+        update.$set = updateWithSet;
+    }
+
+    return Object.keys(updateWithSet).length > 0;
 };
 
 export const insertDocumentsDynamically = async (Model, data) => {

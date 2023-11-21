@@ -28,8 +28,6 @@ export const get = async (id) => {
 };
 
 export const getAll = async (options) => {
-    const lang = loadLanguageSetting();
-
     return await crudFactory.getAll(Axie)(options);
 };
 

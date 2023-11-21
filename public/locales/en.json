@@ -121,7 +121,8 @@
 		"invalid_twitter_url": "Invalid Twitter URL",
 		"invalid_linkedin_url": "Invalid LinkedIn URL",
 		"invalid_whatsapp_url": "Invalid WhatsApp URL",
-		"invalid_telegram_url": "Invalid Telegram URL"
+		"invalid_telegram_url": "Invalid Telegram URL",
+		"password_confirmation_required": "validation.password_confirmation_required"
 	},
 	"success": {
 		"success": "Operation successful",
