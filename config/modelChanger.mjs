@@ -2,9 +2,6 @@ import { loadLanguageSetting } from "./readLang.mjs";
 
 export const toJSON = (doc, converted, modelLangFields) => {
     const lang = loadLanguageSetting();
-
-    // console.log("speaker-toJSON: ", lang);
-
     const otherLang = lang === "fa" ? "en" : "fa";
 
     Object.keys(modelLangFields).forEach((key) => {
@@ -21,9 +18,6 @@ export const toJSON = (doc, converted, modelLangFields) => {
 
 export const addVirtualFields = (schema, modelLangFields) => {
     const lang = loadLanguageSetting();
-
-    console.log("addVirtualFields: ", lang);
-
     Object.keys(modelLangFields).forEach((field) => {
         schema
             .virtual(field)

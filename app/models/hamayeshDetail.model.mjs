@@ -28,6 +28,12 @@ const ArticleFormats = [
 
 const hamayeshDetailSchema = new mongoose.Schema(
     {
+        faTitle: {
+            type: String,
+        },
+        enTitle: {
+            type: String,
+        },
         fa: {
             description: {
                 type: String,
@@ -59,6 +65,12 @@ const hamayeshDetailSchema = new mongoose.Schema(
                         },
                     },
                 ],
+            },
+            poster: {
+                type: String,
+            },
+            headerImage: {
+                type: String,
             },
         },
         en: {
@@ -93,16 +105,17 @@ const hamayeshDetailSchema = new mongoose.Schema(
                     },
                 ],
             },
+            poster: {
+                type: String,
+            },
+            headerImage: {
+                type: String,
+            },
         },
         iscCode: {
             type: String,
         },
-        poster: {
-            type: String,
-        },
-        headerImage: {
-            type: String,
-        },
+
         eventAddress: {
             state: {
                 type: mongoose.Schema.Types.ObjectId,
