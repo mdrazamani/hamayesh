@@ -15,7 +15,7 @@ export const updateController = async (req, res, next) => {
         const { id } = req.params;
         const article = await update(id, req.body, req.user);
         if (article) {
-            if (user.role.name === "referee") {
+            if (user.role.name === "referee" || user.role.name === "admin") {
                 const endUser = await getUser(article.userId);
                 const mailOptionsUser = {
                     to: endUser.email,
@@ -31,7 +31,7 @@ export const updateController = async (req, res, next) => {
                         }
                     ),
                 };
-                sendEmail(mailOptionsUser);
+                await sendEmail(mailOptionsUser);
             }
 
             res.respond(constants.OK, getMessage("success.success"), article);
