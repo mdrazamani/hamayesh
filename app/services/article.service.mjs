@@ -72,3 +72,23 @@ export const getAllReferee = async (options, refereeId) => {
 export const deleteDoc = async (id) => {
     return await crudFactory.delete(Article)(id);
 };
+
+export const getAllUniqueUserIds = async () => {
+    return await Article.aggregate([
+        {
+            $group: {
+                _id: "$userId",
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                userId: "$_id",
+            },
+        },
+    ]);
+};
+
+export const getAllArticlesByUserId = async (userId) => {
+    return await Article.find({ userId: userId });
+};

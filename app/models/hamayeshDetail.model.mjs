@@ -121,7 +121,11 @@ const hamayeshDetailSchema = new mongoose.Schema(
         iscCode: {
             type: String,
         },
-
+        minimumPassingScore: {
+            type: Number,
+            min: 1,
+            max: 5,
+        },
         eventAddress: {
             state: {
                 type: mongoose.Schema.Types.ObjectId,
