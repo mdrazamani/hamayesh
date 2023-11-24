@@ -1,5 +1,19 @@
 import NewsCategory from "../../../app/models/newsCategory.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+function translateToEnglish(farsiText) {
+    const translationMap = {
+        "هوش مصنوعی": "Artificial Intelligence",
+        "بلاک چین": "Blockchain",
+        روباتیک: "Robotics",
+        "یادگیری ماشین": "Machine Learning",
+        "امنیت بلاک چین": "Blockchain Security",
+        "ارزهای دیجیتال": "Cryptocurrencies",
+        // Add more translations as needed
+        // ... Translations for descriptions as well
+    };
+
+    return translationMap[farsiText] || farsiText;
+}
 
 export const seedNewsCategoriesFA = async () => {
     // Define the initial primary categories
@@ -37,8 +51,19 @@ export const seedNewsCategoriesFA = async () => {
             level: 1,
         },
         // Add more primary categories if needed
-    ];
-
+    ].map((category) => ({
+        fa: {
+            title: category.title,
+            description: category.description,
+        },
+        en: {
+            title: translateToEnglish(category.title),
+            description: translateToEnglish(category.description),
+        },
+        slug: category.slug,
+        image: category.image,
+        level: category.level,
+    }));
     let createdCategories;
 
     try {
@@ -48,8 +73,11 @@ export const seedNewsCategoriesFA = async () => {
         //     parentCategories
         // );
 
-        const createdParentCategories = await insertDocumentsDynamically(
-            NewsCategory,
+        // const createdParentCategories = await insertDocumentsDynamically(
+        //     NewsCategory,
+        //     parentCategories
+        // );
+        const createdParentCategories = await NewsCategory.insertMany(
             parentCategories
         );
 
@@ -130,17 +158,28 @@ export const seedNewsCategoriesFA = async () => {
                 level: 2,
             },
             // Add more subcategories as needed
-        ];
-
+        ].map((category) => ({
+            fa: {
+                title: category.title,
+                description: category.description,
+            },
+            en: {
+                title: translateToEnglish(category.title),
+                description: translateToEnglish(category.description),
+            },
+            slug: category.slug,
+            image: category.image,
+            level: category.level,
+        }));
         // Insert the subcategories into the database
-        // const createdCategories2 = await NewsCategory.insertMany(
-        //     childCategories
-        // );
-
-        const createdCategories2 = await insertDocumentsDynamically(
-            NewsCategory,
+        const createdCategories2 = await NewsCategory.insertMany(
             childCategories
         );
+
+        // const createdCategories2 = await insertDocumentsDynamically(
+        //     NewsCategory,
+        //     childCategories
+        // );
 
         createdCategories.push(...createdCategories2);
 

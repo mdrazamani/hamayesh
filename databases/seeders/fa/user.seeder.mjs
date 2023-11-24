@@ -87,11 +87,28 @@ export const seedUsersFA = async () => {
 
     for (let i = 0; i < 8; i++) {
         const user = {
-            firstName: firstNames[i],
-            lastName: lastNames[i],
+            fa: {
+                firstName: firstNames[i], // Assuming this is in Farsi
+                lastName: lastNames[i],
+                degree: degrees[i % degrees.length],
+                institute: "موسسه فناوری",
+                bio: "این یک توضیح کوتاه در مورد کاربر است.",
+                job: jobs[i % jobs.length],
+                study_field: "علوم کامپیوتر",
+            },
+            en: {
+                firstName: translateToEnglish(firstNames[i]), // You need to implement this translation
+                lastName: translateToEnglish(lastNames[i]),
+                degree: translateToEnglish(degrees[i % degrees.length]),
+                institute: "Technology Institute",
+                bio: "This is a short description about the user.",
+                job: translateToEnglish(jobs[i % jobs.length]),
+                study_field: "Computer Science",
+            },
+
             phoneNumber: phoneNumbers[i],
             // password: await bcrypt.hash("1029Mmd1029@", 10),
-            password: "1029Mmd1029@",
+            password: await bcrypt.hash("1029Mmd1029@", 10),
             email: emails[i],
             emailVerifiedAt: null,
             role:
@@ -109,10 +126,6 @@ export const seedUsersFA = async () => {
             lastLoginAt: null,
             national_id: generateNationalId(),
             gender: i % 2 === 0 ? "male" : "female",
-            study_field: "علوم کامپیوتر",
-            degree: degrees[i % degrees.length],
-            institute: "موسسه فناوری",
-            job: jobs[i % jobs.length],
             state: state._id,
             city: city._id,
             deletedAt: null,
@@ -128,10 +141,40 @@ export const seedUsersFA = async () => {
         users.push(user);
     }
 
+    function translateToEnglish(farsiText) {
+        const translationMap = {
+            علی: "Ali",
+            محمد: "Mohammad",
+            حسین: "Hossein",
+            فاطمه: "Fateme",
+            زهرا: "Zahra",
+            محسن: "Mohsen",
+            محمدرضا: "Mohammadreza",
+            رضوی: "Rezavi",
+            صادقی: "Sadeghi",
+            حسینی: "Hosseini",
+            موسوی: "Mousavi",
+            جعفری: "Jafari",
+            رضوانی: "Rezvani",
+            زمانی: "Zamani",
+            کارشناسی: "Bachelor",
+            "کارشناسی ارشد": "Master",
+            دکتری: "PhD",
+            "دکتری هوش مصنوعی": "PhD in Artificial Intelligence",
+            "مهندس بلاک چین": "Blockchain Engineer",
+            "مهندس نرم‌افزار": "Software Engineer",
+            "علوم کامپیوتر": "Computer Science",
+            "موسسه فناوری": "Technology Institute",
+            // Add more translations as needed
+        };
+
+        return translationMap[farsiText] || farsiText; // Return the translated text or the original if not found
+    }
+
     try {
         await User.deleteMany({});
-        // await User.insertMany(users);
-        await insertDocumentsDynamically(User, users);
+        await User.insertMany(users);
+        // await insertDocumentsDynamically(User, users);
         console.log("users added");
     } catch (error) {
         console.error("error in user", error);

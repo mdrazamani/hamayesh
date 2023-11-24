@@ -1,6 +1,32 @@
 import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+const translationMap = {
+    // Title Translations
+    Technology: "فناوری",
+    Health: "سلامت",
+    Science: "علم",
+    Business: "تجارت",
+    Travel: "سفر",
+    Food: "غذا",
+    Sports: "ورزش",
+    Art: "هنر",
+    Entertainment: "سرگرمی",
+    Education: "آموزش",
+    // ... add more translations as needed
 
+    // Description Translations
+    "Articles about the latest technology trends.":
+        "مقالاتی درباره آخرین روندهای فناوری.",
+    "Insights on various health topics.":
+        "بینش‌هایی در مورد موضوعات مختلف سلامت.",
+    "Exploring scientific discoveries and research.":
+        "کاوش در کشفیات و تحقیقات علمی.",
+    // ... add more translations as needed
+};
+
+function translateToFarsi(englishText) {
+    return translationMap[englishText] || englishText;
+}
 export const seedArticleCategoryFA = async () => {
     const articleCategoriesData = [
         {
@@ -54,15 +80,25 @@ export const seedArticleCategoryFA = async () => {
             referees: [],
         },
         // ادامه دهید با دیتاهای بیشتر به همین الگو
-    ];
+    ].map((category) => ({
+        fa: {
+            title: translateToFarsi(category.title),
+            description: translateToFarsi(category.description),
+        },
+        en: {
+            title: category.title,
+            description: category.description,
+        },
+        referees: category.referees,
+    }));
 
     try {
         await ArticleCategory.deleteMany({});
-        // await ArticleCategory.insertMany(articleCategoriesData);
-        await insertDocumentsDynamically(
-            ArticleCategory,
-            articleCategoriesData
-        );
+        await ArticleCategory.insertMany(articleCategoriesData);
+        // await insertDocumentsDynamically(
+        //     ArticleCategory,
+        //     articleCategoriesData
+        // );
         console.log("دسته‌های مقاله با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن دسته‌های مقاله:", error);

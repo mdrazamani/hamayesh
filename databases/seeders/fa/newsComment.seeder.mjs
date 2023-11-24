@@ -1,5 +1,29 @@
 import NewsComment from "../../../app/models/newsComment.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+function translateToEnglish(farsiText) {
+    const translationMap = {
+        "نگاهی به این پیشرفت‌ها نشان می‌دهد که آینده‌ی تکنولوژی وابسته به هوش مصنوعی است.":
+            "A look at these advancements shows that the future of technology is reliant on artificial intelligence.",
+        "مطلب بسیار جامع و کاملی بود، منتظر مقالات بعدی شما هستم.":
+            "The article was very comprehensive; I am looking forward to your next articles.",
+        // ... other comments
+        فرهاد: "Farhad",
+        سارا: "Sara",
+        رضا: "Reza",
+        تارا: "Tara",
+        علی: "Ali",
+        مریم: "Maryam",
+        میرزایی: "Mirzai",
+        کریمی: "Karimi",
+        شاهین: "Shahin",
+        نوری: "Nouri",
+        رضایی: "Rezaei",
+        موسوی: "Mousavi",
+        // Add more translations as needed
+    };
+
+    return translationMap[farsiText] || farsiText;
+}
 
 export const seedNewsCommentsFA = async () => {
     const commentsData = [
@@ -63,16 +87,31 @@ export const seedNewsCommentsFA = async () => {
             status: true,
         },
         // Add more comments as needed
-    ];
+    ].map((comment) => ({
+        fa: {
+            comment: comment.comment,
+            userFirstName: comment.userFirstName,
+            userLastName: comment.userLastName,
+        },
+        en: {
+            comment: translateToEnglish(comment.comment),
+            userFirstName: translateToEnglish(comment.userFirstName),
+            userLastName: translateToEnglish(comment.userLastName),
+        },
+        likeNumber: comment.likeNumber,
+        userEmail: comment.userEmail,
+        userIp: comment.userIp,
+        status: comment.status,
+    }));
 
     let createdComments;
     try {
         await NewsComment.deleteMany({});
-        // createdComments = await NewsComment.insertMany(commentsData);
-        createdComments = await insertDocumentsDynamically(
-            NewsComment,
-            commentsData
-        );
+        createdComments = await NewsComment.insertMany(commentsData);
+        // createdComments = await insertDocumentsDynamically(
+        //     NewsComment,
+        //     commentsData
+        // );
         console.log("news comment seeded successfully");
     } catch (error) {
         console.error("news comment error", error);

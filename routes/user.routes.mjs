@@ -13,6 +13,7 @@ import {
 } from "../app/validations/user.validation.mjs";
 import { updateCurrentUserController } from "../app/controllers/user/updateCurrent.controller.mjs";
 import { authorizeRole } from "../app/middlewares/auth.middleware.mjs";
+import { adminDashboardController } from "../app/controllers/others/adminDash.controller.mjs";
 
 /**
  * @swagger

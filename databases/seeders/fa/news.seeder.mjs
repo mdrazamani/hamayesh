@@ -4,7 +4,26 @@ import { seedNewsCommentsFA } from "./newsComment.seeder.mjs"; // import the fun
 import { seedNewsTagsFA } from "./newsTag.seeder.mjs";
 import { seedNewsCategoriesFA } from "./newsCategory.seeder.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+function translateToEnglish(farsiText) {
+    const translationMap = {
+        // Farsi Titles and their English Translations
+        "هوش مصنوعی در سال 2023: جهش‌ها و دستاوردها":
+            "Artificial Intelligence in 2023: Leaps and Achievements",
+        "بلاک چین و تأثیر آن بر اقتصاد جهانی":
+            "Blockchain and Its Impact on the Global Economy",
+        "پیشرفت‌های جدید در نورومورفیک کامپیوتینگ":
+            "New Advances in Neuromorphic Computing",
+        "کاربردهای بلاک چین فراتر از ارزهای دیجیتال":
+            "Blockchain Applications Beyond Digital Currencies",
+        "تحول دیجیتال با تکنولوژی بلاک چین":
+            "Digital Transformation with Blockchain Technology",
+        "مرزهای جدید در پردازش زبان طبیعی":
+            "New Frontiers in Natural Language Processing",
+        // Add more translations as needed
+    };
 
+    return translationMap[farsiText] || farsiText;
+}
 export const seedNewsFA = async () => {
     let createdCategories = await seedNewsCategoriesFA();
     let createdComments = await seedNewsCommentsFA();
@@ -164,12 +183,22 @@ export const seedNewsFA = async () => {
             publishDate: new Date(),
             specialDate: new Date(),
         },
-    ];
+    ].map((newsItem) => ({
+        ...newsItem,
+        fa: {
+            title: newsItem.title,
+            description: newsItem.description,
+        },
+        en: {
+            title: translateToEnglish(newsItem.title),
+            description: translateToEnglish(newsItem.description),
+        },
+    }));
 
     try {
         await News.deleteMany({});
-        // await News.insertMany(newsData);
-        await insertDocumentsDynamically(News, newsData);
+        await News.insertMany(newsData);
+        // await insertDocumentsDynamically(News, newsData);
         console.log("News seeded successfully!");
     } catch (error) {
         console.error("Error seeding news:", error);

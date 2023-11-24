@@ -3,6 +3,33 @@ import Secretariat from "../../../app/models/secretariat.model.mjs";
 import User from "../../../app/models/user.model.mjs"; // وارد کردن مدل User
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
+function translateTitleToEnglish(farsiTitle) {
+    const titleTranslationMap = {
+        "دبیرخانه علمی": "Academic Secretariat",
+        "دبیرخانه اجرایی": "Executive Secretariat",
+        "دبیرخانه سیاستگذاری": "Policy Secretariat",
+        ریاست: "Presidency",
+        // Add more translations as needed
+    };
+
+    return titleTranslationMap[farsiTitle] || farsiTitle;
+}
+
+function translateDescriptionToEnglish(farsiDescription) {
+    const descriptionTranslationMap = {
+        "مسائل تحصیلی و منابع آموزشی را پیگیری می‌کند.":
+            "Handles educational matters and academic resources.",
+        "مسئول برنامه‌ریزی مالی و بودجه‌بندی است.":
+            "Responsible for financial planning and budgeting.",
+        "مسئولیت‌های سیاستگذاری و برنامه‌ریزی سیاسی را دارد.":
+            "Manages policy-making and political planning.",
+        "رئیس محترم همایش": "Honorable Conference President",
+        // Add more translations as needed
+    };
+
+    return descriptionTranslationMap[farsiDescription] || farsiDescription;
+}
+
 export const seedSecretariatsFA = async () => {
     try {
         // دریافت برخی شناسه‌های کاربر از پایگاه داده‌ی خود. این فقط یک مثال است؛ بر اساس نیازهای خود تنظیم کنید.
@@ -44,12 +71,25 @@ export const seedSecretariatsFA = async () => {
                 type: "conferance", // نوع معتبر از انتخاب‌های شما
             },
             // ... دبیرخانه‌های نمونه دیگر
-        ];
-
+        ].map((secretariat) => ({
+            fa: {
+                title: secretariat.title,
+                description: secretariat.description,
+            },
+            en: {
+                title: translateTitleToEnglish(secretariat.title),
+                description: translateDescriptionToEnglish(
+                    secretariat.description
+                ),
+            },
+            boss: secretariat.boss,
+            users: secretariat.users,
+            type: secretariat.type,
+        }));
         // درج داده‌های نمونه در پایگاه داده‌ی شما
         await Secretariat.deleteMany({});
-        // await Secretariat.insertMany(secretariats);
-        await insertDocumentsDynamically(Secretariat, secretariats);
+        await Secretariat.insertMany(secretariats);
+        // await insertDocumentsDynamically(Secretariat, secretariats);
         console.log("دبیرخانه‌ها با موفقیت seed شدند!");
     } catch (error) {
         // رفع خطاهای درج

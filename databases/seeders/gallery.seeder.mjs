@@ -1,6 +1,20 @@
 import Gallery from "../../app/models/gallery.model.mjs"; // Adjust the import as per your file structure
 import { insertDocumentsDynamically } from "../../config/modelChanger.mjs";
+const translationMap = {
+    // Category Translations
+    "Category 0": "دسته 0",
+    "Category 1": "دسته 1",
+    // ... add more translations as needed
 
+    // Description Translations
+    "Description for Category 0": "توضیحات برای دسته 0",
+    "Description for Category 1": "توضیحات برای دسته 1",
+    // ... add more translations as needed
+};
+
+function translateToFarsi(englishText) {
+    return translationMap[englishText] || englishText;
+}
 export const seedGalleries = async () => {
     const numberOfGalleries = 2; // Adjust as needed
 
@@ -25,11 +39,19 @@ export const seedGalleries = async () => {
     const galleries = [];
     let k = 0;
     for (let i = 0; i < numberOfGalleries; i++) {
+        const category = `Category ${i}`;
+        const description = `Description for Category ${i}`;
         const gallery = {
-            category: `Category ${i}`,
+            fa: {
+                category: translateToFarsi(category),
+                description: translateToFarsi(description),
+            },
+            en: {
+                category,
+                description,
+            },
             slug: `category-${i}-gallery`,
             images: [],
-            description: `Description for Category ${i}`,
             isActive: true,
         };
 
@@ -47,8 +69,8 @@ export const seedGalleries = async () => {
         // Clear the existing galleries (Be careful with this in a production environment)
         await Gallery.deleteMany({});
         // Insert the new galleries
-        // await Gallery.insertMany(galleries);
-        await insertDocumentsDynamically(Gallery, galleries);
+        await Gallery.insertMany(galleries);
+        // await insertDocumentsDynamically(Gallery, galleries);
         console.log("Galleries seeded successfully!");
     } catch (error) {
         console.error("Error seeding galleries:", error);

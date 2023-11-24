@@ -1,6 +1,16 @@
 import Supporter from "../../../app/models/supporter.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+function translateSupporterNameToEnglish(farsiName) {
+    const translationMap = {
+        "دانشگاه آزاد گوهردشت": "Azad University of Gohardasht",
+        "نیروی انتظامی": "Police Force",
+        "دانشگاه فردوسی مشهد": "Ferdowsi University of Mashhad",
+        "دانشگاه صنعتی اصفحان": "Isfahan University of Technology",
+        // Add more translations as needed
+    };
 
+    return translationMap[farsiName] || farsiName; // Return the translated text or the original if not found
+}
 export const seedSupportersFA = async () => {
     const supporters = [
         {
@@ -27,12 +37,20 @@ export const seedSupportersFA = async () => {
             supportType: "Academic",
             link: "www.anothercompany.com",
         },
-    ];
+    ].map((supporter) => ({
+        ...supporter,
+        fa: {
+            name: supporter.name,
+        },
+        en: {
+            name: translateSupporterNameToEnglish(supporter.name),
+        },
+    }));
 
     try {
         await Supporter.deleteMany({});
-        // await Supporter.insertMany(supporters);
-        await insertDocumentsDynamically(Supporter, supporters);
+        await Supporter.insertMany(supporters);
+        // await insertDocumentsDynamically(Supporter, supporters);
         console.log("supporters added successfully");
     } catch (error) {
         console.error("error in supporters", error);

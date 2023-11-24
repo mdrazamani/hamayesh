@@ -1,5 +1,31 @@
 import Question from "../../../app/models/question.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
+function translateToEnglish(farsiText) {
+    // Example translations - these need to be replaced with actual translations
+    const translationMap = {
+        "چگونه می‌توانم برای همایش نفت و گاز ثبت‌نام کنم؟":
+            "How can I register for the Oil and Gas Conference?",
+        "روند ثبت‌نام برای همایش چگونه است؟":
+            "What is the registration process for the conference?",
+        "هزینه ثبت‌نام برای همایش چقدر است؟":
+            "How much does it cost to register for the conference?",
+        "امکانات و خدمات موجود در طول همایش چیست؟":
+            "What facilities and services are available during the conference?",
+        "چه نوع امکاناتی برای شرکت‌کنندگان فراهم است؟":
+            "What kind of facilities are provided for participants?",
+        "آیا در طول همایش خدمات ترجمه فراهم می‌باشد؟":
+            "Are translation services available during the conference?",
+        "چه برنامه‌ریزی‌هایی برای رویدادهای اجتماعی همایش وجود دارد؟":
+            "What are the plans for social events at the conference?",
+        "آیا رویدادهای اجتماعی خاصی در طول همایش برگزار می‌شود؟":
+            "Are there any special social events during the conference?",
+        "چگونه می‌توانم در رویدادهای اجتماعی همایش شرکت کنم؟":
+            "How can I participate in the conference's social events?",
+        // Add more translations as needed
+    };
+
+    return translationMap[farsiText] || farsiText;
+}
 
 export const seedQuestionsFA = async () => {
     const questions = [
@@ -55,12 +81,28 @@ export const seedQuestionsFA = async () => {
                 },
             ],
         },
-    ];
-
+    ].map((question) => ({
+        fa: {
+            title: question.title,
+            description: question.description,
+            items: question.items.map((item) => ({
+                question: item.question,
+                response: item.response,
+            })),
+        },
+        en: {
+            title: translateToEnglish(question.title),
+            description: translateToEnglish(question.description),
+            items: question.items.map((item) => ({
+                question: translateToEnglish(item.question),
+                response: translateToEnglish(item.response),
+            })),
+        },
+    }));
     try {
         await Question.deleteMany({});
-        // await Question.insertMany(questions);
-        await insertDocumentsDynamically(Question, questions);
+        await Question.insertMany(questions);
+        // await insertDocumentsDynamically(Question, questions);
         console.log("سوالات متداول همایش با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن سوالات متداول همایش:", error);

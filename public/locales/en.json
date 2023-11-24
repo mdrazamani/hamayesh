@@ -122,7 +122,19 @@
 		"invalid_linkedin_url": "Invalid LinkedIn URL",
 		"invalid_whatsapp_url": "Invalid WhatsApp URL",
 		"invalid_telegram_url": "Invalid Telegram URL",
-		"password_confirmation_required": "validation.password_confirmation_required"
+		"password_confirmation_required": "validation.password_confirmation_required",
+		"role_name_required": "validation.role_name_required",
+		"role_name_min": "validation.role_name_min",
+		"role_name_max": "validation.role_name_max",
+		"invalid_user_id": "validation.invalid_user_id",
+		"user_required": "validation.user_required",
+		"boss_min": "validation.boss_min",
+		"boss_max": "validation.boss_max",
+		"boss_required": "validation.boss_required",
+		"invalid_secretariat_type": "validation.invalid_secretariat_type",
+		"type_required": "validation.type_required",
+		"invalid_referee": "validation.invalid_referee",
+		"referees_invalid": "validation.referees_invalid"
 	},
 	"success": {
 		"success": "Operation successful",
