@@ -58,22 +58,10 @@ const ArticleSchema = new mongoose.Schema(
                         type: String,
                     },
                 ],
-                messages: [
-                    {
-                        from: {
-                            type: String,
-                            enum: ["referee", "user"],
-                        },
-                        message: {
-                            type: String,
-                        },
-                        date: {
-                            type: Date,
-                        },
-                    },
-                ],
+                messages: {
+                    type: String,
+                },
                 rate: { type: Number, min: 1, max: 5 },
-                date: { type: Date },
             },
         ],
     },

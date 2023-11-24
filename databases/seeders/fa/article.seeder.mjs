@@ -37,10 +37,15 @@ export const seedArticlesFA = async () => {
                 "public/uploads/articleFiles/tasis.pdf",
             ],
             status: "success", // or "در انتظار", or "ناموفق"
-            arbitration: {
-                refereeId: users[1]._id, // Assign another user as a referee
-                message: "تمامی استانداردها مورد تأیید قرار گرفته است.",
-            },
+            arbitrations: [
+                {
+                    refereeId: users[1]._id, // Assign another user as a referee
+                    files: [], // Populate as necessary
+                    messages: "test 1",
+                    rate: 4, // Example rating
+                    // ... other fields
+                },
+            ],
         },
         {
             title: "پیشرفت‌های هوش مصنوعی",
@@ -51,10 +56,15 @@ export const seedArticlesFA = async () => {
             articleFiles: [],
             presentationFiles: [],
             status: "success",
-            arbitration: {
-                refereeId: users[0]._id,
-                message: "محتوای مطالعاتی با کیفیت و تحقیقات دقیق.",
-            },
+            arbitrations: [
+                {
+                    refereeId: users[0]._id,
+                    files: [], // Populate as necessary
+                    messages: "test 2",
+                    rate: 5, // Example rating
+                    // ... other fields
+                },
+            ],
         },
         {
             title: "نوآوری‌های بهداشت: پزشکی از راه دور",
@@ -64,10 +74,15 @@ export const seedArticlesFA = async () => {
             articleFiles: [],
             presentationFiles: [],
             status: "pending",
-            arbitration: {
-                refereeId: users[0]._id,
-                message: "منتظر داده‌های اضافی برای بررسی هستیم.",
-            },
+            arbitrations: [
+                {
+                    refereeId: users[0]._id,
+                    files: [], // Populate as necessary
+                    messages: "test 3",
+                    rate: 5, // Example rating
+                    // ... other fields
+                },
+            ],
         },
         // ... more sample articles
     ];

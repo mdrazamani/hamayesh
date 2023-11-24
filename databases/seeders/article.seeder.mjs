@@ -93,10 +93,15 @@ export const seedArticles = async () => {
                 // ... other files
             ],
             status: "success",
-            arbitration: {
-                refereeId: users[0]._id,
-                message: "Well-researched and insightful content.",
-            },
+            arbitrations: [
+                {
+                    refereeId: users[1]._id, // Assign another user as a referee
+                    files: [], // Populate as necessary
+                    messages: "test 1",
+                    rate: 4, // Example rating
+                    // ... other fields
+                },
+            ],
         },
         {
             title: "Healthcare Innovations: Telemedicine",
@@ -121,10 +126,15 @@ export const seedArticles = async () => {
                 // ... other files
             ],
             status: "pending",
-            arbitration: {
-                refereeId: users[0]._id,
-                message: "Awaiting additional data for review.",
-            },
+            arbitrations: [
+                {
+                    refereeId: users[0]._id,
+                    files: [], // Populate as necessary
+                    messages: "test 2",
+                    rate: 5, // Example rating
+                    // ... other fields
+                },
+            ],
         },
         // ... more sample articles
     ];

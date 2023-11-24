@@ -40,13 +40,32 @@ export const articleValidationSchema = () => ({
         // status: Joi.string()
         //     .valid("success", "pending", "failed") // these are the allowed values
         //     .default("pending"),
-        arbitration: Joi.object({
-            refereeId: Joi.string()
-                .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
-                .allow(null)
-                .optional(),
-            message: Joi.string().allow(null, "").optional(),
-        }).optional(),
+        arbitrations: Joi.array()
+            .items(
+                Joi.object({
+                    refereeId: Joi.string()
+                        .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
+                        .required()
+                        .messages({
+                            "string.pattern.base": getMessage(
+                                "validation.invalid_refereeId"
+                            ),
+                            "any.required": getMessage(
+                                "validation.refereeId_required"
+                            ),
+                        }),
+                    files: Joi.array().optional(), // You can add more specific validation for files if needed
+                    messages: Joi.string().optional(),
+                    rate: Joi.number().min(1).max(5).optional(),
+                    // ... other fields in arbitration if necessary ...
+                })
+            )
+            .optional()
+            .messages({
+                "array.includesRequiredUnknowns": getMessage(
+                    "validation.arbitrations_required"
+                ),
+            }),
     }).options({ abortEarly: false }), // to handle all errors at once
 });
 
@@ -86,13 +105,32 @@ export const articleUpdateValidationSchema = () => ({
         // status: Joi.string()
         //     .valid("success", "pending", "failed") // these are the allowed values
         //     .default("pending"),
-        arbitration: Joi.object({
-            refereeId: Joi.string()
-                .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
-                .allow(null)
-                .optional(),
-            message: Joi.string().allow(null, "").optional(),
-        }).optional(),
+        arbitrations: Joi.array()
+            .items(
+                Joi.object({
+                    refereeId: Joi.string()
+                        .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
+                        .required()
+                        .messages({
+                            "string.pattern.base": getMessage(
+                                "validation.invalid_refereeId"
+                            ),
+                            "any.required": getMessage(
+                                "validation.refereeId_required"
+                            ),
+                        }),
+                    files: Joi.array().optional(), // You can add more specific validation for files if needed
+                    messages: Joi.string().optional(),
+                    rate: Joi.number().min(1).max(5).optional(),
+                    // ... other fields in arbitration if necessary ...
+                })
+            )
+            .optional()
+            .messages({
+                "array.includesRequiredUnknowns": getMessage(
+                    "validation.arbitrations_required"
+                ),
+            }),
     }).options({ abortEarly: false }), // to handle all errors at once
 });
 

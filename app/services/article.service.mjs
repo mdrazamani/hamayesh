@@ -14,10 +14,20 @@ const populateOptions = [
     {
         path: "userId",
         model: "User",
-        select: "-__v",
+        select: "-__v -password", // Assuming you want to exclude the password field
     },
+    {
+        path: "arbitrations.refereeId",
+        model: "User",
+        select: "-__v -password", // Exclude sensitive fields
+    },
+    {
+        path: "arbitrations.messages.user",
+        model: "User",
+        select: "-__v -password", // Exclude sensitive fields for message user
+    },
+    // If there are any other reference fields, add them here similarly
 ];
-
 export const create = async (data) => {
     return await crudFactory.create(Article)(data);
 };
