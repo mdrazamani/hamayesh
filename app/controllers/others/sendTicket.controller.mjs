@@ -4,8 +4,11 @@ import { sendEmail } from "../../emails/verify.email.mjs";
 import pug from "pug";
 import { createPath } from "../../../config/tools.mjs";
 import { get } from "../../services/organizer.service.mjs";
+import { loadLanguageSetting } from "../../../config/readLang.mjs";
 
 export const sendTicketController = async (req, res, next) => {
+    const lang = loadLanguageSetting();
+
     try {
         const { id } = req.params;
         const data = req.body;
@@ -25,6 +28,7 @@ export const sendTicketController = async (req, res, next) => {
                     phone: data.phone,
                     subject: data.subject,
                     message: data.message,
+                    lang,
                 }
             ),
         };

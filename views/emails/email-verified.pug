@@ -41,9 +41,20 @@ html
 
 body
     .email-container
-        h1 Email Verification
-        p Thank you for signing up with us. Please verify your email to continue.
-        p Here's your verification code:
+
+      if lang == "fa"
+      
+        h1 تایید ایمیل
+        p از ثبت نام شما در سایت ما متشکریم. برای تکمیل ثبت نام و فعال‌سازی حساب کاربری خود، لطفاً آدرس ایمیل خود را تایید کنید.
+        p در اینجا کد تایید منحصر به فرد شما آورده شده است:
         .token-box #{token}
-        p If you did not create an account with us, please ignore this email.
+        p اگر شما این ثبت نام را ایجاد نکرده‌اید، لطفاً این ایمیل را نادیده بگیرید زیرا هیچ اقدام بیشتری از طرف شما لازم نیست.
+
+      else
+         
+        h1 Email Verification
+        p Thank you for registering with us. To complete your registration and activate your account, please verify your email address.
+        p Here is your unique verification code:
+        .token-box #{token}
+        p If you did not initiate this registration, please disregard this email as no further action is required on your part.
 

@@ -6,8 +6,11 @@ import constants from "../../../utils/constants.mjs";
 import { getMessage } from "../../../config/i18nConfig.mjs";
 import crypto from "crypto";
 import Resetoken from "../../models/passwordReset.model.mjs";
+import { loadLanguageSetting } from "../../../config/readLang.mjs";
 
 export const forgetPasswordController = async (req, res, next) => {
+    const lang = loadLanguageSetting();
+
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
@@ -34,6 +37,7 @@ export const forgetPasswordController = async (req, res, next) => {
                 ),
                 {
                     token,
+                    lang,
                 }
             ),
         };

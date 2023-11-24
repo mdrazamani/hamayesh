@@ -4,8 +4,11 @@ import { create } from "../../services/article.service.mjs";
 import { get as getArticleCategory } from "../../services/articleCategory.service.mjs";
 import { get as getUser } from "../../services/user.service.mjs";
 import { sendEmail } from "../../emails/verify.email.mjs";
+import { loadLanguageSetting } from "../../../config/readLang.mjs";
 
 export const createController = async (req, res, next) => {
+    const lang = loadLanguageSetting();
+
     try {
         const user = req.user;
         const article = await create(req.body);
@@ -20,6 +23,7 @@ export const createController = async (req, res, next) => {
                     ),
                     {
                         title: article.title,
+                        lang,
                     }
                 ),
             };
@@ -34,6 +38,7 @@ export const createController = async (req, res, next) => {
                     ),
                     {
                         title: article.title,
+                        lang,
                     }
                 ),
             };

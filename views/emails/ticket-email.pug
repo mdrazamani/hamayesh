@@ -40,13 +40,30 @@ html
 
 body
     .email-container
-        h1 User Message
-        p This is a message sent from a user on your website.
-        p Here are the details provided by the user:
-        .info-box
-            p Name: #{name}
-            p Email: #{email}
-            p Contact Number: #{phone}
-            p Subject: #{subject}
-            p Message: #{message}
-        p If you did not expect to receive this message, please ignore this email.
+
+    if lang == "fa"
+
+      h1 پیام کاربر
+      p شما یک پیام جدید از یک کاربر در وب‌سایت خود دریافت کرده‌اید.
+      p در زیر جزئیات ارائه شده توسط کاربر آورده شده است:
+      .info-box
+          p نام: #{name}
+          p ایمیل: #{email}
+          p شماره تماس: #{phone}
+          p موضوع: #{subject}
+          p پیام: #{message}
+      p اگر انتظار دریافت این پیام را نداشتید، لطفاً این ایمیل را نادیده بگیرید.
+
+    else
+    
+      h1 User Message
+      p You have received a new message from a user on your website.
+      p Below are the details provided by the user:
+      .info-box
+          p Name: #{name}
+          p Email: #{email}
+          p Contact Number: #{phone}
+          p Subject: #{subject}
+          p Message: #{message}
+      p If this message is unexpected, please feel free to disregard this email.
+

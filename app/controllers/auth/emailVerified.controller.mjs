@@ -5,8 +5,11 @@ import crypto from "crypto";
 import pug from "pug";
 import { createPath } from "../../../config/tools.mjs";
 import Resetoken from "../../models/passwordReset.model.mjs";
+import { loadLanguageSetting } from "../../../config/readLang.mjs";
 
 export const emailVerifiedSendController = async (req, res, next) => {
+    const lang = loadLanguageSetting();
+
     try {
         const user = req.user;
         if (!user) {
@@ -33,6 +36,7 @@ export const emailVerifiedSendController = async (req, res, next) => {
                 ),
                 {
                     token,
+                    lang,
                 }
             ),
         };

@@ -47,23 +47,21 @@ const ArticleSchema = new mongoose.Schema(
             enum: ArticleStatus,
             default: "pending",
         },
-        arbitrations: [
-            {
-                refereeId: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "User",
-                },
-                files: [
-                    {
-                        type: String,
-                    },
-                ],
-                messages: {
+        arbitrations: {
+            refereeId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+            files: [
+                {
                     type: String,
                 },
-                rate: { type: Number, min: 1, max: 5 },
+            ],
+            messages: {
+                type: String,
             },
-        ],
+            rate: { type: Number, min: 1, max: 5 },
+        },
     },
 
     { timestamps: true }

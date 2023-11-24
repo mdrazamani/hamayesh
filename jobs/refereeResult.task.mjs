@@ -8,8 +8,10 @@ import {
 import { get as getUser } from "../app/services/user.service.mjs";
 import pug from "pug";
 import path from "path";
+import { loadLanguageSetting } from "../config/readLang.mjs";
 
 export async function setupEmailNotificationJobs() {
+    const lang = loadLanguageSetting();
     const hamayesh = await HamayeshDetail.findOne();
 
     new CronJob(
@@ -38,6 +40,7 @@ export async function setupEmailNotificationJobs() {
                         ),
                         {
                             pug: pugArticles,
+                            lang,
                         }
                     ),
                 };

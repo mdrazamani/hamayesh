@@ -40,7 +40,20 @@ html
 
 body
     .email-container
-        h1 User Message
-        p Dear #{title},
-        p Your article has been successfully submitted and is currently under review by our judges.
+      if lang == "fa"
 
+        h1 پیام کاربر
+        p ما خرسندیم که به اطلاع شما برسانیم مقاله شما با عنوان #{title} با موفقیت در پلتفرم ما ارسال شده است. در حال حاضر توسط تیم کارشناسان ما در حال بررسی است. ما قدردان تلاش و کوشش شما در به اشتراک گذاری دانش و بینش خود با جامعه ما هستیم.
+        p لطفا توجه داشته باشید که فرآیند بررسی ممکن است کمی زمان ببرد زیرا ما به بالاترین استانداردهای کیفیت و ارتباط توجه می‌کنیم. پس از اتمام بررسی‌ها و در صورت نیاز به اقدامات بیشتر از طرف شما، از طریق ایمیل به شما اطلاع داده خواهد شد.
+        p از اینکه پلتفرم ما را برای به نمایش گذاشتن کارتان انتخاب کرده‌اید، سپاسگزاریم. هیجان‌زده هستیم که شما را به عنوان بخشی از جامعه‌ی در حال رشد ما داشته باشیم.
+        p با احترام,
+        p همایش
+      
+      else
+
+        h1 User Message
+        p We are pleased to inform you that your article, titled #{title}, has been successfully submitted to our platform. It is currently under review by our team of experts. We appreciate your contribution and effort in sharing your knowledge and insights with our community.
+        p Please note that the review process may take some time as we ensure the highest standards of quality and relevance. You will be notified via email once the review is complete and if any further steps are required from your end.
+        p Thank you for choosing our platform to showcase your work. We are excited to have you as a part of our growing community.
+        p Best regards,
+        p hamayesh

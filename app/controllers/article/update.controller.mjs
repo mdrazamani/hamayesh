@@ -4,8 +4,11 @@ import { update } from "../../services/article.service.mjs";
 import { get as getArticleCategory } from "../../services/articleCategory.service.mjs";
 import { get as getUser } from "../../services/user.service.mjs";
 import { sendEmail } from "../../emails/verify.email.mjs";
+import { loadLanguageSetting } from "../../../config/readLang.mjs";
 
 export const updateController = async (req, res, next) => {
+    const lang = loadLanguageSetting();
+
     try {
         const { id } = req.params;
         const article = await update(id, req.body, req.user);
@@ -20,6 +23,7 @@ export const updateController = async (req, res, next) => {
                     ),
                     {
                         title: article.title,
+                        lang,
                     }
                 ),
             };
@@ -34,6 +38,7 @@ export const updateController = async (req, res, next) => {
                     ),
                     {
                         title: article.title,
+                        lang,
                     }
                 ),
             };
