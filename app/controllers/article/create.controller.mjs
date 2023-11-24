@@ -29,7 +29,7 @@ export const createController = async (req, res, next) => {
                     }
                 ),
             };
-            await sendEmail(mailOptionsUser);
+            sendEmail(mailOptionsUser);
 
             const mailOptionsReferee = {
                 subject: "Article Is Waiting For You",
@@ -50,7 +50,7 @@ export const createController = async (req, res, next) => {
             for (const referee of articleCat?.referees) {
                 const user = await getUser(referee);
                 mailOptionsReferee.to = user.email;
-                await sendEmail(mailOptionsReferee);
+                sendEmail(mailOptionsReferee);
             }
 
             res.respond(constants.OK, getMessage("success.success"));
