@@ -12,9 +12,7 @@ import {
 } from "../../config/modelChanger.mjs";
 
 const lang = loadLanguageSetting();
-
 const ArticleStatus = ["success", "pending", "failed"];
-
 const ArticleSchema = new mongoose.Schema(
     {
         fa: {
@@ -49,15 +47,35 @@ const ArticleSchema = new mongoose.Schema(
             enum: ArticleStatus,
             default: "pending",
         },
-        arbitration: {
-            refereeId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
+        arbitrations: [
+            {
+                refereeId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User",
+                },
+                files: [
+                    {
+                        type: String,
+                    },
+                ],
+                messages: [
+                    {
+                        from: {
+                            type: String,
+                            enum: ["referee", "user"],
+                        },
+                        message: {
+                            type: String,
+                        },
+                        date: {
+                            type: Date,
+                        },
+                    },
+                ],
+                rate: { type: Number, min: 1, max: 5 },
+                date: { type: Date },
             },
-            message: {
-                type: String,
-            },
-        },
+        ],
     },
 
     { timestamps: true }

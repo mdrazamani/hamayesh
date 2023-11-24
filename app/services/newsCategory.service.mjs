@@ -41,6 +41,47 @@ export const getAllGrouped = async () => {
     const lang = loadLanguageSetting();
 
     try {
+        // const stages = [
+        //     {
+        //         $match: {
+        //             parent: null,
+        //         },
+        //     },
+        //     {
+        //         $graphLookup: {
+        //             from: "newscategories",
+        //             startWith: "$_id",
+        //             connectFromField: "_id",
+        //             connectToField: "parent",
+        //             as: "children",
+        //             depthField: "level",
+        //             restrictSearchWithMatch: {},
+        //         },
+        //     },
+        //     {
+        //         $project: {
+        //             title: `$${lang}.title`,
+        //             description: `$${lang}.description`,
+        //             level: 1,
+        //             children: {
+        //                 $map: {
+        //                     input: "$children",
+        //                     as: "child",
+        //                     in: {
+        //                         title: `$$child.${lang}.title`,
+        //                         description: `$$child.${lang}.description`,
+        //                         level: "$$child.level",
+        //                         image: "$$child.image",
+        //                         slug: "$$child.slug",
+        //                     },
+        //                 },
+        //             },
+        //             image: 1,
+        //             slug: 1,
+        //         },
+        //     },
+        // ];
+        const alternativeLang = lang === "fa" ? "en" : "fa";
         const stages = [
             {
                 $match: {
@@ -60,24 +101,45 @@ export const getAllGrouped = async () => {
             },
             {
                 $project: {
-                    title: `$${lang}.title`,
-                    description: `$${lang}.description`,
+                    title: {
+                        $ifNull: [
+                            `$${lang}.title`,
+                            `$${alternativeLang}.title`,
+                        ],
+                    },
+                    description: {
+                        $ifNull: [
+                            `$${lang}.description`,
+                            `$${alternativeLang}.description`,
+                        ],
+                    },
                     level: 1,
+                    image: 1,
+                    slug: 1,
                     children: {
                         $map: {
                             input: "$children",
                             as: "child",
                             in: {
-                                title: `$$child.${lang}.title`,
-                                description: `$$child.${lang}.description`,
+                                title: {
+                                    $ifNull: [
+                                        `$$child.${lang}.title`,
+                                        `$$child.${alternativeLang}.title`,
+                                    ],
+                                },
+                                description: {
+                                    $ifNull: [
+                                        `$$child.${lang}.description`,
+                                        `$$child.${alternativeLang}.description`,
+                                    ],
+                                },
                                 level: "$$child.level",
                                 image: "$$child.image",
                                 slug: "$$child.slug",
+                                // اضافه کردن children در هر child (در صورت نیاز)
                             },
                         },
                     },
-                    image: 1,
-                    slug: 1,
                 },
             },
         ];

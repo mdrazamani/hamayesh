@@ -6,6 +6,7 @@ import News from "../models/news.model.mjs";
 import APIError from "../../utils/errors.mjs";
 import constants from "../../utils/constants.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
+import { loadLanguageSetting } from "../../config/readLang.mjs";
 
 export const create = async (data) => {
     const news = await News.findOne({ _id: data.newsId });
@@ -15,8 +16,9 @@ export const create = async (data) => {
         const newsComment = await NewsComment.findOne({ _id: comment });
 
         if (
-            newsComment.userIp == data.userIp ||
-            newsComment.userEmail == data.userEmail
+            newsComment &&
+            (newsComment.userIp == data.userIp ||
+                newsComment.userEmail == data.userEmail)
         ) {
             flag = false;
             break;
@@ -25,6 +27,7 @@ export const create = async (data) => {
 
     if (flag) {
         const entity = new NewsComment(data);
+
         const add = await entity.save();
         await crudFactory.addNested(News)(news._id, "comments", entity._id);
         return add;

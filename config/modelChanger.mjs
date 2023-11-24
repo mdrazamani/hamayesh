@@ -5,7 +5,10 @@ export const toJSON = (doc, converted, modelLangFields) => {
     const otherLang = lang === "fa" ? "en" : "fa";
 
     Object.keys(modelLangFields).forEach((key) => {
-        if (doc[lang][key]) {
+        if (
+            doc[lang][key] &&
+            (!Array.isArray(doc[lang][key]) || doc[lang][key].length > 0)
+        ) {
             converted[key] = doc[lang][key];
         } else {
             converted[key] = doc[otherLang][key];
@@ -29,6 +32,7 @@ export const addVirtualFields = (schema, modelLangFields) => {
                 if (!this[lang]) {
                     this[lang] = {};
                 }
+
                 this[lang][field] = value;
             });
     });
