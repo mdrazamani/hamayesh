@@ -5,6 +5,8 @@ import { get as getArticleCategory } from "../../services/articleCategory.servic
 import { get as getUser } from "../../services/user.service.mjs";
 import { sendEmail } from "../../emails/verify.email.mjs";
 import { loadLanguageSetting } from "../../../config/readLang.mjs";
+import pug from "pug";
+import { createPath } from "../../../config/tools.mjs";
 
 export const createController = async (req, res, next) => {
     const lang = loadLanguageSetting();
@@ -45,13 +47,11 @@ export const createController = async (req, res, next) => {
 
             const articleCat = await getArticleCategory(article.category);
 
-            await Promise.all(
-                articleCat?.referees?.map(async (referee) => {
-                    const user = await getUser(referee);
-                    mailOptionsReferee.to = user.email;
-                    await sendEmail(mailOptionsReferee);
-                })
-            );
+            for (const referee of articleCat?.referees) {
+                const user = await getUser(referee);
+                mailOptionsReferee.to = user.email;
+                await sendEmail(mailOptionsReferee);
+            }
 
             res.respond(constants.OK, getMessage("success.success"));
         }

@@ -7,8 +7,8 @@ import {
 } from "../app/services/article.service.mjs";
 import { get as getUser } from "../app/services/user.service.mjs";
 import pug from "pug";
-import path from "path";
 import { loadLanguageSetting } from "../config/readLang.mjs";
+import { createPath } from "../config/tools.mjs";
 
 export async function setupEmailNotificationJobs() {
     const lang = loadLanguageSetting();
@@ -34,9 +34,9 @@ export async function setupEmailNotificationJobs() {
                     to: userDetails.email,
                     subject: "Articles Result",
                     html: pug.renderFile(
-                        path.join(
-                            __dirname,
-                            "../views/emails/articles-result.pug"
+                        createPath(
+                            "../views/emails/articles-result.pug",
+                            import.meta.url
                         ),
                         {
                             pug: pugArticles,
