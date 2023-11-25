@@ -9,23 +9,19 @@ const populateOptions = [
     {
         path: "category",
         model: "ArticleCategory",
-        select: "-__v",
-    },
+        select: "-__v -createdAt -updatedAt -referees -_id",
+    }, // -__v
     {
         path: "userId",
         model: "User",
-        select: "-__v -password", // Assuming you want to exclude the password field
-    },
+        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Assuming you want to exclude the password field
+    }, // -__v -password
     {
         path: "arbitration.refereeId",
         model: "User",
-        select: "-__v -password", // Exclude sensitive fields
-    },
-    {
-        path: "arbitration.messages.user",
-        model: "User",
-        select: "-__v -password", // Exclude sensitive fields for message user
-    },
+        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
+    }, // -__v -password
+
     // If there are any other reference fields, add them here similarly
 ];
 export const create = async (data) => {
