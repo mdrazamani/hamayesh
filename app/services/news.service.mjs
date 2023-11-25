@@ -5,7 +5,7 @@ const populateOptions = [
     {
         path: "writer",
         model: "User",
-        select: "-__v",
+        select: "fa.firstName fa.lastName en.firstName en.lastName id profileImage -city -state",
     },
     {
         path: "category",

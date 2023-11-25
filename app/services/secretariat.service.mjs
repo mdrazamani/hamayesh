@@ -6,11 +6,11 @@ import Secretariat from "../models/secretariat.model.mjs"; // Please adjust the 
 const populateOptions = [
     {
         path: "users", // This time, we are populating 'users', not 'user'
-        select: "-__v", // excluding MongoDB's internal field '__v'
+        select: "fa.firstName fa.lastName en.firstName en.lastName id profileImage -state -city", // excluding MongoDB's internal field '__v'
     },
     {
         path: "boss",
-        select: "-__v",
+        select: "fa.firstName fa.lastName en.firstName en.lastName id profileImage -state -city",
     },
 ];
 export const createSecretariat = async (data) => {

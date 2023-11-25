@@ -5,7 +5,7 @@ const populateOptions = [
     {
         path: "referees",
         model: "User",
-        select: "-__v",
+        select: "fa.firstName fa.lastName en.firstName en.lastName id profileImage -state -city",
     },
 ];
 
