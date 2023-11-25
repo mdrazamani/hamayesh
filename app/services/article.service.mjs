@@ -17,12 +17,12 @@ const populateOptions = [
         select: "-__v -password", // Assuming you want to exclude the password field
     },
     {
-        path: "arbitrations.refereeId",
+        path: "arbitration.refereeId",
         model: "User",
         select: "-__v -password", // Exclude sensitive fields
     },
     {
-        path: "arbitrations.messages.user",
+        path: "arbitration.messages.user",
         model: "User",
         select: "-__v -password", // Exclude sensitive fields for message user
     },
@@ -66,24 +66,38 @@ export const getAll = async (options) => {
     });
 };
 
-const categoryIdMaker = (categories) => {
-    return categories.map((cat) => cat._id).join(" || ");
-};
+// const categoryIdMaker = (categories) => {
+//     return categories.map((cat) => cat._id).join(" || ");
+// };
+
+// export const getAllReferee = async (options, refereeId) => {
+//     const categories = await ArticleCategory.find({ referees: refereeId });
+
+//     return await crudFactory.getAll(Article)({
+//         ...options,
+//         ...{ category: categoryIdMaker(categories) },
+//         populate: populateOptions,
+//     });
+// };
 
 export const getAllReferee = async (options, refereeId) => {
     const categories = await ArticleCategory.find({ referees: refereeId });
+    const categoryIds = categories.map((cat) => cat._id);
 
-    return await crudFactory.getAll(Article)({
+    const customQueryConditions = {
+        $or: [
+            { category: { $in: categoryIds } },
+            { "arbitration.refereeId": refereeId },
+        ],
+    };
+
+    const modifiedOptions = {
         ...options,
-        ...{ category: categoryIdMaker(categories) },
+        filter: customQueryConditions,
         populate: populateOptions,
-    });
+    };
 
-    // let articles = [];
-    // categories.forEach((cat) => {
-    //     const article = Article.find({ category: cat });
-    //     articles.push(article);
-    // });
+    return await crudFactory.getAll(Article)(modifiedOptions);
 };
 
 export const deleteDoc = async (id) => {

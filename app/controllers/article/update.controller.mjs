@@ -6,6 +6,7 @@ import { sendEmail } from "../../emails/verify.email.mjs";
 import { loadLanguageSetting } from "../../../config/readLang.mjs";
 import pug from "pug";
 import { createPath } from "../../../config/tools.mjs";
+import { get as getArticleCategory } from "../../services/articleCategory.service.mjs";
 
 export const updateController = async (req, res, next) => {
     const lang = loadLanguageSetting();
@@ -31,7 +32,41 @@ export const updateController = async (req, res, next) => {
                         }
                     ),
                 };
-                await sendEmail(mailOptionsUser);
+                sendEmail(mailOptionsUser);
+            } else if (user.role.name === "user") {
+                const mailOptionsReferee = {
+                    subject: "Article Is Waiting For You",
+                    html: pug.renderFile(
+                        createPath(
+                            "../../../views/emails/add-article-referee.pug",
+                            import.meta.url
+                        ),
+                        {
+                            title: article.title,
+                            lang,
+                        }
+                    ),
+                };
+
+                if (
+                    article.arbitration &&
+                    article.arbitration.refereeId &&
+                    article.arbitration.refereeId !== ""
+                ) {
+                    const user = await getUser(article.arbitration.refereeId);
+                    mailOptionsReferee.to = user.email;
+                    sendEmail(mailOptionsReferee);
+                } else {
+                    const articleCat = await getArticleCategory(
+                        article.category
+                    );
+
+                    for (const referee of articleCat?.referees) {
+                        const user = await getUser(referee);
+                        mailOptionsReferee.to = user.email;
+                        sendEmail(mailOptionsReferee);
+                    }
+                }
             }
 
             res.respond(constants.OK, getMessage("success.success"), article);
