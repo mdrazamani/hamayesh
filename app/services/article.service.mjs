@@ -67,19 +67,25 @@ export const getAll = async (options) => {
 };
 
 const categoryIdMaker = (categories) => {
-    return categories.map((cat) => cat._id).join(" || ");
+    return categories.map((cat) => cat._id.toString());
 };
 
 export const getAllReferee = async (options, refereeId) => {
     const categories = await ArticleCategory.find({ referees: refereeId });
+    const categoryIds = categoryIdMaker(categories);
 
     return await crudFactory.getAll(Article)({
         ...options,
-        ...{
-            category: categoryIdMaker(categories),
-        },
-        ...{ "arbitration.refereeId": refereeId }, // Include articles assigned to the current referee
-
+        $or: [
+            {
+                "arbitration.refereeId": refereeId,
+                category: { $in: categoryIds },
+            },
+            {
+                "arbitration.refereeId": { $exists: false },
+                category: { $in: categoryIds },
+            },
+        ],
         populate: populateOptions,
     });
 };

@@ -23,7 +23,6 @@ export class QueryBuilder {
             );
         }
     }
-
     processFilters(combinedFilters) {
         const processedFilters = {};
 
@@ -31,10 +30,17 @@ export class QueryBuilder {
             if (combinedFilters.hasOwnProperty(key)) {
                 const value = combinedFilters[key];
 
-                if (/\s*\|\|\s*/.test(value)) {
+                if (key === "$or") {
+                    // Handle $or operator
+                    processedFilters[key] = value.map((cond) =>
+                        this.processOrCondition(cond)
+                    );
+                } else if (/\s*\|\|\s*/.test(value)) {
+                    // Handle $in operator
                     const values = value.split(/\s*\|\|\s*/);
                     processedFilters[key] = { $in: values };
                 } else {
+                    // Handle simple field-value pairs
                     processedFilters[key] = value;
                 }
             }
@@ -43,9 +49,38 @@ export class QueryBuilder {
         return processedFilters;
     }
 
+    processOrCondition(condition) {
+        const processedCondition = {};
+        for (const field in condition) {
+            if (condition.hasOwnProperty(field)) {
+                const value = condition[field];
+                if (
+                    typeof value === "object" &&
+                    value !== null &&
+                    !Array.isArray(value)
+                ) {
+                    // Deep copy nested objects (e.g., $in: [null, ''])
+                    processedCondition[field] = { ...value };
+                } else {
+                    // Simple field-value pairs
+                    processedCondition[field] = value;
+                }
+            }
+        }
+        return processedCondition;
+    }
     filter() {
-        // Sanitization and preparing filter conditions
-        let queryObj = sanitize({ ...this.queryString }); // Sanitize input to prevent NoSQL injection attacks
+        // Extract complex conditions (like $or) before sanitization
+        const complexConditions = {};
+        if (this.queryString["$or"]) {
+            complexConditions["$or"] = this.queryString["$or"];
+            delete this.queryString["$or"]; // Remove it to prevent its sanitization
+        }
+
+        // Continue with sanitization for the rest of the query parameters
+        let queryObj = sanitize({ ...this.queryString });
+
+        // Exclude certain fields from being processed as query filters
         const excludedFields = [
             "page",
             "sort",
@@ -64,6 +99,7 @@ export class QueryBuilder {
             return acc;
         }, {});
 
+        // Convert query object to string and replace range operators
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(
             /\b(gte|gt|lte|lt|eq)\b/g,
@@ -71,13 +107,15 @@ export class QueryBuilder {
         );
 
         const additionalFilters = JSON.parse(queryStr);
-        const currentFilters = this.query.getFilter();
+
+        // Re-integrate complex conditions back into the query
+        Object.assign(additionalFilters, complexConditions);
 
         // Ensure no sensitive fields can be queried
         delete additionalFilters["sensitiveField1"];
         delete additionalFilters["sensitiveField2"];
 
-        const combinedFilters = { ...currentFilters, ...additionalFilters };
+        const combinedFilters = { ...additionalFilters };
 
         this.query.find(this.processFilters(combinedFilters));
         return this;

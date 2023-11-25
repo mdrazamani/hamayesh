@@ -14,7 +14,8 @@ export const articleCategoryValidationSchema = () => ({
                 "any.required": getMessage("validation.title_required"),
             }),
         description: Joi.string()
-            .allow(null, "") // allows an optional, empty or null description
+            .allow(null)
+            .allow("") // chain allow calls
             .optional()
             .messages({
                 "string.empty": getMessage("validation.description_empty"),
@@ -22,15 +23,15 @@ export const articleCategoryValidationSchema = () => ({
         referees: Joi.array()
             .items(
                 Joi.string()
-                    .pattern(/^[0-9a-fA-F]{24}$/) // regex to validate the ObjectId
+                    .pattern(/^[0-9a-fA-F]{24}$/)
                     .message(getMessage("validation.invalid_referee"))
             )
             .optional()
-            .allow([]) // allows an empty array
+            // .allow([]) // if causing issues, consider using .sparse() or remove this line
             .messages({
                 "array.base": getMessage("validation.referees_invalid"),
             }),
-    }).options({ abortEarly: false }), // to handle all errors at once
+    }).options({ abortEarly: false }),
 });
 
 export const articleUpdateCategoryValidationSchema = () => ({
