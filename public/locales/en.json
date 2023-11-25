@@ -167,5 +167,7 @@
 	},
 	"errprs": {
 		"user_not_found": "User not found!"
-	}
+	},
+	"No files associated with this article": "No files associated with this article",
+	"User not found": "User not found"
 }

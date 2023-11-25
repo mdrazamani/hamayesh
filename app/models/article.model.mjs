@@ -11,7 +11,6 @@ import {
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const lang = loadLanguageSetting();
 const ArticleStatus = ["success", "pending", "failed"];
 const ArticleSchema = new mongoose.Schema(
     {

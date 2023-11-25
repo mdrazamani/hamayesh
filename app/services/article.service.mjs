@@ -66,39 +66,44 @@ export const getAll = async (options) => {
     });
 };
 
-// const categoryIdMaker = (categories) => {
-//     return categories.map((cat) => cat._id).join(" || ");
-// };
-
-// export const getAllReferee = async (options, refereeId) => {
-//     const categories = await ArticleCategory.find({ referees: refereeId });
-
-//     return await crudFactory.getAll(Article)({
-//         ...options,
-//         ...{ category: categoryIdMaker(categories) },
-//         populate: populateOptions,
-//     });
-// };
+const categoryIdMaker = (categories) => {
+    return categories.map((cat) => cat._id).join(" || ");
+};
 
 export const getAllReferee = async (options, refereeId) => {
     const categories = await ArticleCategory.find({ referees: refereeId });
     const categoryIds = categories.map((cat) => cat._id);
 
-    const customQueryConditions = {
-        $or: [
-            { category: { $in: categoryIds } },
-            { "arbitration.refereeId": refereeId },
-        ],
-    };
-
-    const modifiedOptions = {
+    return await crudFactory.getAll(Article)({
         ...options,
-        filter: customQueryConditions,
-        populate: populateOptions,
-    };
+        ...{
+            category: categoryIdMaker(categories),
+        },
+        ...{ "arbitration.refereeId": refereeId }, // Include articles assigned to the current referee
 
-    return await crudFactory.getAll(Article)(modifiedOptions);
+        populate: populateOptions,
+    });
 };
+
+// export const getAllReferee = async (options, refereeId) => {
+//     const categories = await ArticleCategory.find({ referees: refereeId });
+//     const categoryIds = categories.map((cat) => cat._id);
+
+//     const customQueryConditions = {
+//         // $or: [
+//         //     { category: { $in: categoryIds } }, // Articles in referee's categories
+//         //     { "arbitration.refereeId": refereeId }, // Articles assigned to the current referee
+//         // ],
+//     };
+
+//     const modifiedOptions = {
+//         ...options,
+//         filter: customQueryConditions,
+//         populate: populateOptions,
+//     };
+
+//     return await crudFactory.getAll(Article)(modifiedOptions);
+// };
 
 export const deleteDoc = async (id) => {
     return await crudFactory.delete(Article)(id);

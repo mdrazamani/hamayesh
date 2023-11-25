@@ -2,8 +2,19 @@ import archiver from "archiver";
 
 import Article from "../../models/article.model.mjs";
 import path from "path";
+import User from "../../models/user.model.mjs";
+import APIError from "../../../utils/errors.mjs";
+import { getMessage } from "../../../config/i18nConfig.mjs";
 
 // Function to create a ZIP file
+// Function to encode non-ASCII characters for Content-Disposition header
+function encodeRFC5987ValueChars(str) {
+    return encodeURIComponent(str)
+        .replace(/['()]/g, escape) // i.e., %27 %28 %29
+        .replace(/\*/g, "%2A")
+        .replace(/%(?:7C|60|5E)/g, unescape);
+}
+
 const createZip = async (articleFiles, presentationFiles, files, res) => {
     const archive = archiver("zip", {
         zlib: { level: 9 }, // Set compression level
@@ -39,25 +50,58 @@ export const downloadController = async (req, res, next) => {
     try {
         const article = await Article.findById(id);
         if (!article) {
-            return res.status(404).json({ message: "Article not found" });
+            throw new APIError({
+                message: getMessage("Article not found"),
+                status: 404,
+            });
         }
 
-        // Combine articleFiles and presentationFiles into one array
-        // const allFiles = [
-        //     ...article.articleFiles,
-        //     ...article.presentationFiles,
-        // ];
+        // Extract user ID from the file path and fetch user details
+        if (!article.articleFiles || article.articleFiles.length === 0) {
+            throw new APIError({
+                message: getMessage("No files associated with this article"),
+                status: 400,
+            });
+        }
 
-        // if (allFiles.length === 0) {
-        //     return res.status(404).json({ message: "No files found" });
-        // }
+        // Attempt to extract user ID from the file path
+        const filePathSegments = article.articleFiles[0].split("/");
+        if (filePathSegments.length < 3) {
+            throw new APIError({
+                message: getMessage("Invalid file path format"),
+                status: 400,
+            });
+        }
+        const userId = filePathSegments[2];
 
-        // Set the response headers for downloading a ZIP file
+        const user = await User.findById(userId); // Fetch user details using the User model
+        if (!user) {
+            throw new APIError({
+                message: getMessage("User not found"),
+                status: 404,
+            });
+        }
+
+        // Create a custom file name using the user's first and last name
+        // Encode the filename to handle special characters
+        // Encode the filename
+        const encodedFileName = encodeRFC5987ValueChars(
+            `${user.firstName}_${user.lastName}.zip`
+        );
+
+        // Set headers
         res.setHeader("Content-Type", "application/zip");
+        res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         res.setHeader(
             "Content-Disposition",
-            `attachment; filename=articleFiles.zip`
+            `attachment; filename*=UTF-8''${encodedFileName}`
         );
+
+        // res.setHeader("Content-Type", "application/zip");
+        // res.setHeader(
+        //     "Content-Disposition",
+        //     `attachment; filename=articleFiles.zip`
+        // );
 
         await createZip(
             article.articleFiles,

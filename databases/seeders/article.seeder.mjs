@@ -61,8 +61,10 @@ export const seedArticles = async () => {
             ],
             status: "success", // or "pending", or "failed"
             arbitration: {
-                refereeId: users[1]._id, // Assign another user as a referee
+                refereeId: "", // Assign another user as a referee
                 message: "All standards met.",
+                rate: 0, // Example rating
+                files: [], // Populate as necessary
             },
         },
         {
@@ -94,17 +96,17 @@ export const seedArticles = async () => {
             ],
             status: "success",
             arbitrations: {
-                refereeId: users[1]._id, // Assign another user as a referee
+                refereeId: "", // Assign another user as a referee
                 files: [], // Populate as necessary
                 messages: "test 1",
-                rate: 4, // Example rating
+                rate: 0, // Example rating
             },
         },
         {
             title: "Healthcare Innovations: Telemedicine",
             description:
                 "The rise of telemedicine and its impact on modern healthcare.",
-            category: categories[1]._id,
+            category: categories[0]._id,
             userId: users[0]._id,
             articleFiles: [
                 {
@@ -124,10 +126,10 @@ export const seedArticles = async () => {
             ],
             status: "pending",
             arbitrations: {
-                refereeId: users[0]._id,
+                refereeId: "",
                 files: [], // Populate as necessary
                 messages: "test 2",
-                rate: 5, // Example rating
+                rate: 0, // Example rating
             },
         },
         // ... more sample articles
