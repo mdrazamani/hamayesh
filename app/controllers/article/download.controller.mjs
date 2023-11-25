@@ -4,7 +4,7 @@ import Article from "../../models/article.model.mjs";
 import path from "path";
 
 // Function to create a ZIP file
-const createZip = async (articleFiles, presentationFiles, res) => {
+const createZip = async (articleFiles, presentationFiles, files, res) => {
     const archive = archiver("zip", {
         zlib: { level: 9 }, // Set compression level
     });
@@ -21,6 +21,11 @@ const createZip = async (articleFiles, presentationFiles, res) => {
     // Add presentation files to the ZIP in the 'presentation' folder
     presentationFiles.forEach((file) => {
         const filePath = path.join("presentation", path.basename(file));
+        archive.file(file, { name: filePath });
+    });
+
+    files.forEach((file) => {
+        const filePath = path.join("files", path.basename(file));
         archive.file(file, { name: filePath });
     });
 
@@ -54,7 +59,12 @@ export const downloadController = async (req, res, next) => {
             `attachment; filename=articleFiles.zip`
         );
 
-        await createZip(article.articleFiles, article.presentationFiles, res);
+        await createZip(
+            article.articleFiles,
+            article.presentationFiles,
+            article.arbitration.files,
+            res
+        );
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });

@@ -37,10 +37,10 @@ export const seedArticlesFA = async () => {
                 "public/uploads/articleFiles/tasis.pdf",
             ],
             status: "success", // or "در انتظار", or "ناموفق"
-            arbitrations: {
+            arbitration: {
                 refereeId: users[1]._id, // Assign another user as a referee
                 files: [], // Populate as necessary
-                messages: "test 1",
+                message: "test 1",
                 rate: 4, // Example rating
             },
         },
@@ -53,10 +53,10 @@ export const seedArticlesFA = async () => {
             articleFiles: [],
             presentationFiles: [],
             status: "success",
-            arbitrations: {
+            arbitration: {
                 refereeId: users[0]._id,
                 files: [], // Populate as necessary
-                messages: "test 2",
+                message: "test 2",
                 rate: 5, // Example rating
             },
         },
@@ -68,10 +68,10 @@ export const seedArticlesFA = async () => {
             articleFiles: [],
             presentationFiles: [],
             status: "pending",
-            arbitrations: {
+            arbitration: {
                 refereeId: users[0]._id,
                 files: [], // Populate as necessary
-                messages: "test 3",
+                message: "test 3",
                 rate: 5, // Example rating
             },
         },

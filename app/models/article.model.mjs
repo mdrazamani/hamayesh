@@ -47,7 +47,7 @@ const ArticleSchema = new mongoose.Schema(
             enum: ArticleStatus,
             default: "pending",
         },
-        arbitrations: {
+        arbitration: {
             refereeId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
@@ -57,7 +57,7 @@ const ArticleSchema = new mongoose.Schema(
                     type: String,
                 },
             ],
-            messages: {
+            message: {
                 type: String,
             },
             rate: { type: Number, min: 1, max: 5 },

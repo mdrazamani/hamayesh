@@ -143,7 +143,10 @@
 		"start_required": "validation.start_required",
 		"invalid_category": "validation.invalid_category",
 		"invalid_userId": "validation.invalid_userId",
-		"userId_required": "validation.userId_required"
+		"userId_required": "validation.userId_required",
+		"rate_min": "validation.rate_min",
+		"rate_max": "validation.rate_max",
+		"rate_number": "validation.rate_number"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
