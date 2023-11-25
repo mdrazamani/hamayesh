@@ -72,7 +72,6 @@ const categoryIdMaker = (categories) => {
 
 export const getAllReferee = async (options, refereeId) => {
     const categories = await ArticleCategory.find({ referees: refereeId });
-    const categoryIds = categories.map((cat) => cat._id);
 
     return await crudFactory.getAll(Article)({
         ...options,
