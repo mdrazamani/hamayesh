@@ -121,9 +121,9 @@ ArticleSchema.pre("save", async function (next) {
 ArticleSchema.pre("findOneAndUpdate", async function (next) {
     const hamayesh = await HamayeshDetail.findOne();
 
-    if (hamayesh.dates.editArticle < Date.now()) {
+    if (hamayesh.dates.refeeResult < Date.now()) {
         throw new APIError({
-            message: getMessage("errors.editArticle"),
+            message: getMessage("errors.refeeResult"),
             status: constants.BAD_REQUEST,
         });
     }

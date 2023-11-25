@@ -33,16 +33,23 @@ export const create = async (data) => {
 };
 
 export const update = async (id, data, user) => {
-    if (user.role.name === "admin")
+    if (user.role.name === "admin" || user.role.name === "referee")
         return await crudFactory.update(Article)(id, data);
-    else {
-        if (HamayeshDetail.dates.refeeResult < Date.now()) {
+    else if (user.role.name === "user") {
+        const hamayesh = await HamayeshDetail.findOne();
+
+        if (hamayesh.dates.editArticle < Date.now()) {
             throw new APIError({
-                message: getMessage("errors.refeeResult"),
+                message: getMessage("errors.editArticle"),
                 status: constants.BAD_REQUEST,
             });
         }
         return await Article.updateOne({ _id: id }, { $set: data });
+    } else {
+        throw new APIError({
+            message: getMessage("errors.editArticle"),
+            status: constants.BAD_REQUEST,
+        });
     }
 };
 
