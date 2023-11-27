@@ -126,6 +126,12 @@ const hamayeshDetailSchema = new mongoose.Schema(
             min: 1,
             max: 5,
         },
+        tax: {
+            type: Number,
+            min: 0,
+            max: 100,
+            default: 9,
+        },
         eventAddress: {
             state: {
                 type: mongoose.Schema.Types.ObjectId,
