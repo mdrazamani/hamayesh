@@ -4,52 +4,86 @@ import PricingRule from "../../../../app/models/billing/pricingRule.model.mjs";
 const seedPricingRules = async () => {
     const rules = [
         {
-            name: "Rule1",
-            description: "Description1 - no ai",
+            fa: {
+                name: "قاعده 1",
+                description: "توضیح 1 - بدون هوش مصنوعی",
+            },
+            en: {
+                name: "Rule1",
+                description: "Description1 - no ai",
+            },
             number: 1,
             price: 100,
         },
         {
-            name: "Rule2",
-            description: "Description2 - no ai",
+            fa: {
+                name: "قاعده 2",
+                description: "توضیح 2 - بدون هوش مصنوعی",
+            },
+            en: {
+                name: "Rule2",
+                description: "Description2 - no ai",
+            },
             number: 2,
             price: 200,
         },
-
         {
-            name: "Rule3",
-            description: "Description3 - azafi",
+            fa: {
+                name: "قاعده 3",
+                description: "توضیح 3 - اضافی",
+            },
+            en: {
+                name: "Rule3",
+                description: "Description3 - extra",
+            },
             price: 80,
             additionalInfo: {
-                AdditionalPrice: true,
+                additionalPrice: true,
             },
         },
         {
-            name: "Rule4",
-            description: "Description4 - hame hamin geimat",
+            fa: {
+                name: "قاعده 4",
+                description: "توضیح 4 - همه همین قیمت",
+            },
+            en: {
+                name: "Rule4",
+                description: "Description4 - all the same price",
+            },
             price: 500,
             additionalInfo: {
-                FixedTotalPrice: true,
+                fixedTotalPrice: true,
             },
         },
         {
-            name: "Rule5",
-            description: "Description5  - az 5 ta be baad ",
+            fa: {
+                name: "قاعده 5",
+                description: "توضیح 5 - از 5 به بعد",
+            },
+            en: {
+                name: "Rule5",
+                description: "Description5 - from 5 onwards",
+            },
             number: 5,
             price: 200,
             additionalInfo: {
-                FromThisNumber: true,
+                fromThisNumber: true,
             },
         },
         {
-            name: "Rule6",
-            description: "Description6  -har chand ta bekhaie hamine",
+            fa: {
+                name: "قاعده 6",
+                description: "توضیح 6 - هر تعداد که بخواهید همین است",
+            },
+            en: {
+                name: "Rule6",
+                description: "Description6 - any quantity same price",
+            },
             price: 200,
             additionalInfo: {
-                FixedOnePrice: true,
+                fixedOnePrice: true,
             },
         },
-        // Add more rules as needed...
     ];
 
     await PricingRule.deleteMany({});

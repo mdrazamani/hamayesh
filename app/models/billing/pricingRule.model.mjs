@@ -1,18 +1,30 @@
 import mongoose from "mongoose";
+import {
+    addVirtualFields,
+    toJSON,
+    processLanguageFieldsInUpdate,
+} from "../../../config/modelChanger.mjs";
 
 const pricingRuleSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
+        fa: {
+            name: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
-        description: {
-            type: String,
-            required: true,
+        en: {
+            name: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
         },
         number: {
             type: Number,
-            unique: true,
         },
         price: {
             type: Number,
@@ -23,6 +35,34 @@ const pricingRuleSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+addVirtualFields(pricingRuleSchema, pricingRuleSchema.obj.fa);
+
+pricingRuleSchema.index({
+    "fa.name": "text",
+    "en.name": "text",
+});
+
+pricingRuleSchema.set("toJSON", {
+    transform: (doc, converted) => {
+        delete converted.__v;
+
+        //multiLanguage
+        toJSON(doc, converted, pricingRuleSchema.obj.fa);
+    },
+});
+
+pricingRuleSchema.pre("findOneAndUpdate", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, pricingRuleSchema.obj.fa);
+    next();
+});
+
+pricingRuleSchema.pre("updateOne", function (next) {
+    let update = this.getUpdate();
+    processLanguageFieldsInUpdate(update, pricingRuleSchema.obj.fa);
+    next();
+});
 
 const PricingRule = mongoose.model("pricingRule", pricingRuleSchema);
 

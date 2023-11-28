@@ -6,7 +6,8 @@ import { update as RuleUpdate } from "./pricingRule.service.mjs";
 import { deleteDoc as RuleDeleteDoc } from "./pricingRule.service.mjs";
 
 const populateOptions = {
-    path: "pricingRule",
+    path: "rules",
+    model: "pricingRule",
     select: `-__v`, // excluding MongoDB's internal field '__v'
 }; //-__v
 
@@ -24,15 +25,20 @@ export const create = async (data) => {
 
 export const update = async (id, data) => {
     try {
-        const existingPricing = await crudFactory.get(Pricing)(id);
+        const existingPricing = await get(id);
         const existingRulesSet = new Set(
-            existingPricing ? existingPricing.rules : []
+            existingPricing && existingPricing.rules
+                ? existingPricing.rules.map((rule) => rule._id.toString())
+                : []
         );
 
         const updatedRules = data.rules || [];
         const updatedRuleIdsSet = new Set(
             updatedRules.map((rule) => rule._id).filter((id) => id)
         );
+
+        console.log("updatedRuleIdsSet: ", updatedRuleIdsSet);
+        console.log("existingRulesSet: ", existingRulesSet);
 
         for (const ruleId of existingRulesSet) {
             if (!updatedRuleIdsSet.has(ruleId)) {

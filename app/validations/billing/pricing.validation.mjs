@@ -5,7 +5,7 @@ import {
     pricingRuleValidationSchema,
 } from "./pricingRule.validation.mjs";
 
-const pricingTypes = ["article"];
+const pricingTypes = ["article", "freeRegistration"];
 export const pricingValidationSchema = () => ({
     body: Joi.object({
         type: Joi.string()

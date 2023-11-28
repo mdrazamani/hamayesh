@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const pricingTypes = ["article"];
+const pricingTypes = ["article", "freeRegistration"];
 const pricingSchema = new mongoose.Schema(
     {
         type: {
