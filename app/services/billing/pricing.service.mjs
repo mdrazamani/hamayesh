@@ -1,7 +1,16 @@
 import crudFactory from "../../../utils/crudFactory.mjs";
 import Pricing from "../../models/billing/pricing.model.mjs";
 
+import { create as RuleCreate } from "./pricingRule.service.mjs";
+
 export const create = async (data) => {
+    const arrayRules = [];
+    const rules = data.rules;
+    for (const rule of rules) {
+        const createdData = await RuleCreate(rule);
+        arrayRules.push(createdData._id);
+    }
+    data.rules = arrayRules;
     return await crudFactory.create(Pricing)(data);
 };
 
