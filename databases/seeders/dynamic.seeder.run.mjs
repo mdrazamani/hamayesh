@@ -32,6 +32,7 @@ import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
 import { seedSlidersFA } from "./fa/slider.seeder.mjs";
 import { seedGalleries } from "./gallery.seeder.mjs";
+import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -52,6 +53,7 @@ const seeders = {
     dailyVisit: seedDailyVisit,
     articleCategories: seedArticleCategory,
     articles: Language === "fa" ? seedArticlesFA : seedArticles,
+    pricing: seedPricingDatabase,
     // افزودن هر seeder دیگری که مورد نیاز است
 };
 

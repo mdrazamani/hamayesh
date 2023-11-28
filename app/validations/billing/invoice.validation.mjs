@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { getMessage } from "../../config/i18nConfig.mjs"; // assuming you have a function to get messages for i18n
+import { getMessage } from "../../../config/i18nConfig.mjs"; // assuming you have a function to get messages for i18n
 
 export const invoiceValidationSchema = () => ({
     body: Joi.object({

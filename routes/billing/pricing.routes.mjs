@@ -1,5 +1,5 @@
 import express from "express";
-import { dynamicValidate } from "../utils/validate.mjs";
+import { dynamicValidate } from "../../utils/validate.mjs";
 import {
     pricingValidationSchema,
     pricingUpdateValidationSchema,

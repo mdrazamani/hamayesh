@@ -1,6 +1,6 @@
 // invoice.routes.mjs
 import express from "express";
-import { dynamicValidate } from "../utils/validate.mjs";
+import { dynamicValidate } from "../../utils/validate.mjs";
 
 import { authenticateJWT } from "../../app/middlewares/auth.middleware.mjs";
 

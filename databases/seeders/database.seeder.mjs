@@ -31,6 +31,7 @@ import { seedArticleCategoryFA } from "./fa/articleCategory.seeder.mjs";
 import { seedArticlesFA } from "./fa/article.seeder.mjs";
 import { seedGalleries } from "./gallery.seeder.mjs";
 import { seedSlidersFA } from "./fa/slider.seeder.mjs";
+import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
 // import { closeAllConnections } from "../../config/langDb.mjs";
 
 const seedDatabase = async () => {
@@ -56,6 +57,7 @@ const seedDatabase = async () => {
             await seedArticleCategoryFA();
             await seedArticlesFA();
             await seedSlidersFA();
+            await seedPricingDatabase();
         } else {
             await seedUsers();
             await seedSecretariats();

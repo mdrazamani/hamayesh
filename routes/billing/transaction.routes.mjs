@@ -1,10 +1,10 @@
 // transaction.routes.mjs
 import express from "express";
-import { dynamicValidate } from "../utils/validate.mjs";
+import { dynamicValidate } from "../../utils/validate.mjs";
 
 import { authenticateJWT } from "../../app/middlewares/auth.middleware.mjs";
 
-import { transactionValidationSchema } from "../../app/validations/billing/transaction.validation.mjs";
+// import { transactionValidationSchema } from "../../app/validations/billing/transaction.validation.mjs";
 import { deleteController } from "../../app/controllers/billing/transaction/delete.controller.mjs";
 import { showController } from "../../app/controllers/billing/transaction/show.controller.mjs";
 import { indexController } from "../../app/controllers/billing/transaction/index.controller.mjs";
