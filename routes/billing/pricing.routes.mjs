@@ -42,7 +42,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/pricing:
+ * /api/v1/billing/pricing:
  *   post:
  *     tags: [Pricing]
  *     summary: Create a new pricing
@@ -97,7 +97,7 @@ router.post(
 
 /**
  * @swagger
- * /api/v1/pricing/{id}:
+ * /api/v1/billing/pricing/{id}:
  *   delete:
  *     tags: [Pricing]
  *     summary: Delete a pricing
@@ -116,7 +116,7 @@ router.delete("/:id", authenticateJWT, deleteController);
 
 /**
  * @swagger
- * /api/v1/pricing:
+ * /api/v1/billing/pricing:
  *   get:
  *     tags: [Pricing]
  *     summary: Retrieve pricing
@@ -139,7 +139,7 @@ router.get("/", indexController);
 
 /**
  * @swagger
- * /api/v1/pricing/{id}:
+ * /api/v1/billing/pricing/{id}:
  *   get:
  *     tags: [Pricing]
  *     summary: Retrieve a pricing
@@ -158,7 +158,7 @@ router.get("/:id", showController);
 
 /**
  * @swagger
- * /api/v1/pricing/{id}:
+ * /api/v1/billing/pricing/{id}:
  *   patch:
  *     tags: [Pricing]
  *     summary: Update a pricing
