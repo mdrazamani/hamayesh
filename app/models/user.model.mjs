@@ -67,6 +67,19 @@ const userSchema = new mongoose.Schema(
                 type: String,
             },
         },
+        billingStatus: {
+            articles: {
+                type: Number,
+                default: 0,
+            },
+            invoices: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "invoice",
+                    default: null,
+                },
+            ],
+        },
         phoneNumber: {
             type: String,
             required: true,
