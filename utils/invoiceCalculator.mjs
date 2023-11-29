@@ -51,18 +51,6 @@ const isTypeDiscount = async (items) => {
     return false;
 };
 
-// const codesDiscount = async (codes) => {
-//     let discounts = [];
-//     for (const code of codes) {
-//         const discount = await Discount.find({ code });
-//         discounts.push(...discount);
-//     }
-//     if (discounts.length > 0) {
-//         return discounts;
-//     }
-//     return false;
-// };
-
 const itemsPriceCalculator = async (items) => {
     let allDiscounts = 0;
     let totalPrice = 0;
@@ -200,16 +188,6 @@ export const invoiceCalculator = async (data) => {
             discounttype = await discountsCalculator(typeDiscount, subTotal);
             subTotal -= discounttype;
         }
-
-        // code discounts
-        // let discountcodes = 0;
-        // if (data?.codes) {
-        //     const codesDiscountP = codesDiscount(data?.codes);
-        //     if (codesDiscountP) {
-        //         discountcodes = discountsCalculator(codesDiscountP, subTotal);
-        //         subTotal -= discountcodes;
-        //     }
-        // }
 
         return {
             subTotalPrice: mainSubTotal,

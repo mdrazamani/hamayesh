@@ -3,17 +3,27 @@ import Transaction from "../../models/billing/transaction.model.mjs";
 
 const populateOptions = [
     {
-        path: "invoiceId",
-        model: "invoice",
+        path: "invoice",
+    },
+    {
+        path: "getway",
     },
 
     // If there are any other reference fields, add them here similarly
 ];
 
+export const create = async (data) => {
+    return await crudFactory.create(Transaction)(data);
+};
+
 export const get = async (id) => {
     return await crudFactory.get(Transaction)(id, {
         populate: populateOptions,
     });
+};
+
+export const getByAuthority = async (authority) => {
+    return await Transaction.findOne({ authorityCode: authority });
 };
 
 export const getAll = async (options, userId) => {

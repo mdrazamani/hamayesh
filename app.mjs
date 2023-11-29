@@ -13,7 +13,7 @@ import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
-import { createFilePath } from "./config/tools.mjs";
+import { createFilePath, createPath } from "./config/tools.mjs";
 import {
     ConvertError,
     ErrorHandler,
@@ -33,9 +33,6 @@ const { json, urlencoded } = bodyParser;
 // import "./jobs/token.task.mjs"; // Import the token manager
 
 const app = express();
-
-app.set("views", "views");
-app.set("view engine", "pug");
 
 app.use(cookieParser());
 app.use("/api/v1", languageMiddleware);
