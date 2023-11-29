@@ -32,6 +32,8 @@ import { seedArticlesFA } from "./fa/article.seeder.mjs";
 import { seedGalleries } from "./gallery.seeder.mjs";
 import { seedSlidersFA } from "./fa/slider.seeder.mjs";
 import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
+import { seedDiscountDatabase } from "./fa/billing/discount.seeder.mjs";
+import { seedInvoiceDatabase } from "./fa/billing/invoice.seeder.mjs";
 // import { closeAllConnections } from "../../config/langDb.mjs";
 
 const seedDatabase = async () => {
@@ -58,6 +60,8 @@ const seedDatabase = async () => {
             await seedArticlesFA();
             await seedSlidersFA();
             await seedPricingDatabase();
+            await seedDiscountDatabase();
+            await seedInvoiceDatabase();
         } else {
             await seedUsers();
             await seedSecretariats();

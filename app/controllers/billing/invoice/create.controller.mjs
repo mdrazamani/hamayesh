@@ -4,6 +4,8 @@ import { create } from "../../../services/billing/invoice.service.mjs";
 
 export const createController = async (req, res, next) => {
     try {
+        if (!req.body?.userId) if (req.user) req.body.userId = req.user?._id;
+
         const invoice = await create(req.body);
         if (invoice) res.respond(constants.OK, getMessage("success.success"));
     } catch (error) {

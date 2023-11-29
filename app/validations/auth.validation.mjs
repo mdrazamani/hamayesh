@@ -4,6 +4,42 @@ import constants from "../../utils/constants.mjs";
 
 export const getRegistrationSchema = (req) => ({
     body: Joi.object({
+        items: Joi.array()
+            .items(
+                Joi.object({
+                    item: Joi.string()
+                        .pattern(new RegExp(/^[0-9a-fA-F]{24}$/)) // MongoDB ObjectId pattern
+                        .messages({
+                            "string.pattern.base": getMessage(
+                                "validation.item_invalid"
+                            ),
+                        }),
+
+                    itemType: Joi.string()
+                        .valid("article", "freeRegistration") // specify valid item types
+                        .messages({
+                            "any.only": getMessage(
+                                "validation.itemType_invalid"
+                            ),
+                        }),
+
+                    number: Joi.number()
+                        .integer()
+                        .min(1)
+                        .messages({
+                            "number.base": getMessage(
+                                "validation.number_invalid"
+                            ),
+                            "number.min": getMessage("validation.number_min"),
+                        }),
+                })
+            )
+            .min(1)
+            .messages({
+                "array.base": getMessage("validation.items_invalid"),
+                "array.min": getMessage("validation.items_min"),
+            }),
+
         firstName: Joi.string()
             .min(1)
             .max(50)

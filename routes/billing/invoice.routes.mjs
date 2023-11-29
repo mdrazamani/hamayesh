@@ -4,11 +4,16 @@ import { dynamicValidate } from "../../utils/validate.mjs";
 
 import { authenticateJWT } from "../../app/middlewares/auth.middleware.mjs";
 
-import { invoiceValidationSchema } from "../../app/validations/billing/invoice.validation.mjs";
+import {
+    invoiceValidationSchema,
+    applyValidationSchema,
+} from "../../app/validations/billing/invoice.validation.mjs";
 import { createController } from "../../app/controllers/billing/invoice/create.controller.mjs";
 import { deleteController } from "../../app/controllers/billing/invoice/delete.controller.mjs";
 import { showController } from "../../app/controllers/billing/invoice/show.controller.mjs";
 import { indexController } from "../../app/controllers/billing/invoice/index.controller.mjs";
+import { applyDiscountController } from "../../app/controllers/billing/invoice/applyDiscount.controller.mjs";
+
 const router = express.Router();
 
 /**
@@ -40,8 +45,8 @@ const router = express.Router();
  */
 router.post(
     "/",
-    authenticateJWT,
-    dynamicValidate(invoiceValidationSchema),
+    // authenticateJWT,
+    // dynamicValidate(invoiceValidationSchema),
     createController
 );
 
@@ -91,7 +96,8 @@ router.delete("/:id", authenticateJWT, deleteController);
  *       200:
  *         description: List of invoices.
  */
-router.get("/", authenticateJWT, indexController);
+// router.get("/", authenticateJWT, indexController);
+router.get("/", indexController);
 
 /**
  * @swagger
@@ -113,7 +119,8 @@ router.get("/", authenticateJWT, indexController);
  *       200:
  *         description: Detailed invoice information.
  */
-router.get("/:id", authenticateJWT, showController);
+// router.get("/:id", authenticateJWT, showController);
+router.get("/:id", showController);
 
 /**
  * @swagger
@@ -151,5 +158,12 @@ router.get("/:id", authenticateJWT, showController);
  *           enum: [pending, completed, failed]
  *           default: pending
  */
+
+router.post(
+    "/apply",
+    // authenticateJWT,
+    dynamicValidate(applyValidationSchema),
+    applyDiscountController
+);
 
 export default router;

@@ -28,9 +28,7 @@ const pricingRuleSchema = new mongoose.Schema(
         },
         price: {
             type: Number,
-            required: true,
         },
-
         additionalInfo: mongoose.Schema.Types.Mixed,
     },
     { timestamps: true }

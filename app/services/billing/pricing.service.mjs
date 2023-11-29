@@ -37,9 +37,6 @@ export const update = async (id, data) => {
             updatedRules.map((rule) => rule._id).filter((id) => id)
         );
 
-        console.log("updatedRuleIdsSet: ", updatedRuleIdsSet);
-        console.log("existingRulesSet: ", existingRulesSet);
-
         for (const ruleId of existingRulesSet) {
             if (!updatedRuleIdsSet.has(ruleId)) {
                 await RuleDeleteDoc(ruleId);

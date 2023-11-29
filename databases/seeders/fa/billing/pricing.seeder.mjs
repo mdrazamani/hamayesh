@@ -36,9 +36,11 @@ const seedPricingRules = async () => {
                 name: "Rule3",
                 description: "Description3 - extra",
             },
-            price: 80,
+            number: 3,
+            price: 800,
             additionalInfo: {
-                additionalPrice: true,
+                number: true,
+                price: 80,
             },
         },
         {
@@ -51,9 +53,6 @@ const seedPricingRules = async () => {
                 description: "Description4 - all the same price",
             },
             price: 500,
-            additionalInfo: {
-                fixedTotalPrice: true,
-            },
         },
         {
             fa: {
@@ -64,11 +63,7 @@ const seedPricingRules = async () => {
                 name: "Rule5",
                 description: "Description5 - from 5 onwards",
             },
-            number: 5,
             price: 200,
-            additionalInfo: {
-                fromThisNumber: true,
-            },
         },
         {
             fa: {
@@ -79,9 +74,9 @@ const seedPricingRules = async () => {
                 name: "Rule6",
                 description: "Description6 - any quantity same price",
             },
-            price: 200,
             additionalInfo: {
-                fixedOnePrice: true,
+                number: true,
+                price: 200,
             },
         },
     ];

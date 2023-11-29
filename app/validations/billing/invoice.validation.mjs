@@ -3,14 +3,8 @@ import { getMessage } from "../../../config/i18nConfig.mjs"; // assuming you hav
 
 export const invoiceValidationSchema = () => ({
     body: Joi.object({
-        invoiceNumber: Joi.string()
-            .optional() // Assuming invoice number is not mandatory
-            .messages({
-                "string.empty": getMessage("validation.invoice_number_empty"),
-            }),
         user: Joi.string()
             .pattern(/^[0-9a-fA-F]{24}$/)
-            .required()
             .messages({
                 "string.pattern.base": getMessage("validation.invalid_user"),
                 "any.required": getMessage("validation.user_required"),
@@ -24,38 +18,34 @@ export const invoiceValidationSchema = () => ({
                 "string.pattern.base": getMessage("validation.invalid_item"),
                 "any.required": getMessage("validation.items_required"),
             }),
-        subtotal: Joi.number()
-            .greater(0)
+    }).options({ abortEarly: false }), // to handle all errors at once
+});
+
+export const applyValidationSchema = () => ({
+    body: Joi.object({
+        codes: Joi.array()
+            .items(Joi.string().required())
             .required()
             .messages({
-                "number.base": getMessage("validation.subtotal_number"),
-                "number.greater": getMessage("validation.subtotal_greater"),
-                "any.required": getMessage("validation.subtotal_required"),
+                "string.base": getMessage("validation.invalid_code"),
+                "any.required": getMessage("validation.codes_required"),
             }),
-        discounts: Joi.array()
-            .items(
-                Joi.string().pattern(/^[0-9a-fA-F]{24}$/) // Each discount must be an ObjectId
-            )
-            .optional()
+
+        invoiceId: Joi.string()
+            .pattern(/^[0-9a-fA-F]{24}$/)
+            .required()
             .messages({
                 "string.pattern.base": getMessage(
-                    "validation.invalid_discount"
+                    "validation.invalid_invoiceId"
                 ),
+                "any.required": getMessage("validation.invoiceId_required"),
             }),
-        total: Joi.number()
-            .greater(Joi.ref("subtotal"))
-            .required()
+
+        userId: Joi.string()
+            .pattern(/^[0-9a-fA-F]{24}$/)
+            .optional()
             .messages({
-                "number.base": getMessage("validation.total_number"),
-                "number.greater": getMessage("validation.total_greater"),
-                "any.required": getMessage("validation.total_required"),
+                "string.pattern.base": getMessage("validation.invalid_userId"),
             }),
-        paymentStatus: Joi.string()
-            .valid("pending", "completed", "failed")
-            .default("pending")
-            .messages({
-                "string.base": getMessage("validation.invalid_payment_status"),
-                "any.only": getMessage("validation.payment_status_values"),
-            }),
-    }).options({ abortEarly: false }), // to handle all errors at once
+    }).options({ abortEarly: false }),
 });

@@ -33,6 +33,8 @@ import { seedArticlesFA } from "./fa/article.seeder.mjs";
 import { seedSlidersFA } from "./fa/slider.seeder.mjs";
 import { seedGalleries } from "./gallery.seeder.mjs";
 import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
+import { seedDiscountDatabase } from "./fa/billing/discount.seeder.mjs";
+import { seedInvoiceDatabase } from "./fa/billing/invoice.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -54,7 +56,8 @@ const seeders = {
     articleCategories: seedArticleCategory,
     articles: Language === "fa" ? seedArticlesFA : seedArticles,
     pricing: seedPricingDatabase,
-    // افزودن هر seeder دیگری که مورد نیاز است
+    discount: seedDiscountDatabase,
+    invoice: seedInvoiceDatabase,
 };
 
 console.log(Language);
