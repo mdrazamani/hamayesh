@@ -34,6 +34,7 @@ import { seedSlidersFA } from "./fa/slider.seeder.mjs";
 import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
 import { seedDiscountDatabase } from "./fa/billing/discount.seeder.mjs";
 import { seedInvoiceDatabase } from "./fa/billing/invoice.seeder.mjs";
+import { seedGetwayDatabase } from "./fa/billing/getway.seeder.mjs";
 // import { closeAllConnections } from "../../config/langDb.mjs";
 
 const seedDatabase = async () => {
@@ -62,6 +63,7 @@ const seedDatabase = async () => {
             await seedPricingDatabase();
             await seedDiscountDatabase();
             await seedInvoiceDatabase();
+            await seedGetwayDatabase();
         } else {
             await seedUsers();
             await seedSecretariats();

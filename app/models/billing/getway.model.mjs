@@ -10,32 +10,102 @@ const getwaySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        uri: {
+        privateCode: {
             type: String,
-            required: true,
         },
-        code: {
-            type: String,
-            required: true,
-        },
-        apiKey: {
-            public: String,
-            private: String,
+        api: {
+            request: {
+                uri: {
+                    type: String,
+                    required: true,
+                },
+                method: {
+                    type: String,
+                    required: true,
+                    default: "POST",
+                },
+                headers: {
+                    type: Map,
+                    of: String,
+                },
+                body: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                response: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+            },
+            ourRedirect: {
+                parameter: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                queryStrings: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                url: {
+                    type: String,
+                },
+            },
+            redirectThem: {
+                parameter: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                queryStrings: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                url: {
+                    type: String,
+                },
+            },
+            verify: {
+                uri: {
+                    type: String,
+                    required: true,
+                },
+                method: {
+                    type: String,
+                    required: true,
+                    default: "POST",
+                },
+                headers: {
+                    type: Map,
+                    of: String,
+                },
+                body: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                response: {
+                    type: Map,
+                    of: mongoose.Schema.Types.Mixed,
+                },
+                conditions: {
+                    true: [
+                        {
+                            type: Map,
+                            of: mongoose.Schema.Types.Mixed,
+                        },
+                    ],
+                    false: [
+                        {
+                            type: Map,
+                            of: mongoose.Schema.Types.Mixed,
+                        },
+                    ],
+                },
+            },
         },
         isActive: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         supportedCurrencies: [String],
-        transactionReference: String,
-        inputs: {
-            type: Map,
-            of: mongoose.Schema.Types.Mixed,
-        },
-        outputs: {
-            type: Map,
-            of: mongoose.Schema.Types.Mixed,
-        },
     },
     { timestamps: true }
 );

@@ -34,6 +34,9 @@ const { json, urlencoded } = bodyParser;
 
 const app = express();
 
+app.set("views", "views");
+app.set("view engine", "pug");
+
 app.use(cookieParser());
 app.use("/api/v1", languageMiddleware);
 

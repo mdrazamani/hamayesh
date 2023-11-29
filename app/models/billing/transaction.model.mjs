@@ -2,14 +2,24 @@ import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
     {
-        invoiceId: {
+        invoice: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "invoice",
         },
+        refId: {
+            type: String,
+        },
+        getway: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "getway",
+        },
+        authorityCode: {
+            type: String,
+        },
         status: {
             type: String,
-            enum: ["completed", "failed"],
-            default: "failed",
+            enum: ["completed", "pending", "failed"],
+            default: "pending",
         },
     },
     { timestamps: true }
