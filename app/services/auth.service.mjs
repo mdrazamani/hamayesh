@@ -28,8 +28,9 @@ export const registerUser = async (data, req, res) => {
     }
 
     // ------------- invoice -------------
+    let items;
     if (data?.items) {
-        const items = data?.items;
+        items = data?.items;
         delete data?.items;
     }
     const user = new User(data);

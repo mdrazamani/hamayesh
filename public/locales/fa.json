@@ -173,7 +173,13 @@
 		"invalid_discount": "validation.invalid_discount",
 		"total_number": "validation.total_number",
 		"total_greater": "validation.total_greater",
-		"total_required": "validation.total_required"
+		"total_required": "validation.total_required",
+		"item_invalid": "validation.item_invalid",
+		"itemType_invalid": "validation.itemType_invalid",
+		"number_invalid": "validation.number_invalid",
+		"number_min": "validation.number_min",
+		"items_invalid": "validation.items_invalid",
+		"items_min": "validation.items_min"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

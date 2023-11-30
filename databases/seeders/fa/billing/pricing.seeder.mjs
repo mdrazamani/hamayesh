@@ -100,6 +100,10 @@ const seedPricing = async (rules) => {
                 rules[5]._id,
             ],
         },
+        {
+            type: "freeRegistration",
+            rules: [rules[0]._id],
+        },
         // Add more pricing types as needed...
     ];
 

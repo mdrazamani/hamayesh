@@ -45,7 +45,7 @@ const router = express.Router();
  */
 router.post(
     "/",
-    // authenticateJWT,
+    authenticateJWT,
     // dynamicValidate(invoiceValidationSchema),
     createController
 );
@@ -97,7 +97,7 @@ router.delete("/:id", authenticateJWT, deleteController);
  *         description: List of invoices.
  */
 // router.get("/", authenticateJWT, indexController);
-router.get("/", indexController);
+router.get("/", authenticateJWT, indexController);
 
 /**
  * @swagger
@@ -120,7 +120,7 @@ router.get("/", indexController);
  *         description: Detailed invoice information.
  */
 // router.get("/:id", authenticateJWT, showController);
-router.get("/:id", showController);
+router.get("/:id", authenticateJWT, showController);
 
 /**
  * @swagger
@@ -161,7 +161,7 @@ router.get("/:id", showController);
 
 router.post(
     "/apply",
-    // authenticateJWT,
+    authenticateJWT,
     dynamicValidate(applyValidationSchema),
     applyDiscountController
 );
