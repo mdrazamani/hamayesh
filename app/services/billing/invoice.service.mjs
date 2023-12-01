@@ -42,18 +42,26 @@ export const create = async (data) => {
     data.taxPrice = tax;
     data.articleNumber = articleNumber;
 
-    const added = await crudFactory.create(Invoice)(data);
-    // هر وقت پرداخت موفق بود این اتفاق رخ بده
-    // const resultUser = updateBillingUser(
-    //     added?._id,
-    //     data?.userId,
-    //     articleNumber
-    // );
-
-    return added;
+    return await crudFactory.create(Invoice)(data);
 };
 
 export const update = async (id, data) => {
+    const {
+        subTotalPrice,
+        total,
+        allDiscounts,
+        discounttype,
+        discountGlobal,
+        tax,
+        articleNumber,
+    } = await invoiceCalculator(data);
+
+    data.subtotal = subTotalPrice;
+    data.total = total;
+    data.discountPrice = allDiscounts + discounttype + discountGlobal;
+    data.taxPrice = tax;
+    data.articleNumber = articleNumber;
+
     return await crudFactory.update(Invoice)(id, data);
 };
 
@@ -88,30 +96,89 @@ const getInvoiceItems = (items) => {
     };
 };
 
+// export const updateDiscount = async (data) => {
+//     const { codes, invoiceId, userId } = data;
+//     const invoice = await get(invoiceId);
+//     let discountP = 0;
+//     if (!invoice && !invoice?._id) {
+//         throw new APIError({
+//             message: getMessage("your_invoice_not_found"),
+//             status: 404,
+//         });
+//     }
+
+//     const { uniqueItemTypes, itemList } = getInvoiceItems(invoice?.items);
+
+//     const discounts_main = await applyDiscount(codes, userId);
+//     const discounts_type = await applyDiscount(codes, userId, uniqueItemTypes);
+//     const discounts_rule = await applyDiscount(codes, userId, [], itemList);
+
+//     const discounts = [...discounts_main, ...discounts_type, ...discounts_rule];
+
+//     if (discounts.length) {
+//         discountP += await discountsCalculator(discounts, invoice?.total);
+//     }
+
+//     if (!discountP) {
+//         throw new APIError({
+//             message: getMessage("your_dsicount_code_not_found"),
+//             status: 404,
+//         });
+//     }
+
+//     return update(invoiceId, {
+//         total: invoice?.total - discountP,
+//         discountPrice: invoice?.discountPrice + discountP,
+//     });
+// };
+
 export const updateDiscount = async (data) => {
     const { codes, invoiceId, userId } = data;
-    const invoice = await get(invoiceId);
-    let discountP = 0;
-    if (!invoice && !invoice?._id) {
+
+    if (!codes.length) {
         throw new APIError({
-            message: getMessage("your_invoice_not_found"),
+            message: getMessage("no_discount_codes_provided"),
+            status: 400,
+        });
+    }
+
+    const invoice = await get(invoiceId);
+    if (!invoice) {
+        throw new APIError({
+            message: getMessage("invoice_not_found"),
             status: 404,
         });
     }
 
-    const { uniqueItemTypes, itemList } = getInvoiceItems(invoice?.items);
+    const { uniqueItemTypes, itemList } = getInvoiceItems(invoice.items);
 
-    const discounts_main = await applyDiscount(codes, userId);
-    const discounts_type = await applyDiscount(codes, userId, uniqueItemTypes);
-    const discounts_rule = await applyDiscount(codes, userId, [], itemList);
+    // Combine discount checks into a single call to reduce async overhead
+    const combinedDiscounts = await Promise.all([
+        applyDiscount(codes, userId),
+        applyDiscount(codes, userId, uniqueItemTypes),
+        applyDiscount(codes, userId, [], itemList),
+    ]);
 
-    const discounts = [...discounts_main, ...discounts_type, ...discounts_rule];
+    // Flatten the array of discounts
+    const discounts = combinedDiscounts.flat();
 
-    if (discounts.length) {
-        discountP += await discountsCalculator(discounts, invoice?.total);
+    if (!discounts.length) {
+        throw new APIError({
+            message: getMessage("discount_code_not_applicable"),
+            status: 404,
+        });
     }
+
+    const discountAmount = await discountsCalculator(discounts, invoice.total);
+    if (!discountAmount) {
+        throw new APIError({
+            message: getMessage("discount_calculation_failed"),
+            status: 400,
+        });
+    }
+
     return update(invoiceId, {
-        total: invoice?.total - discountP,
-        discountPrice: invoice?.discountPrice + discountP,
+        total: invoice.total - discountAmount,
+        discountPrice: (invoice.discountPrice || 0) + discountAmount,
     });
 };

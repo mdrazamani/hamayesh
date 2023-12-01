@@ -36,6 +36,7 @@ import { seedPricingDatabase } from "./fa/billing/pricing.seeder.mjs";
 import { seedDiscountDatabase } from "./fa/billing/discount.seeder.mjs";
 import { seedInvoiceDatabase } from "./fa/billing/invoice.seeder.mjs";
 import { seedGetwayDatabase } from "./fa/billing/getway.seeder.mjs";
+import { seedTransactionDatabase } from "./fa/billing/transaction.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -60,6 +61,7 @@ const seeders = {
     discount: seedDiscountDatabase,
     invoice: seedInvoiceDatabase,
     getway: seedGetwayDatabase,
+    transaction: seedTransactionDatabase,
 };
 
 console.log(Language);

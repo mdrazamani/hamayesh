@@ -11,12 +11,23 @@ export const invoiceValidationSchema = () => ({
             }),
         items: Joi.array()
             .items(
-                Joi.string().pattern(/^[0-9a-fA-F]{24}$/) // Each item must be an ObjectId
+                Joi.object({
+                    number: Joi.number().required(),
+                    item: Joi.string().pattern(/^[0-9a-fA-F]{24}$/), // Assuming this is still an ObjectId
+                    itemType: Joi.string().required(),
+                })
             )
             .required()
             .messages({
+                "number.required": getMessage("validation.number_required"),
                 "string.pattern.base": getMessage("validation.invalid_item"),
-                "any.required": getMessage("validation.items_required"),
+                "itemType.required": getMessage(
+                    "validation.item_type_required"
+                ),
+                "array.base": getMessage("validation.items_required"),
+                "array.includes": getMessage(
+                    "validation.invalid_item_structure"
+                ),
             }),
     }).options({ abortEarly: false }), // to handle all errors at once
 });

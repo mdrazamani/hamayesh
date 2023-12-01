@@ -215,5 +215,9 @@
 	},
 	"A category cannot be its own parent.": "A category cannot be its own parent.",
 	"A category cannot set one of its children as its parent.": "A category cannot set one of its children as its parent.",
-	"sasasasas": "sasasasas"
+	"sasasasas": "sasasasas",
+	"your_dsicount_code_not_found": "your_dsicount_code_not_found",
+	"user_not_found": "user_not_found",
+	"user_not_authenticated": "user_not_authenticated",
+	"payment_gateway_error": "payment_gateway_error"
 }

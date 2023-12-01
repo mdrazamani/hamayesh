@@ -5,10 +5,10 @@ const seedGetways = async () => {
         {
             name: "زرین پال",
             slug: "zarinpal",
-            privateCode: "asdfasdfasdfasdfasdfasdfasdfasdfasas",
+            privateCode: "1344b5d4-0048-11e8-94db-005056a205be",
             api: {
                 request: {
-                    uri: "https://api.zarinpal.com/pg/v4/payment/request.json",
+                    uri: "https://sandbox.zarinpal.com/pg/v4/payment/request.json",
                     method: "POST",
                     body: new Map([
                         ["merchant_id", "String"],
@@ -31,7 +31,7 @@ const seedGetways = async () => {
                 ourRedirect: {
                     parameter: new Map([["authority", "String"]]),
                     // queryStrings: new Map([["authority", "String"]]),
-                    url: "https://www.zarinpal.com/pg/StartPay/",
+                    url: "https://sandbox.zarinpal.com/pg/StartPay/",
                 },
 
                 redirectThem: {
@@ -44,7 +44,7 @@ const seedGetways = async () => {
                 },
 
                 verify: {
-                    uri: "https://api.zarinpal.com/pg/v4/payment/verify.json",
+                    uri: "https://sandbox.zarinpal.com/pg/v4/payment/verify.json",
                     method: "POST",
                     body: new Map([
                         ["merchant_id", "String"],

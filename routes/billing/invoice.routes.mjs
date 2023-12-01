@@ -46,7 +46,7 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
-    // dynamicValidate(invoiceValidationSchema),
+    dynamicValidate(invoiceValidationSchema),
     createController
 );
 

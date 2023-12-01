@@ -10,6 +10,12 @@ export const discountValidationSchema = () => ({
             .messages({
                 "number.base": getMessage("validation.amount_number"),
             }),
+
+        useNumber: Joi.number()
+            .optional()
+            .messages({
+                "number.base": getMessage("validation.useNumber"),
+            }),
         percent: Joi.number()
             .min(0)
             .max(100)
@@ -72,6 +78,11 @@ export const discountUpdateValidationSchema = () => ({
             .optional()
             .messages({
                 "number.base": getMessage("validation.amount_number"),
+            }),
+        useNumber: Joi.number()
+            .optional()
+            .messages({
+                "number.base": getMessage("validation.useNumber"),
             }),
         percent: Joi.number()
             .min(0)

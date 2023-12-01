@@ -58,49 +58,74 @@ export const deleteDoc = async (id) => {
     return await crudFactory.delete(Discount)(id);
 };
 
+// export const applyDiscount = async (codes, userId, types = [], items = []) => {
+//     let discounts = [];
+//     for (const code of codes) {
+//         let conditionObj = {};
+//         if (!types.length && !items.length) {
+//             conditionObj = {
+//                 code: code,
+//                 users: { $in: [userId] },
+//                 activity: true,
+//                 type: { $in: ["", null] },
+//                 rules: { $size: 0 },
+//             };
+//         }
+
+//         if (types.length) {
+//             conditionObj = {
+//                 code: code,
+//                 users: { $in: [userId] },
+//                 activity: true,
+//                 rules: { $size: 0 },
+//             };
+//             if (types && types.length > 0) {
+//                 conditionObj.type = { $in: types };
+//             }
+//         }
+
+//         if (items.length) {
+//             conditionObj = {
+//                 code: code,
+//                 users: { $in: [userId] },
+//                 activity: true,
+//                 type: { $in: ["", null] },
+//             };
+//             if (items && items.length > 0) {
+//                 conditionObj.rules = { $in: items };
+//             }
+//         }
+
+//         const discount = await Discount.find(conditionObj);
+//         discounts.push(...discount);
+//     }
+//     if (discounts.length > 0) {
+//         return discounts;
+//     }
+//     return [];
+// };
+
 export const applyDiscount = async (codes, userId, types = [], items = []) => {
-    let discounts = [];
-    for (const code of codes) {
-        let conditionObj = {};
-        if (!types.length && !items.length) {
-            conditionObj = {
-                code: code,
-                users: { $in: [userId] },
-                activity: true,
-                type: { $in: ["", null] },
-                rules: { $size: 0 },
-            };
-        }
+    if (!codes.length) return []; // Return early if no codes are provided
 
-        if (types.length) {
-            conditionObj = {
-                code: code,
-                users: { $in: [userId] },
-                activity: true,
-                rules: { $size: 0 },
-            };
-            if (types && types.length > 0) {
-                conditionObj.type = { $in: types };
-            }
-        }
+    // Base condition shared across different scenarios
+    let baseCondition = {
+        code: { $in: codes },
+        users: { $in: [userId] },
+        activity: true,
+    };
 
-        if (items.length) {
-            conditionObj = {
-                code: code,
-                users: { $in: [userId] },
-                activity: true,
-                type: { $in: ["", null] },
-            };
-            if (items && items.length > 0) {
-                conditionObj.rules = { $in: items };
-            }
-        }
-
-        const discount = await Discount.find(conditionObj);
-        discounts.push(...discount);
+    // Additional conditions based on `types` and `items`
+    if (types.length || items.length) {
+        baseCondition.rules = items.length ? { $in: items } : { $size: 0 };
+        baseCondition.type = types.length
+            ? { $in: types }
+            : { $in: ["", null] };
+    } else {
+        baseCondition.type = { $in: ["", null] };
+        baseCondition.rules = { $size: 0 };
     }
-    if (discounts.length > 0) {
-        return discounts;
-    }
-    return false;
+
+    const discounts = await Discount.find(baseCondition);
+    return discounts.length ? discounts : [];
 };

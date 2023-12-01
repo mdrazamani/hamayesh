@@ -17,8 +17,6 @@ router.post(
     payController
 );
 
-// router.delete("/:id", authenticateJWT, deleteController);
 router.get("/", showController);
-// router.get("/:id", showController);
 
 export default router;
