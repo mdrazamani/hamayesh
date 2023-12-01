@@ -2,7 +2,7 @@
 
 import { getMessage } from "../../../../config/i18nConfig.mjs";
 import constants from "../../../../utils/constants.mjs";
-import { deleteDoc } from "../../../services/billing/getway.service.mjs";
+import { deleteDoc } from "../../../services/billing/gateway.service.mjs";
 
 export const deleteController = async (req, res, next) => {
     try {

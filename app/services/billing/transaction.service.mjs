@@ -4,12 +4,14 @@ import Transaction from "../../models/billing/transaction.model.mjs";
 const populateOptions = [
     {
         path: "invoice",
+        populate: {
+            path: "user",
+        },
     },
     {
-        path: "getway",
+        path: "gateway",
     },
-
-    // If there are any other reference fields, add them here similarly
+    // Add other paths if needed
 ];
 
 export const create = async (data) => {

@@ -1,5 +1,5 @@
 import { getMessage } from "../../../../config/i18nConfig.mjs";
-import { get as getGetway } from "../../../services/billing/getway.service.mjs";
+import { get as getGetway } from "../../../services/billing/gateway.service.mjs";
 import { get as getInvoice } from "../../../services/billing/invoice.service.mjs";
 import axios from "axios";
 import APIError from "../../../../utils/errors.mjs";
@@ -9,38 +9,38 @@ import { justAdmin } from "../../../../utils/justAdmin.mjs";
 export const payController = async (req, res, next) => {
     try {
         const userId = justAdmin(req.body.userId, req.user);
-        const getwayId = req.body?.getway;
+        const gatewayId = req.body?.gateway;
         const invoiceId = req.body?.invoice;
 
         // Validate required parameters
-        if (!getwayId || !invoiceId) {
+        if (!gatewayId || !invoiceId) {
             throw new APIError({
                 message: getMessage("missing_required_parameters"),
                 status: 400,
             });
         }
 
-        const [getway, invoice] = await Promise.all([
-            getGetway(getwayId),
+        const [gateway, invoice] = await Promise.all([
+            getGetway(gatewayId),
             getInvoice(invoiceId),
         ]);
 
-        if (!getway || !invoice) {
+        if (!gateway || !invoice) {
             throw new APIError({
-                message: getMessage("getway_or_invoice_not_found"),
+                message: getMessage("gateway_or_invoice_not_found"),
                 status: 404,
             });
         }
 
         const body = {
-            merchant_id: getway?.privateCode,
+            merchant_id: gateway?.privateCode,
             amount: invoice?.total,
             description: "hamayesh description",
             callback_url: "http://127.0.0.1:8000/api/v1/billing/payment/",
         };
 
         let response = await axios
-            .post(getway?.api?.request?.uri, body)
+            .post(gateway?.api?.request?.uri, body)
             .catch((error) => {
                 console.error("Payment gateway error:", error.response?.data);
                 throw new APIError({

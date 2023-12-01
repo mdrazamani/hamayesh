@@ -1,5 +1,5 @@
 import crudFactory from "../../../utils/crudFactory.mjs";
-import Getway from "../../models/billing/getway.model.mjs";
+import Getway from "../../models/billing/gateway.model.mjs";
 
 export const create = async (data) => {
     return await crudFactory.create(Getway)(data);

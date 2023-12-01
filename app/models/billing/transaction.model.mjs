@@ -9,9 +9,9 @@ const transactionSchema = new mongoose.Schema(
         refId: {
             type: String,
         },
-        getway: {
+        gateway: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "getway",
+            ref: "gateway",
         },
         authorityCode: {
             type: String,

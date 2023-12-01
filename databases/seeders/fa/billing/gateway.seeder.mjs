@@ -1,4 +1,4 @@
-import Getway from "../../../../app/models/billing/getway.model.mjs";
+import Getway from "../../../../app/models/billing/gateway.model.mjs";
 
 const seedGetways = async () => {
     const zarinpalGetways = [

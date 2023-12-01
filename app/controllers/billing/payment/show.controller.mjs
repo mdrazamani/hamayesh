@@ -1,7 +1,7 @@
 import axios from "axios";
 import APIError from "../../../../utils/errors.mjs";
 import { updateBillingUser } from "../../../../utils/invoiceCalculator.mjs";
-import { get as getGetway } from "../../../services/billing/getway.service.mjs";
+import { get as getGetway } from "../../../services/billing/gateway.service.mjs";
 import { get as getInvoice } from "../../../services/billing/invoice.service.mjs";
 import {
     getByAuthority,
@@ -24,12 +24,12 @@ export const showController = async (req, res, next) => {
             });
         }
 
-        const [getway, invoice] = await Promise.all([
-            getGetway(transaction.getway),
+        const [gateway, invoice] = await Promise.all([
+            getGetway(transaction.gateway),
             getInvoice(transaction.invoice),
         ]);
 
-        if (!getway || !invoice) {
+        if (!gateway || !invoice) {
             throw new APIError({
                 message: "Getway or Invoice not found",
                 status: 404,
@@ -37,13 +37,13 @@ export const showController = async (req, res, next) => {
         }
 
         const body = {
-            merchant_id: getway.privateCode,
+            merchant_id: gateway.privateCode,
             amount: invoice.total,
             authority: Authority,
         };
 
         try {
-            const response = await axios.post(getway.api.verify.uri, body);
+            const response = await axios.post(gateway.api.verify.uri, body);
 
             console.log("response: ", response.data);
 

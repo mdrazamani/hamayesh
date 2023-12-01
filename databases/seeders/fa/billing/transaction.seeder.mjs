@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import Invoice from "../../../../app/models/billing/invoice.model.mjs";
 import Transaction from "../../../../app/models/billing/transaction.model.mjs";
+import Gateway from "../../../../app/models/billing/gateway.model.mjs";
 
 // Function to generate a random ObjectId
 const generateObjectId = () => {
@@ -32,13 +34,22 @@ const pickRandomStatus = () => {
 };
 
 const seedTransactions = async () => {
+    // Fetch 10 invoices and 1 gateway from the database
+    const invoices = await Invoice.find().limit(10);
+    const gateway = await Gateway.findOne(); // Assuming there's only one gateway
+
+    if (!gateway || invoices.length < 10) {
+        throw new Error(
+            "Required invoices or gateway not found in the database"
+        );
+    }
+
     const transactions = [];
     for (let i = 0; i < 10; i++) {
-        // Generate 10 transactions
         transactions.push({
-            invoice: generateObjectId(),
+            invoice: invoices[i % invoices.length]._id, // Rotate through the 10 invoices
             refId: generateRefId(),
-            getway: generateObjectId(),
+            gateway: gateway._id, // Use the same gateway for all transactions
             authorityCode: generateAuthorityCode(),
             status: pickRandomStatus(),
         });
@@ -49,7 +60,6 @@ const seedTransactions = async () => {
     console.log("Transactions seeded successfully");
     return createdTransactions;
 };
-
 export const seedTransactionDatabase = async () => {
     try {
         await seedTransactions();

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const getwaySchema = new mongoose.Schema(
+const gatewaySchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -110,6 +110,6 @@ const getwaySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Getway = mongoose.model("getway", getwaySchema);
+const Gateway = mongoose.model("gateway", gatewaySchema);
 
-export default Getway;
+export default Gateway;
