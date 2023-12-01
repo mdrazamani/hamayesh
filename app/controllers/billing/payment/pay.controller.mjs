@@ -5,6 +5,10 @@ import axios from "axios";
 import APIError from "../../../../utils/errors.mjs";
 import { create } from "../../../services/billing/transaction.service.mjs";
 import { justAdmin } from "../../../../utils/justAdmin.mjs";
+import {
+    createBody,
+    createRedirect,
+} from "../../../../utils/dynamicGetway.mjs";
 
 export const payController = async (req, res, next) => {
     try {
@@ -32,12 +36,17 @@ export const payController = async (req, res, next) => {
             });
         }
 
-        const body = {
-            merchant_id: gateway?.privateCode,
-            amount: invoice?.total,
+        const createBodyData = {
+            privateCode: getway.privateCode,
+            total: invoice.total + 150000,
+            redirect: "http://127.0.0.1:8000/api/v1/billing/payment/",
             description: "hamayesh description",
-            callback_url: "http://127.0.0.1:8000/api/v1/billing/payment/",
+            factorNumber: invoice.invoiceNumber,
         };
+
+        const body = createBody(getway?.slug, createBodyData);
+
+        console.log("body :", body);
 
         let response = await axios
             .post(gateway?.api?.request?.uri, body)
@@ -49,26 +58,20 @@ export const payController = async (req, res, next) => {
                 });
             });
 
-        const authorityCode = response.data.data.authority;
+        const { transactionData, redirectUrl } = createRedirect(
+            getway?.slug,
+            response,
+            req.body,
+            userId
+        );
 
-        if (response.data.data.code !== 100) {
-            throw new APIError({
-                message: getMessage("payment_gateway_transaction_failed"),
-                status: 400,
-            });
-        }
-
-        const transactionData = { ...req.body, userId, authorityCode };
         const transaction = await create(transactionData);
-
         if (!transaction) {
             throw new APIError({
                 message: getMessage("transaction_creation_failed"),
                 status: 500,
             });
         }
-
-        const redirectUrl = `https://sandbox.zarinpal.com/pg/StartPay/${authorityCode}`;
         res.redirect(redirectUrl);
     } catch (error) {
         next(error);

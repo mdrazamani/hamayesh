@@ -9,12 +9,10 @@ export const justAdmin = (userId, userLogin) => {
             status: 401, // 401 for unauthenticated
         });
     }
-
     // For admin users, use the provided userId, if available
     if (userLogin.role.name === "admin") {
         return userId || userLogin._id;
     }
-
     // For non-admin users, always use the logged-in user's ID
     return userLogin._id;
 };

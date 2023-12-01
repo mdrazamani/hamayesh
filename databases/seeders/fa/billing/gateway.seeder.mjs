@@ -65,10 +65,68 @@ const seedGetways = async () => {
                             new Map([["code", "100"]]),
                             new Map([["code", "101"]]),
                         ],
-                        // false: new Map([
-                        //     ["code", "Integer"],
-                        //     ["message", "String"],
-                        // ]),
+                    },
+                },
+            },
+            isActive: false,
+            supportedCurrencies: ["IRR"],
+        },
+        {
+            name: "پی دات ای ار",
+            slug: "pay",
+            privateCode: "test",
+            api: {
+                request: {
+                    uri: "https://pay.ir/pg/send",
+                    method: "POST",
+                    body: {
+                        api: "String",
+                        amount: "Integer",
+                        redirect: "String",
+                        description: "String",
+                        factorNumber: "Integer",
+                    },
+                    response: {
+                        status: "Integer",
+                        token: "String",
+                    },
+                },
+                ourRedirect: {
+                    parameter: {
+                        token: "String",
+                    },
+                    url: "https://pay.ir/pg/",
+                },
+                redirectThem: {
+                    queryStrings: {
+                        token: "String",
+                        status: "String",
+                    },
+                    url: "https://www.mysite.com/",
+                },
+                verify: {
+                    uri: "https://pay.ir/pg/verify ",
+                    method: "POST",
+                    body: {
+                        api: "String",
+                        token: "Integer",
+                    },
+                    response: {
+                        status: "Integer",
+                        amount: "Integer",
+                        transId: "String",
+                        message: "String",
+                        factorNumber: "Integer",
+                        cardNumber: "Integer",
+                    },
+                    conditions: {
+                        true: {
+                            code100: "موفق",
+                            code101: "موفق (تکراری)",
+                        },
+                        false: {
+                            // خطاهای احتمالی
+                        },
                     },
                 },
             },

@@ -7,16 +7,18 @@ import {
     getByAuthority,
     update as updateTransaction,
 } from "../../../services/billing/transaction.service.mjs";
+import {
+    checkVerify,
+    createVerifyBody,
+    processPaymentResponse,
+    transId,
+} from "../../../../utils/dynamicGetway.mjs";
 
 export const showController = async (req, res, next) => {
     try {
-        const { Authority, Status } = req.query;
+        const { statusCode, tokenCode } = processPaymentResponse(req, res);
 
-        if (Status !== "OK") {
-            return res.redirect("http://127.0.0.1:8000/admin/false");
-        }
-
-        const transaction = await getByAuthority(Authority);
+        const transaction = await getByAuthority(tokenCode);
         if (!transaction) {
             throw new APIError({
                 message: "Transaction not found",
@@ -36,35 +38,30 @@ export const showController = async (req, res, next) => {
             });
         }
 
-        const body = {
-            merchant_id: gateway.privateCode,
-            amount: invoice.total,
-            authority: Authority,
+        const createBody = {
+            privateCode: getway.privateCode,
+            tokenCode,
+            total: invoice.total,
         };
+        const body = createVerifyBody(getway.slug, createBody);
 
         try {
             const response = await axios.post(gateway.api.verify.uri, body);
 
-            console.log("response: ", response.data);
+            const result = checkVerify(getway?.slug, response);
 
-            if (response.data.data.code === -51) {
-                throw new APIError({
-                    message: "Payment failed",
-                    status: 401,
-                });
-            }
+            if (result) {
+                const transCode = transId(getway?.slug, response);
 
-            if (
-                response.data.data.code === 100 ||
-                response.data.data.code === 101
-            ) {
                 await updateTransaction(transaction._id, {
-                    refId: response.data.data.ref_id,
+                    refId: transCode,
                     status: "completed",
                 });
 
-                await invoice.updateOne({ paymentStatus: "completed" });
-                const updateResult = updateBillingUser(
+                invoice.paymentStatus = "completed";
+                invoice.save();
+
+                const updateResult = await updateBillingUser(
                     invoice._id,
                     invoice.user,
                     invoice.articleNumber
@@ -74,7 +71,7 @@ export const showController = async (req, res, next) => {
                     "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
                     {
                         success: true,
-                        transactionId: response.data.data.ref_id,
+                        transactionId: transCode,
                         lang: "fa",
                         redirectUrl:
                             "http://127.0.0.1:8000/admin/res/" + updateResult,
