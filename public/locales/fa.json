@@ -179,7 +179,12 @@
 		"number_invalid": "validation.number_invalid",
 		"number_min": "validation.number_min",
 		"items_invalid": "validation.items_invalid",
-		"items_min": "validation.items_min"
+		"items_min": "validation.items_min",
+		"number_required": "validation.number_required",
+		"item_type_required": "validation.item_type_required",
+		"invalid_item_structure": "validation.invalid_item_structure",
+		"useNumber": "validation.useNumber",
+		"either_amount_or_percent": "validation.either_amount_or_percent"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

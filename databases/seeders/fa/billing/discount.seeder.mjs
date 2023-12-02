@@ -14,12 +14,14 @@ const generateDiscountCode = () => {
 const seedDiscounts = async () => {
     const discounts = [
         {
+            useNumber: 25,
             amount: 10,
             type: "article",
             code: generateDiscountCode(),
             expiresAt: new Date(new Date().getTime() + 48 * 60 * 60 * 1000),
         },
         {
+            useNumber: 5,
             percent: 15,
             type: "freeRegistration",
             code: generateDiscountCode(),
