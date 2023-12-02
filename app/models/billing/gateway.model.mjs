@@ -110,6 +110,11 @@ const gatewaySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+gatewaySchema.pre(/^find/, function (next) {
+    this.find({ isActive: { $eq: true } });
+    next();
+});
+
 const Gateway = mongoose.model("gateway", gatewaySchema);
 
 export default Gateway;

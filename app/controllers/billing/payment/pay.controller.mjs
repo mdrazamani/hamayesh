@@ -36,6 +36,13 @@ export const payController = async (req, res, next) => {
             });
         }
 
+        if (invoice?.paymentStatus && invoice?.paymentStatus === "completed") {
+            throw new APIError({
+                message: getMessage("The_invoice_has_already_been_paid"),
+                status: 401,
+            });
+        }
+
         const createBodyData = {
             privateCode: getway.privateCode,
             total: invoice.total + 150000,

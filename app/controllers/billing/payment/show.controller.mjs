@@ -13,6 +13,7 @@ import {
     processPaymentResponse,
     transId,
 } from "../../../../utils/dynamicGetway.mjs";
+import { loadLanguageSetting } from "../../../../config/readLang.mjs";
 
 export const showController = async (req, res, next) => {
     try {
@@ -37,6 +38,15 @@ export const showController = async (req, res, next) => {
                 status: 404,
             });
         }
+
+        if (invoice?.paymentStatus && invoice?.paymentStatus === "completed") {
+            throw new APIError({
+                message: getMessage("The_invoice_has_already_been_paid"),
+                status: 401,
+            });
+        }
+
+        let lang = loadLanguageSetting();
 
         const createBody = {
             privateCode: getway.privateCode,
@@ -72,15 +82,22 @@ export const showController = async (req, res, next) => {
                     {
                         success: true,
                         transactionId: transCode,
-                        lang: "fa",
+                        lang,
                         redirectUrl:
                             "http://127.0.0.1:8000/admin/res/" + updateResult,
                     }
                 );
             } else {
-                // Handle failed verification
-                console.error("Verification failed: ", response.data);
-                return res.redirect("http://127.0.0.1:8000/admin/false");
+                return res.render(
+                    "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
+                    {
+                        success: false,
+                        transactionId: transCode,
+                        lang,
+                        redirectUrl:
+                            "http://127.0.0.1:8000/admin/res/" + updateResult,
+                    }
+                );
             }
         } catch (error) {
             console.error(

@@ -9,6 +9,7 @@ import {
 import { update as updateDiscount } from "../app/services/billing/discount.service.mjs";
 import APIError from "./errors.mjs";
 import { getMessage } from "../config/i18nConfig.mjs";
+import { validateNumber } from "./NumberTools.mjs";
 
 // const taxCalculator = async (total) => {
 //     const taxPercent = await HamayeshDetail.findOne();
@@ -138,7 +139,7 @@ const itemsPriceCalculator = async (items) => {
         if (!itemData) continue; // Skip if itemData not found
 
         const { price = 0, number = 0, additionalInfo = {} } = itemData;
-        const inputNumber = Number(item.number);
+        const inputNumber = validateNumber(Number(item.number));
 
         if (isNaN(inputNumber)) {
             throw new APIError({
@@ -158,12 +159,12 @@ const itemsPriceCalculator = async (items) => {
         const discounts = await isItemDiscount(item.item);
         if (discounts) {
             const discountP = await discountsCalculator(discounts, itemPrice);
-            itemPrice -= discountP;
-            allDiscounts += discountP;
+            itemPrice -= validateNumber(discountP);
+            allDiscounts += validateNumber(discountP);
         }
 
-        totalPrice += itemPrice;
-        totalNumber += itemNumber;
+        totalPrice += validateNumber(itemPrice);
+        totalNumber += validateNumber(itemNumber);
 
         if (itemPrice === 0 || itemNumber === 0) {
             undefinedArticles = true;
@@ -335,19 +336,24 @@ export const invoiceCalculator = async (data) => {
             await itemsPriceCalculator(data?.items);
 
         if (subTotal === "undefined") {
-            throw new Error("Cannot calculate invoice due to undefined items");
+            throw new APIError({
+                message: getMessage(
+                    "Cannot calculate invoice due to undefined items"
+                ),
+                status: 400,
+            });
         }
 
         let total = subTotal;
         const tax = await taxCalculator(total);
-        total += tax;
+        total += validateNumber(tax);
 
         // Global discount
         let discountGlobal = 0;
         const globalDiscount = await isGlobalDiscount();
         if (globalDiscount.length) {
             discountGlobal = await discountsCalculator(globalDiscount, total);
-            total -= discountGlobal;
+            total -= validateNumber(discountGlobal);
         }
 
         // Type discounts
@@ -355,21 +361,26 @@ export const invoiceCalculator = async (data) => {
         const typeDiscount = await isTypeDiscount(data?.items);
         if (typeDiscount.length) {
             discountType = await discountsCalculator(typeDiscount, total);
-            total -= discountType;
+            total -= validateNumber(discountType);
         }
 
         return {
-            subTotalPrice: subTotal,
-            total,
-            allDiscounts,
-            discountType,
-            discountGlobal,
-            tax,
+            subTotalPrice: validateNumber(subTotal),
+            total: validateNumber(total),
+            allDiscounts: validateNumber(allDiscounts),
+            discountType: validateNumber(discountType),
+            discountGlobal: validateNumber(discountGlobal),
+            tax: validateNumber(tax),
             articleNumber: totalNumber,
         };
     } catch (error) {
-        console.error(error.message);
-        return { error: error.message };
+        // console.error(error.message);
+        // return { error: error.message };
+
+        throw new APIError({
+            message: getMessage(error.message),
+            status: 400,
+        });
     }
 };
 
@@ -403,27 +414,35 @@ export const updateBillingUser = async (invoiceId, userId, articleNumber) => {
     try {
         const user = await getUser(userId);
 
-        if (!user || !user.billingStatus) {
-            throw new Error("User or billing status not found");
+        if (!user) {
+            throw new APIError({
+                message: getMessage("User_or_billing_status_not_found"),
+                status: 401,
+            });
         }
 
         const updatedArticles =
-            (user.billingStatus.articles || 0) + articleNumber;
+            articleNumber === "Infinity"
+                ? "Infinity"
+                : (user.billingStatus.articles || 0) + articleNumber;
+
         const updatedInvoices = [
-            ...new Set(user.billingStatus.invoices || [], invoiceId),
+            ...new Set([...(user.billingStatus.invoices || []), invoiceId]),
         ];
 
-        const billingUpdate = {
+        const updateResult = await updateUser(userId, {
             billingStatus: {
                 articles: updatedArticles,
                 invoices: updatedInvoices,
             },
-        };
-
-        const updateResult = await updateUser(userId, billingUpdate);
+        });
         return updateResult;
     } catch (error) {
-        console.error("Error updating billing user:", error.message);
-        return false;
+        throw new APIError({
+            message: getMessage("Error updating billing user"),
+            status: 401,
+        });
+        // console.error(":", error.message);
+        // return false;
     }
 };

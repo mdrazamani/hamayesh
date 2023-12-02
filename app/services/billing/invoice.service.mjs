@@ -5,6 +5,7 @@ import {
     discountsCalculator,
     invoiceCalculator,
 } from "../../../utils/invoiceCalculator.mjs";
+import { validateNumber } from "../../../utils/NumberTools.mjs";
 import Invoice from "../../models/billing/invoice.model.mjs";
 import { applyDiscount } from "./discount.service.mjs";
 
@@ -36,10 +37,13 @@ export const create = async (data) => {
         articleNumber,
     } = await invoiceCalculator(data);
 
-    data.subtotal = subTotalPrice;
-    data.total = total;
-    data.discountPrice = allDiscounts + discounttype + discountGlobal;
-    data.taxPrice = tax;
+    data.subtotal = validateNumber(subTotalPrice);
+    data.total = validateNumber(total);
+    data.discountPrice =
+        validateNumber(allDiscounts) +
+        validateNumber(discounttype) +
+        validateNumber(discountGlobal);
+    data.taxPrice = validateNumber(tax);
     data.articleNumber = articleNumber;
 
     return await crudFactory.create(Invoice)(data);
@@ -56,10 +60,13 @@ export const update = async (id, data) => {
         articleNumber,
     } = await invoiceCalculator(data);
 
-    data.subtotal = subTotalPrice;
-    data.total = total;
-    data.discountPrice = allDiscounts + discounttype + discountGlobal;
-    data.taxPrice = tax;
+    data.subtotal = validateNumber(subTotalPrice);
+    data.total = validateNumber(total);
+    data.discountPrice =
+        validateNumber(allDiscounts) +
+        validateNumber(discounttype) +
+        validateNumber(discountGlobal);
+    data.taxPrice = validateNumber(tax);
     data.articleNumber = articleNumber;
 
     return await crudFactory.update(Invoice)(id, data);
@@ -178,7 +185,8 @@ export const updateDiscount = async (data) => {
     }
 
     return update(invoiceId, {
-        total: invoice.total - discountAmount,
-        discountPrice: (invoice.discountPrice || 0) + discountAmount,
+        total: invoice.total - validateNumber(discountAmount),
+        discountPrice:
+            (invoice.discountPrice || 0) + validateNumber(discountAmount),
     });
 };

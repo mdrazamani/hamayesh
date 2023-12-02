@@ -27,6 +27,26 @@ export const create = async (data) => {
 };
 
 export const update = async (id, data) => {
+    if (data?.number) {
+        data.number = Number(data?.number);
+        if (data?.number && isNaN(data?.number)) {
+            throw new APIError({
+                message: getMessage("your_number_is_not_valid"),
+                status: 404,
+            });
+        }
+    }
+
+    if (data?.price) {
+        data.price = Number(data?.price);
+        if (data?.price && isNaN(data?.price)) {
+            throw new APIError({
+                message: getMessage("your_number_is_not_valid"),
+                status: 404,
+            });
+        }
+    }
+
     return await crudFactory.update(PricingRule)(id, data);
 };
 

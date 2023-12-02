@@ -12,7 +12,7 @@ export const invoiceValidationSchema = () => ({
         items: Joi.array()
             .items(
                 Joi.object({
-                    number: Joi.number().required(),
+                    number: Joi.number(),
                     item: Joi.string().pattern(/^[0-9a-fA-F]{24}$/), // Assuming this is still an ObjectId
                     itemType: Joi.string().required(),
                 })

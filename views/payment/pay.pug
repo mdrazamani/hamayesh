@@ -1,13 +1,23 @@
 doctype html
 html(lang=lang)
   head
-    title Payment Status
+    title= lang === 'fa' ? 'وضعیت پرداخت' : 'Payment Status'
+
+    script.
+      window.onload = function() {
+        setTimeout(function() {
+          window.location.href = '#{redirectUrl}';
+        }, 3000); 
+      }
+
     style.
       body {
         font-family: 'Helvetica Neue', Arial, sans-serif;
         padding: 40px;
         background-color: #f4f4f4;
         color: #333;
+        text-align: lang === 'fa' ? 'right' : 'left';
+        direction: lang === 'fa' ? 'rtl' : 'ltr';
       }
       .email-container {
         max-width: 600px;
@@ -41,15 +51,15 @@ html(lang=lang)
 
   body
     .email-container
-      h1 Payment Status
+      h1= lang === 'fa' ? 'وضعیت پرداخت' : 'Payment Status'
 
       if success
         .status-box.success
-          p Your payment was successful.
-          p Transaction ID: #{transactionId}
+          p= lang === 'fa' ? 'پرداخت شما موفقیت‌آمیز بود.' : 'Your payment was successful.'
+          p= lang === 'fa' ? 'شماره تراکنش: ' + transactionId : 'Transaction ID: ' + transactionId
       else
         .status-box.failure
-          p Your payment failed.
-          p Please try again or contact support.
+          p= lang === 'fa' ? 'پرداخت شما ناموفق بود.' : 'Your payment failed.'
+          p= lang === 'fa' ? 'در صورت کسر مبلغ از حساب شما، نهایتاً تا ۷۲ ساعت آینده به حساب شما بازگردانده می‌شود.' : 'If the amount has been deducted from your account, it will be refunded within 72 hours.'
 
-      p If you have any questions, please do not hesitate to contact us.
+      p= lang === 'fa' ? 'در صورت داشتن هرگونه سؤال، لطفاً تردید نکنید با ما تماس بگیرید.' : 'If you have any questions, please do not hesitate to contact us.'

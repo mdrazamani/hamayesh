@@ -156,7 +156,7 @@
 			"success": "Logged out successfully."
 		},
 		"verifytoken": {
-			"success": "حساب با موفقیت تأیید شد."
+			"success": "Account verified successfully."
 		},
 		"deleted": "Successfully deleted",
 		"updated": "Successfully updated",

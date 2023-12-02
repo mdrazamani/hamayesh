@@ -39,6 +39,26 @@ export const create = async (data) => {
 };
 
 export const update = async (id, data) => {
+    if (data?.amount) {
+        data.amount = Number(data?.amount);
+        if (data?.amount && isNaN(data?.amount)) {
+            throw new APIError({
+                message: getMessage("your_number_is_not_valid"),
+                status: 404,
+            });
+        }
+    }
+
+    if (data?.percent) {
+        data.percent = Number(data?.percent);
+        if (data?.percent && isNaN(data?.percent)) {
+            throw new APIError({
+                message: getMessage("your_number_is_not_valid"),
+                status: 404,
+            });
+        }
+    }
+
     return await crudFactory.update(Discount)(id, data);
 };
 
