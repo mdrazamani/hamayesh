@@ -6,7 +6,10 @@ import {
     hamayeshDetailUpdateValidationSchema,
     hamayeshDetailValidationSchema,
 } from "../app/validations/hamayeshDetail.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -131,6 +134,10 @@ router.get("/", showController);
 router.patch(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(hamayeshDetailUpdateValidationSchema),
     updateController
 );

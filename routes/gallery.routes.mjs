@@ -8,7 +8,10 @@ import {
     updateGalleryValidationSchema,
     updateImageValidationSchema,
 } from "../app/validations/gallery.validation.mjs"; // Update these based on your actual file structure
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 import { createGalleryController } from "../app/controllers/gallery/create.controller.mjs";
 import { getAllGalleriesController } from "../app/controllers/gallery/index.controller.mjs";
 import { getGalleryController } from "../app/controllers/gallery/show.controller.mjs";
@@ -101,6 +104,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(createGalleryValidationSchema),
     createGalleryController
 );
@@ -152,7 +159,15 @@ router.get("/:id", getGalleryController);
  *         description: Gallery ID
  */
 
-router.delete("/:id", authenticateJWT, deleteGalleryController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteGalleryController
+);
 
 /**
  * @swagger
@@ -205,6 +220,10 @@ router.delete("/:id", authenticateJWT, deleteGalleryController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(updateGalleryValidationSchema), // Ensure you have the appropriate validation schema
     updateGalleryController
 );
@@ -247,6 +266,10 @@ router.patch(
 router.post(
     "/:galleryId/images",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(addImageValidationSchema), // Ensure you have the appropriate validation schema
     addImageController
 );
@@ -293,6 +316,10 @@ router.post(
 router.patch(
     "/:galleryId/images/:imageId",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(updateImageValidationSchema), // Ensure you have the appropriate validation schema
     updateImageController
 );
@@ -322,6 +349,10 @@ router.patch(
 router.delete(
     "/:galleryId/images/:imageId",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     deleteImageController
 );
 

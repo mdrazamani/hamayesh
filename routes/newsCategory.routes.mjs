@@ -7,7 +7,10 @@ import { showController } from "../app/controllers/news/newsCategory/show.contro
 import { updateController } from "../app/controllers/news/newsCategory/update.controller.mjs";
 import { indexOrderedController } from "../app/controllers/news/newsCategory/indexOrdered.controller.mjs";
 import { newsCategoryValidationSchema } from "../app/validations/newsCategory.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -95,6 +98,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsCategoryValidationSchema),
     createController
 );
@@ -140,7 +147,15 @@ router.get("/ordered", indexOrderedController);
  *           type: string
  *         description: NewsCategory ID
  */
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -245,6 +260,10 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsCategoryValidationSchema),
     updateController
 );

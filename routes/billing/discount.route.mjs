@@ -208,11 +208,11 @@ router.get("/:id", showController);
  *                 description: The expiration date of the discount.
  */
 
-router.patch(
-    "/:id",
-    authenticateJWT,
-    dynamicValidate(discountUpdateValidationSchema),
-    updateController
-);
+// router.patch(
+//     "/:id",
+//     authenticateJWT,
+//     dynamicValidate(discountUpdateValidationSchema),
+//     updateController
+// );
 
 export default router;

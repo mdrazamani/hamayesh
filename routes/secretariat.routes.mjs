@@ -6,7 +6,10 @@ import {
     secretariatUpdateValidation,
     secretariatValidation,
 } from "../app/validations/secretariat.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 import { createSecretariatController } from "../app/controllers/secretariat/create.controller.mjs";
 import { deleteSecretariatController } from "../app/controllers/secretariat/delete.controller.mjs";
 import { getAllSecretariatsController } from "../app/controllers/secretariat/index.controller.mjs";
@@ -85,6 +88,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(secretariatValidation),
     createSecretariatController
 );
@@ -106,7 +113,15 @@ router.post(
  *           type: string
  *         description: Secretariat ID
  */
-router.delete("/:id", authenticateJWT, deleteSecretariatController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteSecretariatController
+);
 
 /**
  * @swagger
@@ -194,6 +209,10 @@ router.get("/:id", getSecretariatController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(secretariatUpdateValidation),
     updateSecretariatController
 );

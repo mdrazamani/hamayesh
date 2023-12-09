@@ -1,7 +1,10 @@
 import express from "express";
 import { dynamicValidate } from "../utils/validate.mjs";
 import { newsTagValidationSchema } from "../app/validations/newsTag.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 import { createController } from "../app/controllers/news/newsTag/create.controller.mjs";
 import { deleteController } from "../app/controllers/news/newsTag/delete.controller.mjs";
 import { indexController } from "../app/controllers/news/newsTag/index.controller.mjs";
@@ -75,6 +78,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsTagValidationSchema),
     createController
 );
@@ -96,7 +103,15 @@ router.post(
  *           type: string
  *         description: NewsTag ID
  */
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -183,6 +198,10 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsTagValidationSchema),
     updateController
 );

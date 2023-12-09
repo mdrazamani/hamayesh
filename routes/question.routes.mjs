@@ -11,7 +11,10 @@ import {
     questionValidationSchemaUpdate,
     updateItemValidationSchema,
 } from "../app/validations/question.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 import {
     addNestedItemController,
     deleteNestedItemController,
@@ -90,6 +93,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(questionValidationSchema),
     createController
 );
@@ -112,7 +119,15 @@ router.post(
  *         description: Question ID
  */
 
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -201,6 +216,10 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(questionValidationSchemaUpdate),
     updateController
 );

@@ -101,41 +101,17 @@ export const discountUpdateValidationSchema = () => ({
             .messages({
                 "number.base": getMessage("validation.useNumber"),
             }),
-        amount: Joi.alternatives().conditional("percent", {
-            is: Joi.string().allow("", null).empty(["", null]),
-            then: Joi.forbidden().messages({
-                "any.unknown": getMessage(
-                    "validation.either_amount_or_percent"
-                ),
-            }),
-            otherwise: Joi.number()
-                .optional()
-                .messages({
-                    "number.base": getMessage("validation.amount_number"),
-                }),
-        }),
-        percent: Joi.alternatives().conditional("amount", {
-            is: Joi.number().exist(),
-            then: Joi.number()
-                .allow("", null)
-                .empty(["", null])
-                .messages({
-                    "number.base": getMessage(
-                        "validation.either_amount_or_percent"
-                    ),
-                }),
-            otherwise: Joi.number()
-                .min(0)
-                .max(100)
-                .allow("", null)
-                .optional()
-                .messages({
-                    "number.base": getMessage("validation.percent_number"),
-                    "number.min": getMessage("validation.percent_min"),
-                    "number.max": getMessage("validation.percent_max"),
-                }),
-        }),
+        // amount: Joi.number().optional().when("percent", {
+        //     is: Joi.exist(),
+        //     then: Joi.forbidden(),
+        //     otherwise: Joi.required(),
+        // }),
 
+        // percent: Joi.number().optional().min(0).max(100).when("amount", {
+        //     is: Joi.exist(),
+        //     then: Joi.forbidden(),
+        //     otherwise: Joi.required(),
+        // }),
         type: Joi.string()
             .valid(...pricingTypes)
             .messages({

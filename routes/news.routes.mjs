@@ -9,7 +9,10 @@ import {
     newsUpdateValidationSchema,
     newsValidationSchema,
 } from "../app/validations/news.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -119,6 +122,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsValidationSchema),
     createController
 );
@@ -268,6 +275,10 @@ router.get("/:slug", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(newsUpdateValidationSchema),
     updateController
 );

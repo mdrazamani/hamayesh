@@ -9,7 +9,10 @@ import {
     organizerUpdateValidationSchema,
     organizerValidationSchema,
 } from "../app/validations/organizer.validation.mjs";
-import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import {
+    authenticateJWT,
+    authorizeRole,
+} from "../app/middlewares/auth.middleware.mjs";
 
 /**
  * @swagger
@@ -110,6 +113,10 @@ const router = express.Router();
 router.post(
     "/",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(organizerValidationSchema),
     createController
 );
@@ -132,7 +139,15 @@ router.post(
  *         description: Organizer ID
  */
 
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
@@ -250,6 +265,10 @@ router.get("/:id", showController);
 router.patch(
     "/:id",
     authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+        executive: "", // Full access
+    }),
     dynamicValidate(organizerUpdateValidationSchema),
     updateController
 );

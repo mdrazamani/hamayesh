@@ -12,7 +12,7 @@ import { applyDiscount } from "./discount.service.mjs";
 const populateOptions = [
     {
         path: "user",
-        select: `fa.firstName fa.lastName en.firstName en.lastName id profileImage -state -city`,
+        select: `fa.firstName fa.lastName en.firstName en.lastName id profileImage state city`,
     },
     {
         path: "items.item",

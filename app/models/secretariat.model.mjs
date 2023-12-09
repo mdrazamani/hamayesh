@@ -90,6 +90,7 @@ secretariatSchema.virtual("faType").get(function () {
             academic: "دبیرخانه علمی",
             policy: "دبیرخانه سیاستگذاری",
             conferance: "دبیرخانه کنفرانس",
+            "scientific-editor": "سردبیر علمی",
         };
 
         return roleNamesToFaNams[this.type] || "دبیرخانه";
