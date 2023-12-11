@@ -3,6 +3,86 @@ import User from "../../../app/models/user.model.mjs";
 import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
+const ArticleStatusLog = [
+    {
+        title: "اضافه شده",
+        status: "new",
+        textColor: "text-primary",
+    },
+    {
+        title: "ارسال به کاربر برای بازنگری",
+        status: "review",
+        textColor: "text-warning",
+    },
+    {
+        title: "تغییر یافته توسط کاربر",
+        status: "changed",
+        textColor: "text-primary",
+    },
+    {
+        title: "بررسی شده توسط داور",
+        status: "reviewed",
+        textColor: "text-primary",
+    },
+    {
+        title: "بررسی مجدد توسط داور",
+        status: "reviewedAgain",
+        textColor: "text-primary",
+    },
+    {
+        title: "ارسال شده به داوران",
+        status: "pending",
+        textColor: "text-primary",
+    },
+    {
+        title: "رد شده",
+        status: "failed",
+        textColor: "text-danger",
+    },
+    {
+        title: "تائید شده",
+        status: "accepted",
+        textColor: "text-success",
+    },
+];
+
+const getRandomLogs = () => {
+    // Start with the 'new' status
+    let logs = [
+        {
+            ...ArticleStatusLog.find((log) => log.status === "new"),
+            date: new Date(), // Assigning the current date
+        },
+    ];
+
+    // Shuffle the remaining logs, excluding 'new', 'failed', and 'accepted'
+    const otherLogs = ArticleStatusLog.filter(
+        (log) =>
+            log.status !== "new" &&
+            log.status !== "failed" &&
+            log.status !== "accepted"
+    ).sort(() => 0.5 - Math.random());
+
+    // Add a random number of other logs
+    logs.push(
+        ...otherLogs
+            .slice(0, Math.floor(Math.random() * otherLogs.length))
+            .map((log) => ({
+                ...log,
+                date: new Date(), // Assigning the current date
+            }))
+    );
+
+    // Always end with 'accepted' or 'failed', randomly chosen
+    const endStatus = ["failed", "accepted"][Math.floor(Math.random() * 2)];
+    logs.push({
+        ...ArticleStatusLog.find((log) => log.status === endStatus),
+        date: new Date(), // Assigning the current date
+    });
+
+    return logs;
+};
+
 export const seedArticlesFA = async () => {
     let users;
     let categories;
@@ -43,6 +123,7 @@ export const seedArticlesFA = async () => {
             ],
             status: "review",
             rate: Math.floor(Math.random() * 101),
+            logs: getRandomLogs(),
         },
         {
             fa: {
@@ -65,6 +146,7 @@ export const seedArticlesFA = async () => {
             ],
             status: "accepted",
             rate: Math.floor(Math.random() * 101),
+            logs: getRandomLogs(),
         },
         {
             fa: {
@@ -85,6 +167,7 @@ export const seedArticlesFA = async () => {
             presentationFiles: [],
             status: "new",
             rate: Math.floor(Math.random() * 101),
+            logs: getRandomLogs(),
         },
         {
             fa: {
@@ -108,6 +191,7 @@ export const seedArticlesFA = async () => {
             ],
             status: "pending",
             rate: Math.floor(Math.random() * 101),
+            logs: getRandomLogs(),
         },
         // ... more sample articles
     ];
