@@ -146,12 +146,21 @@ export const get = async (id) => {
     const article = await crudFactory.get(Article)(id, {
         populate: populateOptions,
     });
+
+    if (!article || !article.data) {
+        throw new Error("Article not found or article data is undefined");
+    }
+
     const judgings = await getAllJudging({
         page: 1,
         items_per_page: 1000,
         article: id,
     });
-    if (judgings) article.data.referees = judgings;
+
+    if (judgings.data && judgings.data.length > 0) {
+        article.data.referees = judgings;
+    }
+
     return article;
 };
 
