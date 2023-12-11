@@ -37,6 +37,7 @@ import { seedDiscountDatabase } from "./fa/billing/discount.seeder.mjs";
 import { seedInvoiceDatabase } from "./fa/billing/invoice.seeder.mjs";
 import { seedGetwayDatabase } from "./fa/billing/gateway.seeder.mjs";
 import { seedTransactionDatabase } from "./fa/billing/transaction.seeder.mjs";
+import { seedJudgingArticles } from "./fa/judging.seeder.mjs";
 
 const seeders = {
     states: seedStates,
@@ -62,6 +63,7 @@ const seeders = {
     invoice: seedInvoiceDatabase,
     gateway: seedGetwayDatabase,
     transaction: seedTransactionDatabase,
+    judging: seedJudgingArticles,
 };
 
 console.log(Language);

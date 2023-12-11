@@ -49,49 +49,97 @@ export const create = async (data, user = null) => {
     return await crudFactory.create(Article)(data);
 };
 
-export const update = async (id, data, user) => {
-    if (user.role.name === "admin" || user.role.name === "scientific")
-        return await crudFactory.update(Article)(id, data);
-    else if (user.role.name === "user") {
-        const hamayesh = await HamayeshDetail.findOne();
+// export const update = async (id, data, user) => {
+//     if (user.role.name === "admin" || user.role.name === "scientific")
+//         return await crudFactory.update(Article)(id, data);
+//     else if (user.role.name === "user") {
+//         const hamayesh = await HamayeshDetail.findOne();
 
-        if (hamayesh.dates.editArticle < Date.now()) {
+//         if (hamayesh.dates.editArticle < Date.now()) {
+//             throw new APIError({
+//                 message: getMessage("errors.editArticle"),
+//                 status: constants.BAD_REQUEST,
+//             });
+//         }
+
+//         const article = await get(id);
+//         if (article.status !== "review") {
+//             throw new APIError({
+//                 message: getMessage("errors.status_not_review"),
+//                 status: constants.BAD_REQUEST,
+//             });
+//         }
+
+//         const newData = {
+//             title: data.title ? data?.title : article?.title,
+//             description: data.description
+//                 ? data?.description
+//                 : article?.description,
+//             category: data.category ? data?.category : article?.category,
+//             articleFiles: data.articleFiles
+//                 ? data?.articleFiles
+//                 : article?.articleFiles,
+//             presentationFiles: data.presentationFiles
+//                 ? data?.presentationFiles
+//                 : article?.presentationFiles,
+//             status: "changed",
+//         };
+
+//         return await crudFactory.update(Article)(id, newData);
+//     } else {
+//         throw new APIError({
+//             message: getMessage("errors.editArticle"),
+//             status: constants.BAD_REQUEST,
+//         });
+//     }
+// };
+
+export const update = async (id, data, user) => {
+    if (user.role.name !== "admin" && user.role.name !== "scientific") {
+        if (user.role.name !== "user") {
             throw new APIError({
                 message: getMessage("errors.editArticle"),
                 status: constants.BAD_REQUEST,
             });
         }
 
-        const article = await get(id);
-        if (article.status !== "review") {
-            throw new APIError({
-                message: getMessage("errors.status_not_review"),
-                status: constants.BAD_REQUEST,
-            });
-        }
+        await checkEditArticleDeadline();
+        await checkArticleStatus(id);
+    }
 
-        const newData = {
-            title: data.title ? data?.title : article?.title,
-            description: data.description
-                ? data?.description
-                : article?.description,
-            category: data.category ? data?.category : article?.category,
-            articleFiles: data.articleFiles
-                ? data?.articleFiles
-                : article?.articleFiles,
-            presentationFiles: data.presentationFiles
-                ? data?.presentationFiles
-                : article?.presentationFiles,
-            status: "changed",
-        };
+    const newData = createNewData(data, await get(id));
+    return await crudFactory.update(Article)(id, newData);
+};
 
-        return await crudFactory.update(Article)(id, newData);
-    } else {
+const checkEditArticleDeadline = async () => {
+    const hamayesh = await HamayeshDetail.findOne();
+    if (hamayesh.dates.editArticle < Date.now()) {
         throw new APIError({
             message: getMessage("errors.editArticle"),
             status: constants.BAD_REQUEST,
         });
     }
+};
+
+const checkArticleStatus = async (id) => {
+    const article = await get(id);
+    if (article.status !== "review") {
+        throw new APIError({
+            message: getMessage("errors.status_not_review"),
+            status: constants.BAD_REQUEST,
+        });
+    }
+};
+
+const createNewData = (data, article) => {
+    return {
+        title: data.title || article.title,
+        description: data.description || article.description,
+        category: data.category || article.category,
+        articleFiles: data.articleFiles || article.articleFiles,
+        presentationFiles: data.presentationFiles || article.presentationFiles,
+        status: "changed",
+    };
 };
 
 export const get = async (id) => {
