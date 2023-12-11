@@ -129,6 +129,9 @@ const hamayeshDetailSchema = new mongoose.Schema(
                 path: {
                     type: String,
                 },
+                cover: {
+                    type: String,
+                },
             },
         ],
         iscCode: {

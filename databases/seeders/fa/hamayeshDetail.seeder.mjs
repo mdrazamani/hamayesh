@@ -12,6 +12,15 @@ export const seedHamayeshDetailFA = async () => {
             throw new Error("استان یا شهر مورد نظر یافت نشد.");
         }
 
+        const teasersData = [
+            {
+                title: "خرگوش آدمنما",
+                description: "خرگوش که خمیازه می کشد!",
+                path: "public/uploads/teaser/test.mp4",
+                cover: "public/uploads/teaser/poster.jpeg",
+            },
+        ];
+
         const hamayeshDetails = [
             {
                 faTitle: "نهمین همایش بین المللی هوش مصنوعی و بلاک چین",
@@ -38,6 +47,7 @@ export const seedHamayeshDetailFA = async () => {
                 &lt;/footer&gt;
             &lt;/div&gt;`,
                 poster: "public/uploads/poster/poster.jpeg",
+                teasers: teasersData,
                 headerImage: "public/uploads/headerImage/test.png",
                 eventAddress: {
                     state: state._id,

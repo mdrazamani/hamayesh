@@ -238,6 +238,28 @@ ArticleSchema.pre("findOneAndUpdate", async function (next) {
     next();
 });
 
+ArticleSchema.pre("findByIdAndUpdate", async function (next) {
+    const hamayesh = await HamayeshDetail.findOne();
+
+    if (hamayesh.dates.refeeResult < Date.now()) {
+        throw new APIError({
+            message: getMessage("errors.refeeResult"),
+            status: constants.BAD_REQUEST,
+        });
+    }
+
+    const update = this.getUpdate();
+    if (update.status) {
+        const currentDocument = await this.model.findOne(this.getQuery());
+        if (currentDocument && update.status !== currentDocument.status) {
+            const existingLogs = currentDocument.logs || [];
+            this.set("logs", addLog(update.status, existingLogs));
+        }
+    }
+
+    next();
+});
+
 const Article = mongoose.model("Article", ArticleSchema);
 
 export default Article;
