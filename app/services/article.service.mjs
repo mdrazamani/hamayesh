@@ -147,10 +147,6 @@ export const get = async (id) => {
         populate: populateOptions,
     });
 
-    if (!article || !article.data) {
-        throw new Error("Article not found or article data is undefined");
-    }
-
     const judgings = await getAllJudging({
         page: 1,
         items_per_page: 1000,
