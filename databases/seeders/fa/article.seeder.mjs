@@ -4,9 +4,6 @@ import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 export const seedArticlesFA = async () => {
-    // Assuming users and categories are already seeded and we just need to fetch them.
-    // If not, you would need to create them similarly to the articles below.
-
     let users;
     let categories;
 
@@ -24,10 +21,18 @@ export const seedArticlesFA = async () => {
     // Create a list of sample articles
     const articlesData = [
         {
-            title: "نوآوری‌ها در انرژی تجدیدپذیر",
-            description: "یک نگاه دقیق به فناوری‌های جدید در تحرکی نظیف امروز.",
-            category: categories[0]._id, // Assign a category ID
-            userId: users[0]._id, // Assign a user ID
+            fa: {
+                title: "نوآوری‌ها در انرژی تجدیدپذیر",
+                description:
+                    "یک نگاه دقیق به فناوری‌های جدید در تحرکی نظیف امروز.",
+            },
+            en: {
+                title: "Innovations in Renewable Energy",
+                description:
+                    "A detailed look at new technologies in today's clean mobility.",
+            },
+            category: categories[0]._id,
+            userId: users[0]._id,
             articleFiles: [
                 "public/uploads/articleFiles/test33.pdf",
                 "public/uploads/articleFiles/test34.pdf",
@@ -36,44 +41,73 @@ export const seedArticlesFA = async () => {
                 "public/uploads/articleFiles/per.pdf",
                 "public/uploads/articleFiles/tasis.pdf",
             ],
-            status: "success", // or "در انتظار", or "ناموفق"
-            arbitration: {
-                refereeId: users[1]._id, // Assign another user as a referee
-                files: [], // Populate as necessary
-                message: "test 1",
-                rate: 4, // Example rating
-            },
+            status: "review",
+            rate: Math.floor(Math.random() * 101),
         },
         {
-            title: "پیشرفت‌های هوش مصنوعی",
-            description:
-                "بررسی آخرین پیشرفت‌های هوش مصنوعی و کاربردهای واقعی آن‌ها.",
-            category: categories[0]._id,
-            userId: users[1]._id,
-            articleFiles: [],
-            presentationFiles: [],
-            status: "success",
-            arbitration: {
-                refereeId: users[0]._id,
-                files: [], // Populate as necessary
-                message: "test 2",
-                rate: 5, // Example rating
+            fa: {
+                title: "تأثیر فناوری در آموزش",
+                description: "بررسی نقش فناوری‌های نوین در تحول آموزشی.",
             },
-        },
-        {
-            title: "نوآوری‌های بهداشت: پزشکی از راه دور",
-            description: "صعود پزشکی از راه دور و تأثیر آن در بهداشت مدرن.",
+            en: {
+                title: "The Impact of Technology on Education",
+                description:
+                    "Exploring the role of modern technologies in educational transformation.",
+            },
             category: categories[1]._id,
-            userId: users[0]._id,
-            articleFiles: [],
-            presentationFiles: [],
-            status: "pending",
-            arbitration: {
-                refereeId: users[0]._id,
-                files: [], // Populate as necessary
-                message: "test 3",
-                rate: 5, // Example rating
+            userId: users[1]._id,
+            articleFiles: [
+                "public/uploads/articleFiles/edu1.pdf",
+                "public/uploads/articleFiles/edu2.pdf",
+            ],
+            presentationFiles: [
+                "public/uploads/articleFiles/edu_presentation1.pdf",
+            ],
+            status: "accepted",
+            rate: Math.floor(Math.random() * 101),
+        },
+        {
+            fa: {
+                title: "پیشرفت‌های جدید در پزشکی ژنتیک",
+                description: "کشفیات و نوآوری‌های اخیر در زمینه ژنتیک و پزشکی.",
             },
+            en: {
+                title: "New Advances in Genetic Medicine",
+                description:
+                    "Recent discoveries and innovations in genetics and medicine.",
+            },
+            category: categories[2]._id,
+            userId: users[2]._id,
+            articleFiles: [
+                "public/uploads/articleFiles/genetic1.pdf",
+                "public/uploads/articleFiles/genetic2.pdf",
+            ],
+            presentationFiles: [],
+            status: "new",
+            rate: Math.floor(Math.random() * 101),
+        },
+        {
+            fa: {
+                title: "مهندسی نرم‌افزار و تحولات آینده",
+                description:
+                    "نگاهی به آینده مهندسی نرم‌افزار و تکنولوژی‌های نوظهور.",
+            },
+            en: {
+                title: "Software Engineering and Future Trends",
+                description:
+                    "A look into the future of software engineering and emerging technologies.",
+            },
+            category: categories[3]._id,
+            userId: users[3]._id,
+            articleFiles: [
+                "public/uploads/articleFiles/software1.pdf",
+                "public/uploads/articleFiles/software2.pdf",
+            ],
+            presentationFiles: [
+                "public/uploads/articleFiles/software_presentation.pdf",
+            ],
+            status: "pending",
+            rate: Math.floor(Math.random() * 101),
         },
         // ... more sample articles
     ];
@@ -81,7 +115,6 @@ export const seedArticlesFA = async () => {
     // Insert the sample articles into the database
     try {
         await Article.deleteMany({});
-        // await Article.insertMany(articlesData);
         await insertDocumentsDynamically(Article, articlesData);
         console.log("مقالات با موفقیت seed شدند!");
     } catch (error) {
