@@ -1,46 +1,53 @@
 import Article from "../../../app/models/article.model.mjs"; // Adjust the import path as necessary
 import User from "../../../app/models/user.model.mjs";
 import ArticleCategory from "../../../app/models/articleCategory.model.mjs";
-import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
 
 const ArticleStatusLog = [
     {
-        title: "اضافه شده",
+        faTitle: "اضافه شده",
+        enTitle: "Added",
         status: "new",
         textColor: "text-primary",
     },
     {
-        title: "ارسال به کاربر برای بازنگری",
+        faTitle: "ارسال به کاربر برای بازنگری",
+        enTitle: "Send to user for review",
         status: "review",
         textColor: "text-warning",
     },
     {
-        title: "تغییر یافته توسط کاربر",
+        faTitle: "تغییر یافته توسط کاربر",
+        enTitle: "modified by user",
         status: "changed",
         textColor: "text-primary",
     },
     {
-        title: "بررسی شده توسط داور",
+        faTitle: "بررسی شده توسط داور",
+        enTitle: "reviewed by referee",
         status: "reviewed",
         textColor: "text-primary",
     },
     {
-        title: "بررسی مجدد توسط داور",
+        faTitle: "بررسی مجدد توسط داور",
+        enTitle: "Review by referee",
         status: "reviewedAgain",
         textColor: "text-primary",
     },
     {
-        title: "ارسال شده به داوران",
+        faTitle: "ارسال شده به داوران",
+        enTitle: "sent to referees",
         status: "pending",
         textColor: "text-primary",
     },
     {
-        title: "رد شده",
+        faTitle: "رد شده",
+        enTitle: "failed",
         status: "failed",
         textColor: "text-danger",
     },
     {
-        title: "تائید شده",
+        faTitle: "تائید شده",
+        enTitle: "confirmed",
         status: "accepted",
         textColor: "text-success",
     },
