@@ -147,8 +147,8 @@ const createNewData = (data, article, roleName) => {
     };
 
     if (roleName === "admin" || "scientific") {
-        result.status = data.status;
-        result.rate = data.rate;
+        result.status = data.status || article.status;
+        result.rate = data.rate || article.rate;
     }
     return result;
 };
