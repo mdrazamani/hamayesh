@@ -94,7 +94,9 @@ export const seedJudgingArticles = async () => {
             message: "Initial message",
             scientificMessage: "Scientific feedback",
             rates: rates.map((rate) => ({
-                title: rate.enTitle,
+                faTitle: rate.faTitle,
+                enTitle: rate.enTitle,
+                slug: rate.slug,
                 rate: Math.floor(Math.random() * 101), // Random rating between 0 to 100
             })),
             status: judgingStatus[

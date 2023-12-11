@@ -154,7 +154,7 @@ export const get = async (id) => {
     });
 
     if (judgings.data && judgings.data.length > 0) {
-        article.data.referees = judgings;
+        article.referees = judgings;
     }
 
     return article;
