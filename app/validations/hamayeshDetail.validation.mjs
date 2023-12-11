@@ -22,6 +22,17 @@ export const hamayeshDetailValidationSchema = () => ({
                 "string.empty": getMessage("validation.enTitle_required"),
             }),
         description: Joi.string().allow("").optional(),
+
+        teasers: Joi.array()
+            .items(
+                Joi.object({
+                    title: Joi.string().optional().allow(""),
+                    description: Joi.string().optional().allow(""),
+                    path: Joi.string().optional().allow(""),
+                })
+            )
+            .optional(),
+
         iscCode: Joi.string()
             .required()
             .messages({
@@ -102,6 +113,17 @@ export const hamayeshDetailUpdateValidationSchema = () => ({
                 "string.empty": getMessage("validation.enTitle_required"),
             }),
         description: Joi.string().allow("").optional(),
+
+        teasers: Joi.array()
+            .items(
+                Joi.object({
+                    title: Joi.string().optional().allow(""),
+                    description: Joi.string().optional().allow(""),
+                    path: Joi.string().optional().allow(""),
+                })
+            )
+            .optional(),
+
         iscCode: Joi.string().messages({
             "string.empty": getMessage("validation.iscCode_required"),
         }),

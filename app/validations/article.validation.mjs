@@ -97,6 +97,12 @@ export const articleUpdateValidationSchema = () => ({
             }),
         articleFiles: Joi.array().optional(),
         presentationFiles: Joi.array().optional(),
+
+        refereeIds: Joi.array()
+            .items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
+            .allow(null)
+            .optional(),
+
         // status: Joi.string()
         //     .valid("success", "pending", "failed") // these are the allowed values
         //     .default("pending"),

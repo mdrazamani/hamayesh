@@ -118,6 +118,19 @@ const hamayeshDetailSchema = new mongoose.Schema(
                 type: String,
             },
         },
+        teasers: [
+            {
+                title: {
+                    type: String,
+                },
+                description: {
+                    type: String,
+                },
+                path: {
+                    type: String,
+                },
+            },
+        ],
         iscCode: {
             type: String,
         },

@@ -13,7 +13,7 @@ export const createController = async (req, res, next) => {
 
     try {
         const user = req.user;
-        const article = await create(req.body);
+        const article = await create(req.body, user);
         if (article) {
             const mailOptionsUser = {
                 to: user.email,
@@ -45,13 +45,13 @@ export const createController = async (req, res, next) => {
                 ),
             };
 
-            const articleCat = await getArticleCategory(article.category);
+            // const articleCat = await getArticleCategory(article.category);
 
-            for (const referee of articleCat?.referees) {
-                const user = await getUser(referee);
-                mailOptionsReferee.to = user.email;
-                sendEmail(mailOptionsReferee);
-            }
+            // for (const referee of articleCat?.referees) {
+            //     const user = await getUser(referee);
+            //     mailOptionsReferee.to = user.email;
+            //     sendEmail(mailOptionsReferee);
+            // }
 
             res.respond(constants.OK, getMessage("success.success"));
         }

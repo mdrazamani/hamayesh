@@ -3,15 +3,22 @@ import HamayeshDetail from "./hamayeshDetail.model.mjs";
 import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
 import constants from "../../utils/constants.mjs";
-
-import { loadLanguageSetting } from "../../config/readLang.mjs";
 import {
     addVirtualFields,
     toJSON,
     processLanguageFieldsInUpdate,
 } from "../../config/modelChanger.mjs";
 
-const ArticleStatus = ["success", "pending", "failed"];
+const ArticleStatus = [
+    "new",
+    "review",
+    "Reviewed",
+    "accepted",
+    "changed",
+    "pending",
+    "failed",
+];
+
 const ArticleSchema = new mongoose.Schema(
     {
         fa: {
@@ -41,25 +48,16 @@ const ArticleSchema = new mongoose.Schema(
         },
         articleFiles: [String],
         presentationFiles: [String],
+
         status: {
             type: String,
             enum: ArticleStatus,
-            default: "pending",
+            default: "new",
         },
-        arbitration: {
-            refereeId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-            },
-            files: [
-                {
-                    type: String,
-                },
-            ],
-            message: {
-                type: String,
-            },
-            rate: { type: Number, min: 1, max: 5 },
+        rate: {
+            type: Number,
+            min: 0,
+            max: 100,
         },
     },
 

@@ -2,8 +2,9 @@ import { getMessage } from "../../config/i18nConfig.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import Article from "../models/article.model.mjs";
-import ArticleCategory from "../models/articleCategory.model.mjs";
 import HamayeshDetail from "../models/hamayeshDetail.model.mjs";
+import { getAll as getAllJudging } from "./judgingArticle.service.mjs";
+import { update as updateUser } from "./user.service.mjs";
 
 const populateOptions = [
     {
@@ -21,15 +22,35 @@ const populateOptions = [
         model: "User",
         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
     }, // -__v -password
-
-    // If there are any other reference fields, add them here similarly
 ];
-export const create = async (data) => {
+export const create = async (data, user = null) => {
+    if (user && user.role.name === "user") {
+        const isEligibleForArticleAddition =
+            user.billingStatus.articles === "Infinity" ||
+            user.billingStatus.articles > 0;
+
+        if (isEligibleForArticleAddition) {
+            if (user.billingStatus.articles !== "Infinity") {
+                await updateUser(user._id, {
+                    billingStatus: {
+                        ...user.billingStatus,
+                        articles: Number(user.billingStatus.articles) - 1,
+                    },
+                });
+            }
+            return await crudFactory.create(Article)(data);
+        } else {
+            throw new APIError({
+                message: getMessage("errors.not_possible_add_article"),
+                status: constants.BAD_REQUEST,
+            });
+        }
+    }
     return await crudFactory.create(Article)(data);
 };
 
 export const update = async (id, data, user) => {
-    if (user.role.name === "admin" || user.role.name === "referee")
+    if (user.role.name === "admin" || user.role.name === "scientific")
         return await crudFactory.update(Article)(id, data);
     else if (user.role.name === "user") {
         const hamayesh = await HamayeshDetail.findOne();
@@ -40,7 +61,31 @@ export const update = async (id, data, user) => {
                 status: constants.BAD_REQUEST,
             });
         }
-        return await Article.updateOne({ _id: id }, { $set: data });
+
+        const article = await get(id);
+        if (article.status !== "review") {
+            throw new APIError({
+                message: getMessage("errors.status_not_review"),
+                status: constants.BAD_REQUEST,
+            });
+        }
+
+        const newData = {
+            title: data.title ? data?.title : article?.title,
+            description: data.description
+                ? data?.description
+                : article?.description,
+            category: data.category ? data?.category : article?.category,
+            articleFiles: data.articleFiles
+                ? data?.articleFiles
+                : article?.articleFiles,
+            presentationFiles: data.presentationFiles
+                ? data?.presentationFiles
+                : article?.presentationFiles,
+            status: "changed",
+        };
+
+        return await crudFactory.update(Article)(id, newData);
     } else {
         throw new APIError({
             message: getMessage("errors.editArticle"),
@@ -50,9 +95,16 @@ export const update = async (id, data, user) => {
 };
 
 export const get = async (id) => {
-    return await crudFactory.get(Article)(id, {
+    const article = await crudFactory.get(Article)(id, {
         populate: populateOptions,
     });
+    const judgings = await getAllJudging({
+        page: 1,
+        items_per_page: 1000,
+        article: id,
+    });
+    article.data.referees = judgings;
+    return article;
 };
 
 export const getAll = async (options) => {
@@ -61,50 +113,6 @@ export const getAll = async (options) => {
         populate: populateOptions,
     });
 };
-
-const categoryIdMaker = (categories) => {
-    return categories.map((cat) => cat._id.toString());
-};
-
-export const getAllReferee = async (options, refereeId) => {
-    const categories = await ArticleCategory.find({ referees: refereeId });
-    const categoryIds = categoryIdMaker(categories);
-
-    return await crudFactory.getAll(Article)({
-        ...options,
-        $or: [
-            {
-                "arbitration.refereeId": refereeId,
-                category: { $in: categoryIds },
-            },
-            {
-                "arbitration.refereeId": { $exists: false },
-                category: { $in: categoryIds },
-            },
-        ],
-        populate: populateOptions,
-    });
-};
-
-// export const getAllReferee = async (options, refereeId) => {
-//     const categories = await ArticleCategory.find({ referees: refereeId });
-//     const categoryIds = categories.map((cat) => cat._id);
-
-//     const customQueryConditions = {
-//         // $or: [
-//         //     { category: { $in: categoryIds } }, // Articles in referee's categories
-//         //     { "arbitration.refereeId": refereeId }, // Articles assigned to the current referee
-//         // ],
-//     };
-
-//     const modifiedOptions = {
-//         ...options,
-//         filter: customQueryConditions,
-//         populate: populateOptions,
-//     };
-
-//     return await crudFactory.getAll(Article)(modifiedOptions);
-// };
 
 export const deleteDoc = async (id) => {
     return await crudFactory.delete(Article)(id);

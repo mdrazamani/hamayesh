@@ -23,6 +23,7 @@ import DailyVisit from "./dailyVisit.routes.mjs";
 import ArticleCategory from "./articleCategory.routes.mjs";
 import Article from "./article.routes.mjs";
 import BillingRoutes from "./billing/billing.routes.mjs";
+import JudgingRoutes from "./judging.routes.mjs";
 
 import {
     authenticateJWT,
@@ -55,5 +56,6 @@ router.use("/daily-visits", DailyVisit);
 router.use("/article-categories", ArticleCategory);
 router.use("/articles", Article);
 router.use("/billing", BillingRoutes);
+router.use("/judging", JudgingRoutes);
 
 export default router;

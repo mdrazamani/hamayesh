@@ -16,7 +16,7 @@ export const updateController = async (req, res, next) => {
         const { id } = req.params;
         const article = await update(id, req.body, req.user);
         if (article) {
-            if (user.role.name === "referee" || user.role.name === "admin") {
+            if (user.role.name === "admin" || user.role.name === "scientific") {
                 const endUser = await getUser(article.userId);
                 const mailOptionsUser = {
                     to: endUser.email,
@@ -48,25 +48,25 @@ export const updateController = async (req, res, next) => {
                     ),
                 };
 
-                if (
-                    article.arbitration &&
-                    article.arbitration.refereeId &&
-                    article.arbitration.refereeId !== ""
-                ) {
-                    const user = await getUser(article.arbitration.refereeId);
-                    mailOptionsReferee.to = user.email;
-                    sendEmail(mailOptionsReferee);
-                } else {
-                    const articleCat = await getArticleCategory(
-                        article.category
-                    );
+                // if (
+                //     article.arbitration &&
+                //     article.arbitration.refereeId &&
+                //     article.arbitration.refereeId !== ""
+                // ) {
+                //     const user = await getUser(article.arbitration.refereeId);
+                //     mailOptionsReferee.to = user.email;
+                //     sendEmail(mailOptionsReferee);
+                // } else {
+                //     const articleCat = await getArticleCategory(
+                //         article.category
+                //     );
 
-                    for (const referee of articleCat?.referees) {
-                        const user = await getUser(referee);
-                        mailOptionsReferee.to = user.email;
-                        sendEmail(mailOptionsReferee);
-                    }
-                }
+                //     for (const referee of articleCat?.referees) {
+                //         const user = await getUser(referee);
+                //         mailOptionsReferee.to = user.email;
+                //         sendEmail(mailOptionsReferee);
+                //     }
+                // }
             }
 
             res.respond(constants.OK, getMessage("success.success"), article);
