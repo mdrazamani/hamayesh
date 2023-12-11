@@ -1,5 +1,5 @@
 import crudFactory from "../../utils/crudFactory.mjs";
-import JudgingArticle from "../models/JudgingArticles.mjs";
+import JudgingArticle from "../models/JudgingArticles.model.mjs";
 
 const populateOptions = [
     {

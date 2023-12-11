@@ -97,7 +97,13 @@ const JudgingArticles = new mongoose.Schema(
         },
         rates: [
             {
-                title: {
+                faTitle: {
+                    type: String,
+                },
+                enTitle: {
+                    type: String,
+                },
+                slug: {
                     type: String,
                 },
                 rate: {

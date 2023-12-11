@@ -1,4 +1,4 @@
-import JudgingArticle from "../../../app/models/JudgingArticles.mjs"; // Adjust the import path as necessary
+import JudgingArticle from "../../../app/models/JudgingArticles.model.mjs"; // Adjust the import path as necessary
 import Article from "../../../app/models/article.model.mjs";
 import User from "../../../app/models/user.model.mjs";
 import { insertDocumentsDynamically } from "../../../config/modelChanger.mjs";
