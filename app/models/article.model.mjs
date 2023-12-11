@@ -106,7 +106,7 @@ const ArticleSchema = new mongoose.Schema(
         logs: [
             {
                 title: {
-                    typr: String,
+                    type: String,
                 },
                 status: {
                     type: String,

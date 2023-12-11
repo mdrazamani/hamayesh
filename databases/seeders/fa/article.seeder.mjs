@@ -75,6 +75,7 @@ const getRandomLogs = () => {
 
     // Always end with 'accepted' or 'failed', randomly chosen
     const endStatus = ["failed", "accepted"][Math.floor(Math.random() * 2)];
+
     logs.push({
         ...ArticleStatusLog.find((log) => log.status === endStatus),
         date: new Date(), // Assigning the current date
@@ -199,7 +200,7 @@ export const seedArticlesFA = async () => {
     // Insert the sample articles into the database
     try {
         await Article.deleteMany({});
-        await insertDocumentsDynamically(Article, articlesData);
+        await Article.insertMany(articlesData);
         console.log("مقالات با موفقیت seed شدند!");
     } catch (error) {
         console.error("خطا در seed کردن مقالات:", error);
