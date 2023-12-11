@@ -74,6 +74,7 @@ ArticleSchema.index({
 });
 
 ArticleSchema.set("toJSON", {
+    virtuals: true,
     transform: (doc, converted) => {
         delete converted._id;
         delete converted.__v;
@@ -82,6 +83,15 @@ ArticleSchema.set("toJSON", {
         //multiLanguage
         toJSON(doc, converted, ArticleSchema.obj.fa);
     },
+});
+
+ArticleSchema.set("toObject", { virtuals: true });
+
+ArticleSchema.virtual("referees", {
+    ref: "JudgingArticle", // This is the model to which you are referring
+    localField: "_id", // This is the field in the Article model that you are matching against
+    foreignField: "article", // This is the field in the Judging model that corresponds to the ID in the Article model
+    justOne: false, // Set to false if you expect an array of Judgings (referees)
 });
 
 ArticleSchema.pre("findOneAndUpdate", function (next) {

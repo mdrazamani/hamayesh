@@ -22,6 +22,10 @@ const populateOptions = [
         model: "User",
         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
     }, // -__v -password
+    {
+        path: "referees",
+        model: "JudgingArticle",
+    },
 ];
 export const create = async (data, user = null) => {
     if (user && user.role.name === "user") {
@@ -146,16 +150,6 @@ export const get = async (id) => {
     const article = await crudFactory.get(Article)(id, {
         populate: populateOptions,
     });
-
-    const judgings = await getAllJudging({
-        page: 1,
-        items_per_page: 1000,
-        article: id,
-    });
-
-    if (judgings.data && judgings.data.length > 0) {
-        article.referees = judgings;
-    }
 
     return article;
 };
