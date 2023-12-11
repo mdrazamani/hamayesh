@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
-const roleTypes = [
-    "admin",
-    "user",
-    "executive",
-    "scientific",
-    "referee",
-    "scientific-editor",
-];
+const roleTypes = ["admin", "user", "executive", "scientific", "referee"];
 const roleSchema = new mongoose.Schema({
     name: {
         type: String,
