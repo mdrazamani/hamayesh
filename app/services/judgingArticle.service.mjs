@@ -14,6 +14,42 @@ const populateOptions = [
     }, // -__v -password
 ];
 
+export const check = async (data) => {
+    const { article, referees } = data;
+
+    const existingEntries = await JudgingArticle.find({ article });
+
+    const refereesToAdd = referees.filter(
+        (referee) =>
+            !existingEntries.some(
+                (entry) => entry.referee.toString() === referee
+            )
+    );
+
+    for (const refereeId of refereesToAdd) {
+        await create({
+            article,
+            referee: refereeId,
+        });
+    }
+
+    const refereesToDelete = existingEntries.filter(
+        (entry) => !referees.includes(entry.referee.toString())
+    );
+
+    for (const entry of refereesToDelete) {
+        await deleteDoc(entry._id);
+    }
+
+    return await getAllReferee(
+        {
+            page: 1,
+            items_per_page: 1000,
+        },
+        article
+    );
+};
+
 export const create = async (data) => {
     return await crudFactory.create(JudgingArticle)(data);
 };

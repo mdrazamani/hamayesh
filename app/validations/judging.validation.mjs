@@ -13,12 +13,16 @@ export const judgingValidationSchema = () => ({
                 "string.pattern.base": getMessage("validation.parent_invalid"),
             }),
 
-        referee: Joi.string() // because it's an ObjectId, it's validated as a string
+        referees: Joi.array()
+            .items(
+                Joi.string()
+                    .regex(/^[0-9a-fA-F]{24}$/)
+                    .message(getMessage("validation.referee_invalid"))
+            )
             .required()
-            .allow(null) // assuming the parent is optional and can be null
-            .regex(/^[0-9a-fA-F]{24}$/) // validating ObjectId as a 24-character hexadecimal string
             .messages({
-                "string.pattern.base": getMessage("validation.parent_invalid"),
+                "array.base": getMessage("validation.rules_array"),
+                "array.includes": getMessage("validation.referee_invalid"),
             }),
     }).options({ abortEarly: false }), // to handle all errors at once
 });

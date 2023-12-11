@@ -11,63 +11,51 @@ const rates = [
     {
         faTitle: "تناسب مقاله با موضوعات کنفرانس",
         enTitle: "Suitability of the article to the conference topics",
-        slug: "s1",
     },
     {
         faTitle: "کیفیت عنوان مقاله",
         enTitle: "Quality of the article title",
-        slug: "s2",
     },
     {
         faTitle: "تناسب عنوان با محتوا",
         enTitle: "Suitability of the title with the content",
-        slug: "s3",
     },
     {
         faTitle: "تازگی محتوا",
         enTitle: "Freshness of the content",
-        slug: "s4",
     },
     {
         faTitle: "کاربردی بودن محتوا",
         enTitle: "Practicality of the content",
-        slug: "s5",
     },
     {
         faTitle: "مستند بودن محتوا",
         enTitle: "Documentary nature of the content",
-        slug: "s6",
     },
     {
         faTitle: "کیفیت روش شناسی",
         enTitle: "Quality of methodology",
-        slug: "s7",
     },
     {
         faTitle: "کیفیت نمایش و بازنمایی مناسب یافته ها",
         enTitle:
             "Quality of presentation and proper representation of findings",
-        slug: "s8",
     },
     {
         faTitle: "قابلیت استقبال از سوی مخاطبان کنفرانس",
         enTitle: "Acceptability by conference audience",
-        slug: "s9",
     },
     {
         faTitle: "ارزیابی کلی شما از مقاله",
         enTitle: "Your overall assessment of the article",
-        slug: "s10",
     },
     {
         faTitle: "تصمیم نهایی",
         enTitle: "Final decision",
-        slug: "s11",
     },
     {
         faTitle: "توضیحات، اصلاحات، و پیشنهادها",
         enTitle: "Comments, revisions, and suggestions",
-        slug: "s12",
     },
 ];
 
@@ -141,26 +129,35 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
         });
     }
 
+    const article = await Article.findById(this.article);
+    if (
+        article &&
+        !["review", "reviewed", "changed", "pending"].includes(article.status)
+    ) {
+        throw new APIError({
+            message: getMessage(
+                "errors.Currently_there_is_no_possibility_of_judging-this_article"
+            ),
+            status: constants.BAD_REQUEST,
+        });
+    }
+
     if (!this.isNew && this.isModified("rates")) {
-        if (rates.length == 12) {
-            const newRates = rates.map((rateTemplate) => {
-                const existingRate = this.rates.find(
-                    (r) => r.slug === rateTemplate.slug
-                );
-                return {
-                    ...rateTemplate,
-                    rate: existingRate ? existingRate.rate : undefined,
-                };
-            });
-            this.rates = newRates;
-        }
+        const newRates = this.rates.map((existingRate) => {
+            const rateTemplate = rates.find(
+                (r) => r._id.toString() === existingRate._id.toString()
+            );
+            return rateTemplate
+                ? { ...rateTemplate, rate: existingRate.rate }
+                : existingRate;
+        });
+        this.rates = newRates;
     }
 
     if (this.status === "accepted" || this.status === "failed") {
         this.refereeDate = new Date();
 
-        const article = await Article.findById(this.article);
-        article.status = "Reviewed";
+        article.status = "reviewed";
         article.save();
     }
 

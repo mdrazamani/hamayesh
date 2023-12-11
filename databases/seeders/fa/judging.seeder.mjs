@@ -8,63 +8,51 @@ const rates = [
     {
         faTitle: "تناسب مقاله با موضوعات کنفرانس",
         enTitle: "Suitability of the article to the conference topics",
-        slug: "s1",
     },
     {
         faTitle: "کیفیت عنوان مقاله",
         enTitle: "Quality of the article title",
-        slug: "s2",
     },
     {
         faTitle: "تناسب عنوان با محتوا",
         enTitle: "Suitability of the title with the content",
-        slug: "s3",
     },
     {
         faTitle: "تازگی محتوا",
         enTitle: "Freshness of the content",
-        slug: "s4",
     },
     {
         faTitle: "کاربردی بودن محتوا",
         enTitle: "Practicality of the content",
-        slug: "s5",
     },
     {
         faTitle: "مستند بودن محتوا",
         enTitle: "Documentary nature of the content",
-        slug: "s6",
     },
     {
         faTitle: "کیفیت روش شناسی",
         enTitle: "Quality of methodology",
-        slug: "s7",
     },
     {
         faTitle: "کیفیت نمایش و بازنمایی مناسب یافته ها",
         enTitle:
             "Quality of presentation and proper representation of findings",
-        slug: "s8",
     },
     {
         faTitle: "قابلیت استقبال از سوی مخاطبان کنفرانس",
         enTitle: "Acceptability by conference audience",
-        slug: "s9",
     },
     {
         faTitle: "ارزیابی کلی شما از مقاله",
         enTitle: "Your overall assessment of the article",
-        slug: "s10",
     },
     {
         faTitle: "تصمیم نهایی",
         enTitle: "Final decision",
-        slug: "s11",
     },
     {
         faTitle: "توضیحات، اصلاحات، و پیشنهادها",
         enTitle: "Comments, revisions, and suggestions",
-        slug: "s12",
     },
 ];
 
@@ -96,7 +84,6 @@ export const seedJudgingArticles = async () => {
             rates: rates.map((rate) => ({
                 faTitle: rate.faTitle,
                 enTitle: rate.enTitle,
-                slug: rate.slug,
                 rate: Math.floor(Math.random() * 101), // Random rating between 0 to 100
             })),
             status: judgingStatus[

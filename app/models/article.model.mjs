@@ -12,11 +12,55 @@ import {
 const ArticleStatus = [
     "new",
     "review",
-    "Reviewed",
+    "reviewed",
+    "reviewedAgain",
     "accepted",
     "changed",
     "pending",
     "failed",
+];
+
+const ArticleStatusLog = [
+    {
+        title: "اضافه شده",
+        status: "new",
+        textColor: "text-primary",
+    },
+    {
+        title: "ارسال به کاربر برای بازنگری",
+        status: "review",
+        textColor: "text-warning",
+    },
+    {
+        title: "تغییر یافته توسط کاربر",
+        status: "changed",
+        textColor: "text-primary",
+    },
+    {
+        title: "بررسی شده توسط داور",
+        status: "reviewed",
+        textColor: "text-primary",
+    },
+    {
+        title: "بررسی مجدد توسط داور",
+        status: "reviewedAgain",
+        textColor: "text-primary",
+    },
+    {
+        title: "ارسال شده به داوران",
+        status: "pending",
+        textColor: "text-primary",
+    },
+    {
+        title: "رد شده",
+        status: "failed",
+        textColor: "text-danger",
+    },
+    {
+        title: "تائید شده",
+        status: "accepted",
+        textColor: "text-success",
+    },
 ];
 
 const ArticleSchema = new mongoose.Schema(
@@ -59,10 +103,41 @@ const ArticleSchema = new mongoose.Schema(
             min: 0,
             max: 100,
         },
+        logs: [
+            {
+                title: {
+                    typr: String,
+                },
+                status: {
+                    type: String,
+                },
+                textColor: {
+                    type: String,
+                },
+                date: {
+                    type: Date,
+                },
+            },
+        ],
     },
 
     { timestamps: true }
 );
+
+const addLog = (status, logs) => {
+    const statusLog = ArticleStatusLog.find((log) => log.status === status);
+
+    if (statusLog) {
+        const newLog = {
+            ...statusLog,
+            date: new Date(),
+        };
+
+        return [...logs, newLog];
+    }
+
+    return logs;
+};
 
 addVirtualFields(ArticleSchema, ArticleSchema.obj.fa);
 
@@ -122,6 +197,11 @@ ArticleSchema.pre("save", async function (next) {
             status: constants.BAD_REQUEST,
         });
     }
+
+    if (this.isModified("status")) {
+        this.logs = addLog(this.status, this.logs || []);
+    }
+
     next();
 });
 
@@ -133,6 +213,15 @@ ArticleSchema.pre("findOneAndUpdate", async function (next) {
             message: getMessage("errors.refeeResult"),
             status: constants.BAD_REQUEST,
         });
+    }
+
+    const update = this.getUpdate();
+    if (update.status) {
+        const currentDocument = await this.model.findOne(this.getQuery());
+        if (currentDocument && update.status !== currentDocument.status) {
+            const existingLogs = currentDocument.logs || [];
+            this.set("logs", addLog(update.status, existingLogs));
+        }
     }
 
     next();

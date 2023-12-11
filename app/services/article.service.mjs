@@ -111,7 +111,7 @@ export const update = async (id, data, user) => {
         await checkArticleStatus(id);
     }
 
-    const newData = createNewData(data, await get(id));
+    const newData = createNewData(data, await get(id), user.role.name);
     return await crudFactory.update(Article)(id, newData);
 };
 
@@ -135,15 +135,22 @@ const checkArticleStatus = async (id) => {
     }
 };
 
-const createNewData = (data, article) => {
-    return {
+const createNewData = (data, article, roleName) => {
+    const result = {
         title: data.title || article.title,
         description: data.description || article.description,
         category: data.category || article.category,
         articleFiles: data.articleFiles || article.articleFiles,
         presentationFiles: data.presentationFiles || article.presentationFiles,
         status: "changed",
+        rate: article.rate,
     };
+
+    if (roleName === "admin" || "scientific") {
+        result.status = data.status;
+        result.rate = data.rate;
+    }
+    return result;
 };
 
 export const get = async (id) => {
