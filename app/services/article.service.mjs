@@ -151,7 +151,7 @@ export const get = async (id) => {
         items_per_page: 1000,
         article: id,
     });
-    article.data.referees = judgings;
+    if (judgings) article.data.referees = judgings;
     return article;
 };
 
