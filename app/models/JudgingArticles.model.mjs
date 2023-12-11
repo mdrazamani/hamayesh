@@ -157,7 +157,8 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
     if (this.status === "accepted" || this.status === "failed") {
         this.refereeDate = new Date();
 
-        article.status = "reviewed";
+        if (article.status === "changed") article.status = "reviewedAgain";
+        else article.status = "reviewed";
         article.save();
     }
 
