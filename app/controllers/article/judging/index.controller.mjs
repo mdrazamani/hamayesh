@@ -22,14 +22,12 @@ export const indexController = async (req, res, next) => {
                 ...query,
             });
         } else if (user.role.name === "referee") {
-            judgings = await getAllArticles(
-                {
-                    page: Number(page),
-                    items_per_page: Number(items_per_page),
-                    ...query,
-                },
-                user?._id
-            );
+            judgings = await getAllArticles({
+                page: Number(page),
+                items_per_page: Number(items_per_page),
+                ...query,
+                referee: user?._id,
+            });
         } else {
             throw new APIError({
                 message: getMessage("errors.user_not_found"),
