@@ -47,10 +47,6 @@ const rates = [
         enTitle: "Your overall assessment of the article",
     },
     {
-        faTitle: "تصمیم نهایی",
-        enTitle: "Final decision",
-    },
-    {
         faTitle: "توضیحات، اصلاحات، و پیشنهادها",
         enTitle: "Comments, revisions, and suggestions",
     },
@@ -79,8 +75,10 @@ export const seedJudgingArticles = async () => {
             referee: referees[index % referees.length]._id, // Cycle through referees
             assignmentDate: new Date(),
             files: ["somefile.pdf"], // Example file, adjust as necessary
-            message: "Initial message",
-            scientificMessage: "Scientific feedback",
+            message:
+                "Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message Initial message",
+            scientificMessage:
+                "Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback Scientific feedback ",
             rates: rates.map((rate) => ({
                 faTitle: rate.faTitle,
                 enTitle: rate.enTitle,

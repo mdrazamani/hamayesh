@@ -5,7 +5,7 @@ import { get } from "../../services/article.service.mjs";
 export const showController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const article = await get(id);
+        const article = await get(id, req.user);
         if (article)
             res.respond(constants.OK, getMessage("success.success"), article);
     } catch (error) {

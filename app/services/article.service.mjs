@@ -6,27 +6,88 @@ import HamayeshDetail from "../models/hamayeshDetail.model.mjs";
 import { getAll as getAllJudging } from "./judgingArticle.service.mjs";
 import { update as updateUser } from "./user.service.mjs";
 
+// const populateOptions = [
+//     {
+//         path: "category",
+//         model: "ArticleCategory",
+//         select: "-__v -createdAt -updatedAt -referees -_id",
+//     }, // -__v
+//     {
+//         path: "userId",
+//         model: "User",
+//         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Assuming you want to exclude the password field
+//     }, // -__v -password
+//     {
+//         path: "arbitration.refereeId",
+//         model: "User",
+//         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
+//     }, // -__v -password
+// ];
+
+// const populateOptionsFun = (role, populateOptions) => {
+//     let addObj;
+//     if (role === "user") {
+//         addObj = {
+//             path: "referees",
+//             model: "JudgingArticle",
+//             select: "-v -scientificMessage",
+//         };
+//     } else if (role === "admin" || role === "scientific") {
+//         addObj = {
+//             path: "referees",
+//             model: "JudgingArticle",
+//         };
+//     }
+
+//     populateOptions.push(addObj);
+//     return populateOptions;
+// };
+
 const populateOptions = [
     {
         path: "category",
         model: "ArticleCategory",
         select: "-__v -createdAt -updatedAt -referees -_id",
-    }, // -__v
+    },
     {
         path: "userId",
         model: "User",
-        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Assuming you want to exclude the password field
-    }, // -__v -password
+        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole",
+    },
     {
         path: "arbitration.refereeId",
         model: "User",
-        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
-    }, // -__v -password
-    {
+        select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole",
+    },
+];
+
+const rolePopulateOptions = {
+    user: {
+        path: "referees",
+        model: "JudgingArticle",
+        select: "-__v -scientificMessage",
+    },
+    admin: {
         path: "referees",
         model: "JudgingArticle",
     },
-];
+    scientific: {
+        path: "referees",
+        model: "JudgingArticle",
+    },
+};
+
+const populateOptionsFun = (role, populateOptions) => {
+    const optionsCopy = [...populateOptions];
+    const addObj = rolePopulateOptions[role];
+
+    if (addObj) {
+        optionsCopy.push(addObj);
+    }
+
+    return optionsCopy;
+};
+
 export const create = async (data, user = null) => {
     if (user && user.role.name === "user") {
         const isEligibleForArticleAddition =
@@ -52,51 +113,6 @@ export const create = async (data, user = null) => {
     }
     return await crudFactory.create(Article)(data);
 };
-
-// export const update = async (id, data, user) => {
-//     if (user.role.name === "admin" || user.role.name === "scientific")
-//         return await crudFactory.update(Article)(id, data);
-//     else if (user.role.name === "user") {
-//         const hamayesh = await HamayeshDetail.findOne();
-
-//         if (hamayesh.dates.editArticle < Date.now()) {
-//             throw new APIError({
-//                 message: getMessage("errors.editArticle"),
-//                 status: constants.BAD_REQUEST,
-//             });
-//         }
-
-//         const article = await get(id);
-//         if (article.status !== "review") {
-//             throw new APIError({
-//                 message: getMessage("errors.status_not_review"),
-//                 status: constants.BAD_REQUEST,
-//             });
-//         }
-
-//         const newData = {
-//             title: data.title ? data?.title : article?.title,
-//             description: data.description
-//                 ? data?.description
-//                 : article?.description,
-//             category: data.category ? data?.category : article?.category,
-//             articleFiles: data.articleFiles
-//                 ? data?.articleFiles
-//                 : article?.articleFiles,
-//             presentationFiles: data.presentationFiles
-//                 ? data?.presentationFiles
-//                 : article?.presentationFiles,
-//             status: "changed",
-//         };
-
-//         return await crudFactory.update(Article)(id, newData);
-//     } else {
-//         throw new APIError({
-//             message: getMessage("errors.editArticle"),
-//             status: constants.BAD_REQUEST,
-//         });
-//     }
-// };
 
 export const update = async (id, data, user) => {
     if (user.role.name !== "admin" && user.role.name !== "scientific") {
@@ -153,18 +169,18 @@ const createNewData = (data, article, roleName) => {
     return result;
 };
 
-export const get = async (id) => {
+export const get = async (id, role = null) => {
     const article = await crudFactory.get(Article)(id, {
-        populate: populateOptions,
+        populate: populateOptionsFun(role),
     });
 
     return article;
 };
 
-export const getAll = async (options) => {
+export const getAll = async (options, role = null) => {
     return await crudFactory.getAll(Article)({
         ...options,
-        populate: populateOptions,
+        populate: populateOptionsFun(role),
     });
 };
 

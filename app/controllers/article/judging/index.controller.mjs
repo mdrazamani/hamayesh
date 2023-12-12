@@ -13,9 +13,8 @@ export const indexController = async (req, res, next) => {
 
         if (
             user &&
-            (user.role.name === "admin" ||
-                user.role.name === "scientific" ||
-                user.role.name === "user")
+            (user.role.name === "admin" || user.role.name === "scientific")
+            /*|| user.role.name === "user"*/
         ) {
             judgings = await getAll({
                 page: Number(page),

@@ -27,12 +27,15 @@ export const indexController = async (req, res, next) => {
         //     );
         // }
 
-        const articles = await getAll({
-            page: Number(page),
-            items_per_page: Number(items_per_page),
-            ...(roleName === "user" ? { userId: req.user.id } : {}),
-            ...query,
-        });
+        const articles = await getAll(
+            {
+                page: Number(page),
+                items_per_page: Number(items_per_page),
+                ...(roleName === "user" ? { userId: req.user.id } : {}),
+                ...query,
+            },
+            roleName
+        );
 
         if (articles)
             res.respond(constants.OK, getMessage("success.success"), articles);

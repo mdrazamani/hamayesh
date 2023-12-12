@@ -50,10 +50,6 @@ const rates = [
         enTitle: "Your overall assessment of the article",
     },
     {
-        faTitle: "تصمیم نهایی",
-        enTitle: "Final decision",
-    },
-    {
         faTitle: "توضیحات، اصلاحات، و پیشنهادها",
         enTitle: "Comments, revisions, and suggestions",
     },
