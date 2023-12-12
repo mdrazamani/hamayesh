@@ -23,19 +23,27 @@ const populateOptions = [
     },
 ];
 
+const additionalPopulate = {
+    path: "referee",
+    model: "User",
+};
+
 const rolePopulateOptions = {
     user: {
         path: "referees",
         model: "JudgingArticle",
         select: "-__v -scientificMessage",
+        populate: additionalPopulate,
     },
     admin: {
         path: "referees",
         model: "JudgingArticle",
+        populate: additionalPopulate,
     },
     scientific: {
         path: "referees",
         model: "JudgingArticle",
+        populate: additionalPopulate,
     },
 };
 
