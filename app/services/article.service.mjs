@@ -40,7 +40,7 @@ const rolePopulateOptions = {
     },
 };
 
-const populateOptionsFun = (role, populateOptions) => {
+const populateOptionsFun = (role) => {
     const optionsCopy = [...populateOptions];
     const addObj = rolePopulateOptions[role];
 
@@ -134,7 +134,7 @@ const createNewData = (data, article, roleName) => {
 
 export const get = async (id, role = null) => {
     const article = await crudFactory.get(Article)(id, {
-        populate: populateOptionsFun(role, populateOptions),
+        populate: populateOptionsFun(role),
     });
 
     return article;
@@ -143,7 +143,7 @@ export const get = async (id, role = null) => {
 export const getAll = async (options, role = null) => {
     return await crudFactory.getAll(Article)({
         ...options,
-        populate: populateOptionsFun(role, populateOptions),
+        populate: populateOptionsFun(role),
     });
 };
 
