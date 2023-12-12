@@ -15,7 +15,7 @@ function encodeRFC5987ValueChars(str) {
         .replace(/%(?:7C|60|5E)/g, unescape);
 }
 
-const createZip = async (articleFiles, presentationFiles, files, res) => {
+const createZip = async (articleFiles, presentationFiles, res) => {
     const archive = archiver("zip", {
         zlib: { level: 9 }, // Set compression level
     });
@@ -35,10 +35,10 @@ const createZip = async (articleFiles, presentationFiles, files, res) => {
         archive.file(file, { name: filePath });
     });
 
-    files.forEach((file) => {
-        const filePath = path.join("files", path.basename(file));
-        archive.file(file, { name: filePath });
-    });
+    // files.forEach((file) => {
+    //     const filePath = path.join("files", path.basename(file));
+    //     archive.file(file, { name: filePath });
+    // });
 
     // Finalize the ZIP and send it
     archive.finalize();
@@ -106,7 +106,7 @@ export const downloadController = async (req, res, next) => {
         await createZip(
             article.articleFiles,
             article.presentationFiles,
-            article.arbitration.files,
+            // article.arbitration.files,
             res
         );
     } catch (error) {
