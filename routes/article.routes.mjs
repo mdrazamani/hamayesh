@@ -192,7 +192,7 @@ router.get("/", authenticateJWT, indexController);
  *         description: article ID
  */
 
-router.get("/:id", showController);
+router.get("/:id", authenticateJWT, showController);
 
 /**
  * @swagger
