@@ -28,7 +28,7 @@ export const indexController = async (req, res, next) => {
                     items_per_page: Number(items_per_page),
                     ...query,
                 },
-                req.user?._id
+                user?._id
             );
         } else {
             throw new APIError({

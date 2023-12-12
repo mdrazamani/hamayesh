@@ -79,10 +79,22 @@ export const getAllReferee = async (options, articleId) => {
     });
 };
 
+// export const getAllArticles = async (options, refereeId) => {
+//     return await crudFactory.getAll(JudgingArticle)({
+//         ...options,
+//         referee: refereeId,
+//         populate: populateOptions,
+//     });
+// };
+
 export const getAllArticles = async (options, refereeId) => {
-    return await crudFactory.getAll(JudgingArticle)({
+    const updatedOptions = {
         ...options,
         referee: refereeId,
+    };
+
+    return await crudFactory.getAll(JudgingArticle)({
+        ...updatedOptions,
         populate: populateOptions,
     });
 };
