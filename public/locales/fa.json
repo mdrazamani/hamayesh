@@ -31,7 +31,8 @@
 		"getAllGrouped": "errors.getAllGrouped",
 		"commentIsAre": "نظر شما برای این خبر قبلا ثبت شده است",
 		"startArticle": "errors.startArticle",
-		"File_upload_failed": "errors.File_upload_failed"
+		"File_upload_failed": "errors.File_upload_failed",
+		"not_possible_add_article": "errors.not_possible_add_article"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
@@ -184,7 +185,8 @@
 		"item_type_required": "validation.item_type_required",
 		"invalid_item_structure": "validation.invalid_item_structure",
 		"useNumber": "validation.useNumber",
-		"either_amount_or_percent": "validation.either_amount_or_percent"
+		"either_amount_or_percent": "validation.either_amount_or_percent",
+		"referee_invalid": "validation.referee_invalid"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",
@@ -225,5 +227,6 @@
 	"user_not_found": "user_not_found",
 	"user_not_authenticated": "user_not_authenticated",
 	"payment_gateway_error": "payment_gateway_error",
-	"No files associated with this article": "No files associated with this article"
+	"No files associated with this article": "No files associated with this article",
+	"User not found": "User not found"
 }
