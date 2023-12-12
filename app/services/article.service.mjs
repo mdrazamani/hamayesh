@@ -6,43 +6,6 @@ import HamayeshDetail from "../models/hamayeshDetail.model.mjs";
 import { getAll as getAllJudging } from "./judgingArticle.service.mjs";
 import { update as updateUser } from "./user.service.mjs";
 
-// const populateOptions = [
-//     {
-//         path: "category",
-//         model: "ArticleCategory",
-//         select: "-__v -createdAt -updatedAt -referees -_id",
-//     }, // -__v
-//     {
-//         path: "userId",
-//         model: "User",
-//         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Assuming you want to exclude the password field
-//     }, // -__v -password
-//     {
-//         path: "arbitration.refereeId",
-//         model: "User",
-//         select: "-__v -emailVerifiedAt -deletedAt -password -lastLoginAt -national_id -createdAt -updatedAt -en.job -fa.job -en.study_field -fa.study_field -en.institute -fa.institute -en.degree -fa.degree -gender -en.bio -fa.bio -role -faRole", // Exclude sensitive fields
-//     }, // -__v -password
-// ];
-
-// const populateOptionsFun = (role, populateOptions) => {
-//     let addObj;
-//     if (role === "user") {
-//         addObj = {
-//             path: "referees",
-//             model: "JudgingArticle",
-//             select: "-v -scientificMessage",
-//         };
-//     } else if (role === "admin" || role === "scientific") {
-//         addObj = {
-//             path: "referees",
-//             model: "JudgingArticle",
-//         };
-//     }
-
-//     populateOptions.push(addObj);
-//     return populateOptions;
-// };
-
 const populateOptions = [
     {
         path: "category",
@@ -171,7 +134,7 @@ const createNewData = (data, article, roleName) => {
 
 export const get = async (id, role = null) => {
     const article = await crudFactory.get(Article)(id, {
-        populate: populateOptionsFun(role),
+        populate: populateOptionsFun(role, populateOptions),
     });
 
     return article;
@@ -180,7 +143,7 @@ export const get = async (id, role = null) => {
 export const getAll = async (options, role = null) => {
     return await crudFactory.getAll(Article)({
         ...options,
-        populate: populateOptionsFun(role),
+        populate: populateOptionsFun(role, populateOptions),
     });
 };
 
