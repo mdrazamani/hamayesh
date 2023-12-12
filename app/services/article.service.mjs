@@ -3,7 +3,6 @@ import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
 import Article from "../models/article.model.mjs";
 import HamayeshDetail from "../models/hamayeshDetail.model.mjs";
-import { getAll as getAllJudging } from "./judgingArticle.service.mjs";
 import { update as updateUser } from "./user.service.mjs";
 
 const populateOptions = [
@@ -133,11 +132,9 @@ const createNewData = (data, article, roleName) => {
 };
 
 export const get = async (id, role = null) => {
-    const article = await crudFactory.get(Article)(id, {
+    return await crudFactory.get(Article)(id, {
         populate: populateOptionsFun(role),
     });
-
-    return article;
 };
 
 export const getAll = async (options, role = null) => {
