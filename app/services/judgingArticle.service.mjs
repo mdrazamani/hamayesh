@@ -5,6 +5,10 @@ const populateOptions = [
     {
         path: "article",
         model: "Article",
+        populate: {
+            path: "userId",
+            model: "User",
+        },
         // select: "-__v -createdAt -updatedAt -referees -_id",
     }, // -__v
     {
@@ -79,9 +83,10 @@ export const getAllReferee = async (options, articleId) => {
     });
 };
 
-export const getAllArticles = async (options) => {
+export const getAllArticles = async (options, refereeId) => {
     return await crudFactory.getAll(JudgingArticle)({
         ...options,
+        referee: refereeId,
         populate: populateOptions,
     });
 };

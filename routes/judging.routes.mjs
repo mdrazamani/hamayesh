@@ -10,6 +10,7 @@ import {
     judgingUpdateValidationSchema,
 } from "../app/validations/judging.validation.mjs";
 import { authenticateJWT } from "../app/middlewares/auth.middleware.mjs";
+import { downloadController } from "../app/controllers/article/judging/download.controller.mjs";
 
 /**
  * @swagger
@@ -286,6 +287,13 @@ router.patch(
     authenticateJWT,
     dynamicValidate(judgingUpdateValidationSchema),
     updateController
+);
+
+router.get(
+    "/download/all/:id",
+    authenticateJWT,
+    // dynamicValidate(articleValidationSchema),
+    downloadController
 );
 
 export default router;
