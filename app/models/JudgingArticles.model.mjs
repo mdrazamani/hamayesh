@@ -110,6 +110,15 @@ const JudgingArticles = new mongoose.Schema(
     { timestamps: true }
 );
 
+JudgingArticles.set("toJSON", {
+    virtuals: true, // ensures virtual fields are included
+    transform: (doc, converted) => {
+        delete converted._id;
+        delete converted.__v;
+        converted.id = doc._id;
+    },
+});
+
 JudgingArticles.index({
     article: "text",
     referee: "text",
