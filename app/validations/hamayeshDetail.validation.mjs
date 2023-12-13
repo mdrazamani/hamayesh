@@ -29,6 +29,7 @@ export const hamayeshDetailValidationSchema = () => ({
                     title: Joi.string().optional().allow(""),
                     description: Joi.string().optional().allow(""),
                     path: Joi.string().optional().allow(""),
+                    cover: Joi.string().optional().allow(""),
                 })
             )
             .optional(),
@@ -120,6 +121,7 @@ export const hamayeshDetailUpdateValidationSchema = () => ({
                     title: Joi.string().optional().allow(""),
                     description: Joi.string().optional().allow(""),
                     path: Joi.string().optional().allow(""),
+                    cover: Joi.string().optional().allow(""),
                 })
             )
             .optional(),

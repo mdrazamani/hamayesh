@@ -26,7 +26,7 @@ const createZip = async (files, res) => {
 
     // Add article files to the ZIP in the 'article' folder
     files.forEach((file) => {
-        const filePath = path.join("article", path.basename(file));
+        const filePath = path.join("referee", path.basename(file));
         archive.file(file, { name: filePath });
     });
 

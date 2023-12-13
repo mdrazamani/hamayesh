@@ -19,7 +19,7 @@ export default fileUpload({
 export function validateFileType(file) {
     // Define the allowed extensions
     const allowedExtensions =
-        /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.doc|\.docx|\.ppt|\.pptx)$/i;
+        /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.doc|\.docx|\.ppt|\.pptx|.mp4)$/i;
 
     // Define the allowed MIME types
     const allowedMimeTypes = [
@@ -31,6 +31,7 @@ export function validateFileType(file) {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // For .docx files
         "application/vnd.ms-powerpoint", // For .ppt files
         "application/vnd.openxmlformats-officedocument.presentationml.presentation", // For .pptx files
+        "video/mp4", // For .mp4 files
     ];
 
     // Check the file extension and MIME type
