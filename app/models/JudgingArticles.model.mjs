@@ -128,7 +128,6 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
     let update = this.getUpdate();
 
     const hamayesh = await HamayeshDetail.findOne();
-
     if (hamayesh.dates.refeeResult < Date.now()) {
         throw new APIError({
             message: getMessage("errors.refeeResult"),
@@ -136,98 +135,47 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
         });
     }
 
-    const article = await Article.findById(this.article);
+    const judgingArticle = await JudgingArticles.findOne(this._conditions);
+    const articleId = judgingArticle ? judgingArticle.article : null;
+    const article = await Article.findById(articleId);
     if (
         article &&
         !["review", "reviewed", "changed", "pending"].includes(article.status)
     ) {
         throw new APIError({
             message: getMessage(
-                "errors.Currently_there_is_no_possibility_of_judging-this_article"
+                "errors.Currently_there_is_no_possibility_of_judging_this_article"
             ),
             status: constants.BAD_REQUEST,
         });
     }
 
     if (update.$set && update.$set.rates) {
-        const existingRates = await JudgingArticles.findOne({
-            _id: this._conditions._id,
-        })
-            .select("rates -_id")
-            .exec();
+        if (judgingArticle && judgingArticle.rates) {
+            const newRates = judgingArticle.rates.map((existingRate) => {
+                const updatedRate = update.$set.rates.find(
+                    (r) => r._id.toString() === existingRate._id.toString()
+                );
+                return updatedRate
+                    ? { ...existingRate, rate: updatedRate.rate }
+                    : existingRate;
+            });
 
-        const newRates = existingRates.rates.map((existingRate) => {
-            const updatedRate = update.$set.rates.find(
-                (r) => r._id.toString() === existingRate._id.toString()
-            );
-            return updatedRate
-                ? { ...existingRate, rate: updatedRate.rate }
-                : existingRate;
-        });
-
-        update.$set.rates = newRates;
+            update.$set.rates = newRates;
+        }
     }
 
-    if (this.status === "accepted" || this.status === "failed") {
-        this.refereeDate = new Date();
-
-        if (article.status === "changed") article.status = "reviewedAgain";
-        else article.status = "reviewed";
-        article.save();
-    }
-
-    next();
-});
-
-JudgingArticles.pre("findByIdAndUpdate", async function (next) {
-    let update = this.getUpdate();
-
-    const hamayesh = await HamayeshDetail.findOne();
-
-    if (hamayesh.dates.refeeResult < Date.now()) {
-        throw new APIError({
-            message: getMessage("errors.refeeResult"),
-            status: constants.BAD_REQUEST,
-        });
-    }
-
-    const article = await Article.findById(this.article);
     if (
-        article &&
-        !["review", "reviewed", "changed", "pending"].includes(article.status)
+        update.$set &&
+        (update.$set.status === "accepted" || update.$set.status === "failed")
     ) {
-        throw new APIError({
-            message: getMessage(
-                "errors.Currently_there_is_no_possibility_of_judging-this_article"
-            ),
-            status: constants.BAD_REQUEST,
-        });
-    }
+        update.$set.refereeDate = new Date();
 
-    if (update.$set && update.$set.rates) {
-        const existingRates = await JudgingArticles.findOne({
-            _id: this._conditions._id,
-        })
-            .select("rates -_id")
-            .exec();
-
-        const newRates = existingRates.rates.map((existingRate) => {
-            const updatedRate = update.$set.rates.find(
-                (r) => r._id.toString() === existingRate._id.toString()
-            );
-            return updatedRate
-                ? { ...existingRate, rate: updatedRate.rate }
-                : existingRate;
-        });
-
-        update.$set.rates = newRates;
-    }
-
-    if (this.status === "accepted" || this.status === "failed") {
-        this.refereeDate = new Date();
-
-        if (article.status === "changed") article.status = "reviewedAgain";
-        else article.status = "reviewed";
+        if (article && article.status === "changed") {
+            article.satus = "reviewedAgain";
+        } else if (article) {
+            article.status = "reviewed";
+        }
         article.save();
     }
 
