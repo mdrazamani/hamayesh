@@ -59,6 +59,13 @@ export const judgingUpdateValidationSchema = () => ({
                 "array.base": getMessage("validation.rules_array"),
             }),
 
+        files: Joi.array()
+            .items(Joi.string().message(getMessage("validation.filePath")))
+            .optional()
+            .messages({
+                "array.base": getMessage("validation.rules_array"),
+            }),
+
         status: Joi.string()
             .valid(...judgingStatus)
             .allow("")
