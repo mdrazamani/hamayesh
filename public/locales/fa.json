@@ -186,7 +186,8 @@
 		"invalid_item_structure": "validation.invalid_item_structure",
 		"useNumber": "validation.useNumber",
 		"either_amount_or_percent": "validation.either_amount_or_percent",
-		"referee_invalid": "validation.referee_invalid"
+		"referee_invalid": "validation.referee_invalid",
+		"filePath": "validation.filePath"
 	},
 	"success": {
 		"success": "عملیات موفق آمیز بود",

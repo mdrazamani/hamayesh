@@ -60,7 +60,7 @@ export const judgingUpdateValidationSchema = () => ({
             }),
 
         files: Joi.array()
-            .items(Joi.string().message(getMessage("validation.filePath")))
+            .items(Joi.string())
             .optional()
             .messages({
                 "array.base": getMessage("validation.rules_array"),
