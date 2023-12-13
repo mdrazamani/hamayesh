@@ -150,12 +150,18 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
     }
 
     if (update.$set && update.$set.rates) {
-        const newRates = update.$set.rates.map((existingRate) => {
-            const rateTemplate = rates.find(
+        const existingRates = await JudgingArticles.findOne({
+            _id: this._conditions._id,
+        })
+            .select("rates -_id")
+            .exec();
+
+        const newRates = existingRates.rates.map((existingRate) => {
+            const updatedRate = update.$set.rates.find(
                 (r) => r._id.toString() === existingRate._id.toString()
             );
-            return rateTemplate
-                ? { ...rateTemplate, rate: existingRate.rate }
+            return updatedRate
+                ? { ...existingRate, rate: updatedRate.rate }
                 : existingRate;
         });
 
@@ -199,12 +205,18 @@ JudgingArticles.pre("findByIdAndUpdate", async function (next) {
     }
 
     if (update.$set && update.$set.rates) {
-        const newRates = update.$set.rates.map((existingRate) => {
-            const rateTemplate = rates.find(
+        const existingRates = await JudgingArticles.findOne({
+            _id: this._conditions._id,
+        })
+            .select("rates -_id")
+            .exec();
+
+        const newRates = existingRates.rates.map((existingRate) => {
+            const updatedRate = update.$set.rates.find(
                 (r) => r._id.toString() === existingRate._id.toString()
             );
-            return rateTemplate
-                ? { ...rateTemplate, rate: existingRate.rate }
+            return updatedRate
+                ? { ...existingRate, rate: updatedRate.rate }
                 : existingRate;
         });
 
