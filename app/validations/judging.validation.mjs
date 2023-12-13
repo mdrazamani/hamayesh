@@ -50,8 +50,8 @@ export const judgingUpdateValidationSchema = () => ({
         rates: Joi.array()
             .items(
                 Joi.object({
+                    _id: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
                     rate: Joi.number().min(0).max(100),
-                    slug: Joi.string(),
                 })
             )
             .optional()
