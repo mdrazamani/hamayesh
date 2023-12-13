@@ -125,6 +125,8 @@ JudgingArticles.index({
 });
 
 JudgingArticles.pre("findOneAndUpdate", async function (next) {
+    let update = this.getUpdate();
+
     const hamayesh = await HamayeshDetail.findOne();
 
     if (hamayesh.dates.refeeResult < Date.now()) {
@@ -147,8 +149,8 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
         });
     }
 
-    if (!this.isNew && this.isModified("rates")) {
-        const newRates = this.rates.map((existingRate) => {
+    if (update.$set && update.$set.rates) {
+        const newRates = update.$set.rates.map((existingRate) => {
             const rateTemplate = rates.find(
                 (r) => r._id.toString() === existingRate._id.toString()
             );
@@ -156,7 +158,8 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
                 ? { ...rateTemplate, rate: existingRate.rate }
                 : existingRate;
         });
-        this.rates = newRates;
+
+        update.$set.rates = newRates;
     }
 
     if (this.status === "accepted" || this.status === "failed") {
@@ -171,6 +174,8 @@ JudgingArticles.pre("findOneAndUpdate", async function (next) {
 });
 
 JudgingArticles.pre("findByIdAndUpdate", async function (next) {
+    let update = this.getUpdate();
+
     const hamayesh = await HamayeshDetail.findOne();
 
     if (hamayesh.dates.refeeResult < Date.now()) {
@@ -193,8 +198,8 @@ JudgingArticles.pre("findByIdAndUpdate", async function (next) {
         });
     }
 
-    if (!this.isNew && this.isModified("rates")) {
-        const newRates = this.rates.map((existingRate) => {
+    if (update.$set && update.$set.rates) {
+        const newRates = update.$set.rates.map((existingRate) => {
             const rateTemplate = rates.find(
                 (r) => r._id.toString() === existingRate._id.toString()
             );
@@ -202,7 +207,8 @@ JudgingArticles.pre("findByIdAndUpdate", async function (next) {
                 ? { ...rateTemplate, rate: existingRate.rate }
                 : existingRate;
         });
-        this.rates = newRates;
+
+        update.$set.rates = newRates;
     }
 
     if (this.status === "accepted" || this.status === "failed") {
