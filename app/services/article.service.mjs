@@ -133,7 +133,7 @@ const createNewData = (data, article, roleName) => {
         rate: article.rate,
     };
 
-    if (roleName === "admin" || "scientific") {
+    if (roleName === "admin" || roleName === "scientific") {
         result.status = data.status || article.status;
         result.rate = data.rate || article.rate;
     }

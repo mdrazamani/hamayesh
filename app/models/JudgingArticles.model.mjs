@@ -4,7 +4,7 @@ import APIError from "../../utils/errors.mjs";
 import { getMessage } from "../../config/i18nConfig.mjs";
 import constants from "../../utils/constants.mjs";
 import Article from "./article.model.mjs";
-
+import { updateNestedDocument } from "../../utils/nested.mjs";
 const judgingStatus = ["accepted", "pending", "failed"];
 
 const rates = [
@@ -124,63 +124,63 @@ JudgingArticles.index({
     referee: "text",
 });
 
-JudgingArticles.pre("findOneAndUpdate", async function (next) {
-    let update = this.getUpdate();
+// JudgingArticles.pre("findOneAndUpdate", async function (next) {
+//     let update = this.getUpdate();
 
-    const hamayesh = await HamayeshDetail.findOne();
-    if (hamayesh.dates.refeeResult < Date.now()) {
-        throw new APIError({
-            message: getMessage("errors.refeeResult"),
-            status: constants.BAD_REQUEST,
-        });
-    }
+//     const hamayesh = await HamayeshDetail.findOne();
+//     if (hamayesh.dates.refeeResult < Date.now()) {
+//         throw new APIError({
+//             message: getMessage("errors.refeeResult"),
+//             status: constants.BAD_REQUEST,
+//         });
+//     }
 
-    const judgingArticle = await JudgingArticles.findOne(this._conditions);
-    const articleId = judgingArticle ? judgingArticle.article : null;
-    const article = await Article.findById(articleId);
-    if (
-        article &&
-        !["review", "reviewed", "changed", "pending"].includes(article.status)
-    ) {
-        throw new APIError({
-            message: getMessage(
-                "errors.Currently_there_is_no_possibility_of_judging_this_article"
-            ),
-            status: constants.BAD_REQUEST,
-        });
-    }
+//     // Fetch the JudgingArticle document
+//     const judgingArticle = await this.model
+//         .findOne(this.getQuery())
+//         .populate("article");
+//     if (!judgingArticle) {
+//         return next(
+//             new APIError({
+//                 message: getMessage("errors.judgingArticleNotFound"),
+//                 status: constants.BAD_REQUEST,
+//             })
+//         );
+//     }
 
-    if (update.$set && update.$set.rates) {
-        if (judgingArticle && judgingArticle.rates) {
-            const newRates = judgingArticle.rates.map((existingRate) => {
-                const updatedRate = update.$set.rates.find(
-                    (r) => r._id.toString() === existingRate._id.toString()
-                );
-                return updatedRate
-                    ? { ...existingRate, rate: updatedRate.rate }
-                    : existingRate;
-            });
+//     // Validate Article Status
+//     if (
+//         judgingArticle.article &&
+//         !["review", "reviewed", "changed", "pending"].includes(
+//             judgingArticle.article.status
+//         )
+//     ) {
+//         throw new APIError({
+//             message: getMessage(
+//                 "errors.Currently_there_is_no_possibility_of_judging_this_article"
+//             ),
+//             status: constants.BAD_REQUEST,
+//         });
+//     }
 
-            update.$set.rates = newRates;
-        }
-    }
-
-    if (
-        update.$set &&
-        (update.$set.status === "accepted" || update.$set.status === "failed")
-    ) {
-        update.$set.refereeDate = new Date();
-
-        if (article && article.status === "changed") {
-            article.satus = "reviewedAgain";
-        } else if (article) {
-            article.status = "reviewed";
-        }
-        article.save();
-    }
-
-    next();
-});
+//     // Update Status and Referee Date
+//     const statusUpdate = update.status || update.$set?.status;
+//     if (
+//         statusUpdate &&
+//         (statusUpdate === "accepted" || statusUpdate === "failed")
+//     ) {
+//         judgingArticle.refereeDate = new Date();
+//         if (judgingArticle.article) {
+//             if (judgingArticle.article.status === "changed") {
+//                 judgingArticle.article.status = "reviewedAgain";
+//             } else {
+//                 judgingArticle.article.status = "reviewed";
+//             }
+//             await judgingArticle.article.save();
+//         }
+//     }
+//     next();
+// });
 
 JudgingArticles.pre("save", async function (next) {
     const hamayesh = await HamayeshDetail.findOne();

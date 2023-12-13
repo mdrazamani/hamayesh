@@ -28,15 +28,20 @@ export const updateNestedDocument = async (
     itemId,
     itemData
 ) => {
+    // Construct the update object to target only the specified fields within the nested document
     const update = { $set: {} };
     for (const [key, value] of Object.entries(itemData)) {
         update.$set[`${nestedField}.$.${key}`] = value;
     }
 
+    // Use array filters to specify which element of the array to update
     const result = await Model.findOneAndUpdate(
         { _id: mainDocId, [`${nestedField}._id`]: itemId },
         update,
-        { new: true }
+        {
+            new: true,
+            arrayFilters: [{ [`${nestedField}._id`]: itemId }],
+        }
     );
 
     if (!result) {

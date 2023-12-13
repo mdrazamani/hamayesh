@@ -32,7 +32,9 @@
 		"commentIsAre": "نظر شما برای این خبر قبلا ثبت شده است",
 		"startArticle": "errors.startArticle",
 		"File_upload_failed": "errors.File_upload_failed",
-		"not_possible_add_article": "errors.not_possible_add_article"
+		"not_possible_add_article": "errors.not_possible_add_article",
+		"Currently_there_is_no_possibility_of_judging_this_article": "errors.Currently_there_is_no_possibility_of_judging_this_article",
+		"status_not_review": "errors.status_not_review"
 	},
 	"validation": {
 		"tokenExpired": "توکن بازیابی رمز عبور منقضی شده است.",
