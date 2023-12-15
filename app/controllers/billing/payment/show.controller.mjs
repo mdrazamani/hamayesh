@@ -14,6 +14,7 @@ import {
     transId,
 } from "../../../../utils/dynamicGetway.mjs";
 import { loadLanguageSetting } from "../../../../config/readLang.mjs";
+import { createPath } from "../../../../config/tools.mjs";
 
 export const showController = async (req, res, next) => {
     try {
@@ -60,6 +61,8 @@ export const showController = async (req, res, next) => {
 
             const result = checkVerify(gateway?.slug, response);
 
+            // console.log("createPath: ", createPath("../views/payment/pay"));
+
             if (result) {
                 const transCode = transId(gateway?.slug, response);
 
@@ -68,8 +71,8 @@ export const showController = async (req, res, next) => {
                     status: "completed",
                 });
 
-                invoice.paymentStatus = "completed";
-                invoice.save();
+                // invoice.paymentStatus = "completed";
+                // invoice.save();
 
                 const updateResult = await updateBillingUser(
                     invoice._id,
@@ -78,7 +81,8 @@ export const showController = async (req, res, next) => {
                 );
 
                 return res.render(
-                    "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
+                    // "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
+                    createPath("../views/payment/pay"),
                     {
                         success: true,
                         transactionId: transCode,
@@ -89,7 +93,8 @@ export const showController = async (req, res, next) => {
                 );
             } else {
                 return res.render(
-                    "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
+                    // "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
+                    createPath("../views/payment/pay"),
                     {
                         success: false,
                         transactionId: transCode,
