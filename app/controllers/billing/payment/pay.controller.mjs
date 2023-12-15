@@ -65,6 +65,8 @@ export const payController = async (req, res, next) => {
                 });
             });
 
+        // console.log(response?.data);
+
         const { transactionData, redirectUrl } = createRedirect(
             gateway?.slug,
             response,
@@ -79,9 +81,15 @@ export const payController = async (req, res, next) => {
                 status: 500,
             });
         }
-        console.log("redirectUrl:", redirectUrl);
 
-        res.redirect(redirectUrl);
+        // res.redirect(redirectUrl);
+
+        if (response?.data)
+            res.respond(
+                constants.OK,
+                getMessage("success.success"),
+                response?.data
+            );
     } catch (error) {
         next(error);
     }

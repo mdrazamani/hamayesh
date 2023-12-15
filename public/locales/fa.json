@@ -233,5 +233,7 @@
 	"No files associated with this article": "No files associated with this article",
 	"User not found": "User not found",
 	"judging not found": "judging not found",
-	"missing_required_parameters": "missing_required_parameters"
+	"missing_required_parameters": "missing_required_parameters",
+	"Error updating billing user": "Error updating billing user",
+	"The_invoice_has_already_been_paid": "The_invoice_has_already_been_paid"
 }

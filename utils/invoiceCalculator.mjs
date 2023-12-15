@@ -411,6 +411,7 @@ export const invoiceCalculator = async (data) => {
 // };
 
 export const updateBillingUser = async (invoiceId, userId, articleNumber) => {
+    if (userId?._id) userId = userId._id;
     try {
         const user = await getUser(userId);
 
@@ -421,11 +422,13 @@ export const updateBillingUser = async (invoiceId, userId, articleNumber) => {
             });
         }
 
-        const updatedArticles =
-            articleNumber === "Infinity"
-                ? "Infinity"
-                : (user.billingStatus.articles || 0) + articleNumber;
-
+        let updatedArticles;
+        if (articleNumber) {
+            updatedArticles =
+                articleNumber === "Infinity"
+                    ? "Infinity"
+                    : (user.billingStatus.articles || 0) + articleNumber;
+        }
         const updatedInvoices = [
             ...new Set([...(user.billingStatus.invoices || []), invoiceId]),
         ];
@@ -436,6 +439,7 @@ export const updateBillingUser = async (invoiceId, userId, articleNumber) => {
                 invoices: updatedInvoices,
             },
         });
+
         return updateResult;
     } catch (error) {
         throw new APIError({

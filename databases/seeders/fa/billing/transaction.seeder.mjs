@@ -38,7 +38,7 @@ const seedTransactions = async () => {
     const invoices = await Invoice.find().limit(10);
     const gateway = await Gateway.findOne(); // Assuming there's only one gateway
 
-    if (!gateway || invoices.length < 10) {
+    if (!gateway || invoices.length) {
         throw new Error(
             "Required invoices or gateway not found in the database"
         );

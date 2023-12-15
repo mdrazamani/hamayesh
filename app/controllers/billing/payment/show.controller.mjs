@@ -49,27 +49,27 @@ export const showController = async (req, res, next) => {
         let lang = loadLanguageSetting();
 
         const createBody = {
-            privateCode: getway.privateCode,
+            privateCode: gateway.privateCode,
             tokenCode,
             total: invoice.total,
         };
-        const body = createVerifyBody(getway.slug, createBody);
+        const body = createVerifyBody(gateway.slug, createBody);
 
         try {
             const response = await axios.post(gateway.api.verify.uri, body);
 
-            const result = checkVerify(getway?.slug, response);
+            const result = checkVerify(gateway?.slug, response);
 
             if (result) {
-                const transCode = transId(getway?.slug, response);
+                const transCode = transId(gateway?.slug, response);
 
                 await updateTransaction(transaction._id, {
                     refId: transCode,
                     status: "completed",
                 });
 
-                invoice.paymentStatus = "completed";
-                invoice.save();
+                // invoice.paymentStatus = "completed";
+                // invoice.save();
 
                 const updateResult = await updateBillingUser(
                     invoice._id,
