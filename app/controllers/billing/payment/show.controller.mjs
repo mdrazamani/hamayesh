@@ -71,8 +71,8 @@ export const showController = async (req, res, next) => {
                     status: "completed",
                 });
 
-                // invoice.paymentStatus = "completed";
-                // invoice.save();
+                invoice.paymentStatus = "completed";
+                invoice.save();
 
                 const updateResult = await updateBillingUser(
                     invoice._id,
