@@ -86,7 +86,6 @@ export const payController = async (req, res, next) => {
 
         if (response?.data)
             res.respond(constants.OK, getMessage("success.success"), {
-                ...response?.data,
                 redirectUrl,
             });
     } catch (error) {
