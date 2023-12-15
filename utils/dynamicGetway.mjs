@@ -1,3 +1,5 @@
+import { get as getTransaction } from "../app/services/billing/transaction.service.mjs";
+
 export const createBody = (slug, data) => {
     if (slug === "pay") {
         return {
@@ -86,7 +88,7 @@ export const createVerifyBody = (slug, data) => {
     return false;
 };
 
-export const checkVerify = (slug, response) => {
+export const checkVerify = async (slug, response) => {
     if (slug === "zarinpal") {
         const code = response.data.data.code;
         if (code !== 100 && code !== 101) {
@@ -95,10 +97,23 @@ export const checkVerify = (slug, response) => {
                 status: 401,
             });
         }
-        if (code == 100 || code == 101) return true;
+        if (code == 100) return true;
+        if (code == 101) return false;
     } else if (slug === "pay") {
         const status = response.data.status;
         if (status !== 1) {
+            throw new APIError({
+                message: "Payment failed",
+                status: 401,
+            });
+        }
+
+        const transaction = await getTransaction(response.data.transId);
+        if (
+            transaction &&
+            transaction._id &&
+            transaction.status !== "pending"
+        ) {
             throw new APIError({
                 message: "Payment failed",
                 status: 401,

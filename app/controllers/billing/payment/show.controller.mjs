@@ -59,13 +59,11 @@ export const showController = async (req, res, next) => {
         try {
             const response = await axios.post(gateway.api.verify.uri, body);
 
-            const result = checkVerify(gateway?.slug, response);
-
+            const result = await checkVerify(gateway?.slug, response);
+            const transCode = transId(gateway?.slug, response);
             // console.log("createPath: ", createPath("../views/payment/pay"));
 
             if (result) {
-                const transCode = transId(gateway?.slug, response);
-
                 await updateTransaction(transaction._id, {
                     refId: transCode,
                     status: "completed",
@@ -92,6 +90,11 @@ export const showController = async (req, res, next) => {
                     }
                 );
             } else {
+                await updateTransaction(transaction._id, {
+                    refId: transCode,
+                    status: "failed",
+                });
+
                 return res.render(
                     // "D:/projects/Hamayesh/back/hamayesh/views/payment/pay",
                     createPath("../views/payment/pay"),
