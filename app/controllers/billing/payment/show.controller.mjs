@@ -58,7 +58,6 @@ export const showController = async (req, res, next) => {
 
         try {
             const response = await axios.post(gateway.api.verify.uri, body);
-
             const result = await checkVerify(gateway?.slug, response);
             const transCode = transId(gateway?.slug, response);
             // console.log("createPath: ", createPath("../views/payment/pay"));
