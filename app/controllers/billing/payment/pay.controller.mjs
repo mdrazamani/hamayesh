@@ -10,6 +10,7 @@ import {
     createRedirect,
 } from "../../../../utils/dynamicGetway.mjs";
 import constants from "../../../../utils/constants.mjs";
+import { redirectUrlEnv } from "../../../../config/index.mjs";
 
 export const payController = async (req, res, next) => {
     try {
@@ -46,8 +47,8 @@ export const payController = async (req, res, next) => {
 
         const createBodyData = {
             privateCode: gateway.privateCode,
-            total: invoice.total + 150000,
-            redirect: "http://127.0.0.1:8000/api/v1/billing/payment/",
+            total: invoice.total,
+            redirect: redirectUrlEnv,
             description: "hamayesh description",
             factorNumber: invoice.invoiceNumber,
         };
