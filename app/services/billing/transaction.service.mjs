@@ -31,6 +31,9 @@ export const get = async (id) => {
 export const getByAuthority = async (authority) => {
     return await Transaction.findOne({ authorityCode: authority });
 };
+export const getByRefId = async (refId) => {
+    return await Transaction.findOne({ refId });
+};
 
 export const getAll = async (options, userId) => {
     const query = {

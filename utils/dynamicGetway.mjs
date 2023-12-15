@@ -1,4 +1,4 @@
-import { get as getTransaction } from "../app/services/billing/transaction.service.mjs";
+import { getByRefId } from "../app/services/billing/transaction.service.mjs";
 
 export const createBody = (slug, data) => {
     if (slug === "pay") {
@@ -108,7 +108,7 @@ export const checkVerify = async (slug, response) => {
             });
         }
 
-        const transaction = await getTransaction(response.data.transId);
+        const transaction = await getByRefId(response.data.transId);
         if (
             transaction &&
             transaction._id &&
