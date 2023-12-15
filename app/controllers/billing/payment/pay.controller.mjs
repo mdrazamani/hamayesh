@@ -85,11 +85,10 @@ export const payController = async (req, res, next) => {
         // res.redirect(redirectUrl);
 
         if (response?.data)
-            res.respond(
-                constants.OK,
-                getMessage("success.success"),
-                response?.data
-            );
+            res.respond(constants.OK, getMessage("success.success"), {
+                ...response?.data,
+                redirectUrl,
+            });
     } catch (error) {
         next(error);
     }
