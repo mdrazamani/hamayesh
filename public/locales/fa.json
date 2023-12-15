@@ -232,5 +232,6 @@
 	"payment_gateway_error": "payment_gateway_error",
 	"No files associated with this article": "No files associated with this article",
 	"User not found": "User not found",
-	"judging not found": "judging not found"
+	"judging not found": "judging not found",
+	"missing_required_parameters": "missing_required_parameters"
 }

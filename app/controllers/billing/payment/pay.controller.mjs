@@ -44,14 +44,14 @@ export const payController = async (req, res, next) => {
         }
 
         const createBodyData = {
-            privateCode: getway.privateCode,
+            privateCode: gateway.privateCode,
             total: invoice.total + 150000,
             redirect: "http://127.0.0.1:8000/api/v1/billing/payment/",
             description: "hamayesh description",
             factorNumber: invoice.invoiceNumber,
         };
 
-        const body = createBody(getway?.slug, createBodyData);
+        const body = createBody(gateway?.slug, createBodyData);
 
         console.log("body :", body);
 
@@ -66,7 +66,7 @@ export const payController = async (req, res, next) => {
             });
 
         const { transactionData, redirectUrl } = createRedirect(
-            getway?.slug,
+            gateway?.slug,
             response,
             req.body,
             userId
@@ -79,6 +79,8 @@ export const payController = async (req, res, next) => {
                 status: 500,
             });
         }
+        console.log("redirectUrl:", redirectUrl);
+
         res.redirect(redirectUrl);
     } catch (error) {
         next(error);
