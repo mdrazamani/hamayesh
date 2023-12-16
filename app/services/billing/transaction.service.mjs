@@ -4,14 +4,10 @@ import Transaction from "../../models/billing/transaction.model.mjs";
 const populateOptions = [
     {
         path: "invoice",
-        populate: {
-            path: "user",
-        },
     },
     {
         path: "gateway",
     },
-    // Add other paths if needed
 ];
 
 export const create = async (data) => {
@@ -42,16 +38,11 @@ export const getByRefId = async (refId) => {
     return await Transaction.findOne({ refId });
 };
 
-export const getAll = async (options, userId) => {
+export const getAll = async (options) => {
     const query = {
         ...options,
         populate: populateOptions,
     };
-
-    if (userId) {
-        // Assuming the invoice model has a 'user' field that stores the user ID
-        query.populate.match = { user: userId };
-    }
 
     return await crudFactory.getAll(Transaction)(query);
 };
