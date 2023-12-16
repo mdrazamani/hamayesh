@@ -104,7 +104,7 @@ export const checkVerify = async (slug, response) => {
         ) {
             throw new APIError({
                 message: getMessage(
-                    "Dishonest_clown_you_thought_we_were_buying"
+                    "peyment.Dishonest_clown_you_thought_we_were_buying"
                 ),
                 status: 422,
             });

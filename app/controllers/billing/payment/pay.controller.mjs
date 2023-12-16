@@ -51,7 +51,9 @@ export const payController = async (req, res, next) => {
         const transactionCount = await getByInvoice(invoiceId);
         if (transactionCount && transactionCount._id) {
             throw new APIError({
-                message: getMessage("You_currently_have_an_active_transaction"),
+                message: getMessage(
+                    "peyment.You_currently_have_an_active_transaction"
+                ),
                 status: 422,
             });
         }
