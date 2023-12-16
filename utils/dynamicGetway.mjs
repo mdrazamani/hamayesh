@@ -96,8 +96,6 @@ export const checkVerify = async (slug, response) => {
         if (code !== 100) return false;
         return true;
     } else if (slug === "pay") {
-        const status = response.data.status;
-        if (status !== 1) return false;
         const transaction = await getByRefId(response.data.transId);
         if (
             transaction &&
@@ -111,6 +109,9 @@ export const checkVerify = async (slug, response) => {
                 status: 422,
             });
         }
+        const status = response.data.status;
+        if (status !== 1) return false;
+
         if (status == 1) return true;
     } else {
         return false;
