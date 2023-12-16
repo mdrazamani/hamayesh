@@ -12,7 +12,6 @@ export const indexController = async (req, res, next) => {
             page: Number(page),
             items_per_page: Number(items_per_page),
             ...(roleName === "user" ? { user: userId } : {}),
-
             ...query,
         });
         if (pricings)

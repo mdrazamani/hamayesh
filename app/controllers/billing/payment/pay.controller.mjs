@@ -20,6 +20,7 @@ export const payController = async (req, res, next) => {
         const userId = justAdmin(req.body.userId, req.user);
         const gatewayId = req.body?.gateway;
         const invoiceId = req.body?.invoice;
+        if (req.body.status) req.body.status = "pending";
 
         // Validate required parameters
         if (!gatewayId || !invoiceId) {
@@ -68,8 +69,6 @@ export const payController = async (req, res, next) => {
 
         const body = createBody(gateway?.slug, createBodyData);
 
-        console.log("body :", body);
-
         let response = await axios
             .post(gateway?.api?.request?.uri, body)
             .catch((error) => {
@@ -96,8 +95,6 @@ export const payController = async (req, res, next) => {
                 status: 500,
             });
         }
-
-        // res.redirect(redirectUrl);
 
         if (response?.data)
             res.respond(constants.OK, getMessage("success.success"), {

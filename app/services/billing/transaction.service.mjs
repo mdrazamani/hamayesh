@@ -43,7 +43,6 @@ export const getAll = async (options) => {
         ...options,
         populate: populateOptions,
     };
-
     return await crudFactory.getAll(Transaction)(query);
 };
 export const deleteDoc = async (id) => {

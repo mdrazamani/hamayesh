@@ -21,7 +21,7 @@ export const createBody = (slug, data) => {
     }
 };
 
-export const createRedirect = (slug, response, reqBody, userId) => {
+export const createRedirect = (slug, response, reqBody, user) => {
     if (slug === "pay") {
         const status = response.data.status;
         const token = response.data.token;
@@ -35,7 +35,7 @@ export const createRedirect = (slug, response, reqBody, userId) => {
 
         const authorityCode = token;
         return {
-            transactionData: { ...reqBody, userId, authorityCode },
+            transactionData: { ...reqBody, user, authorityCode },
             redirectUrl: `https://pay.ir/pg/${token}`,
         };
     } else if (slug === "zarinpal") {
@@ -50,7 +50,7 @@ export const createRedirect = (slug, response, reqBody, userId) => {
         }
 
         return {
-            transactionData: { ...reqBody, userId, authorityCode },
+            transactionData: { ...reqBody, user, authorityCode },
             redirectUrl: `https://sandbox.zarinpal.com/pg/StartPay/${authorityCode}`,
         };
     }
