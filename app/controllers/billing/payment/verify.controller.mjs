@@ -70,7 +70,7 @@ export const verifyController = async (req, res, next) => {
                 invoice.paymentStatus = "completed";
                 invoice.save();
 
-                const updateResult = await updateBillingUser(
+                await updateBillingUser(
                     invoice._id,
                     invoice.user,
                     invoice.articleNumber
@@ -96,13 +96,17 @@ export const verifyController = async (req, res, next) => {
                 });
             }
         } catch (error) {
-            console.error(
-                "Error in payment verification: ",
-                error.response?.data
-            );
-            throw new APIError({
-                message: "Error in payment verification",
-                status: error.response?.status || 500,
+            await updateTransaction(transaction._id, {
+                refId: transCode,
+                status: "failed",
+            });
+            invoice.paymentStatus = "failed";
+            invoice.save();
+
+            res.respond(constants.OK, getMessage("success.success"), {
+                status: false,
+                transactionId: transCode,
+                lang,
             });
         }
     } catch (error) {
