@@ -109,7 +109,6 @@ export const checkVerify = async (slug, response) => {
         }
         const status = response.data.status;
         if (status !== 1) return false;
-
         if (status == 1) return true;
     } else {
         return false;
