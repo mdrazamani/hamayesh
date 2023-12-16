@@ -104,7 +104,7 @@ export const verifyController = async (req, res, next) => {
 
             res.respond(constants.OK, getMessage("success.success"), {
                 status: false,
-                transactionId: transCode,
+                transactionId: null,
                 lang,
             });
         }
