@@ -252,6 +252,7 @@
 	"peyment": {
 		"success": "success payment",
 		"faild": "faild payment",
-		"Dishonest_clown_you_thought_we_were_buying": "Dishonest clown, you thought we were buying!"
+		"Dishonest_clown_you_thought_we_were_buying": "Dishonest clown, you thought we were buying!",
+		"You_currently_have_an_active_transaction": "You currently have an active transaction!"
 	}
 }

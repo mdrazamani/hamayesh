@@ -252,6 +252,7 @@
 	"peyment": {
 		"success": "پرداخت موفقیت",
 		"faild": "پرداخت ناموفق",
-		"Dishonest_clown_you_thought_we_were_buying": "بی ناموس دلقک فکر کردی ما خریم!"
+		"Dishonest_clown_you_thought_we_were_buying": "بی ناموس دلقک فکر کردی ما خریم!",
+		"You_currently_have_an_active_transaction": "درحال حاضریه تراکنش فعال دارید!"
 	}
 }

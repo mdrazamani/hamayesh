@@ -51,7 +51,7 @@ export const payController = async (req, res, next) => {
         const transactionCount = await getByInvoice(invoiceId);
         if (transactionCount && transactionCount._id) {
             throw new APIError({
-                message: getMessage("The_invoice_has_already_been_paid"),
+                message: getMessage("You_currently_have_an_active_transaction"),
                 status: 422,
             });
         }
