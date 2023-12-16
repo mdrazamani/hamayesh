@@ -102,17 +102,11 @@ export const checkVerify = async (slug, response) => {
             transaction._id &&
             transaction.status !== "pending"
         ) {
-            throw new APIError({
-                message: "Payment failed",
-                status: 401,
-            });
+            return false;
         }
         if (status == 1) return true;
     } else {
-        throw new APIError({
-            message: "getway not found",
-            status: 401,
-        });
+        return false;
     }
 
     return false;
