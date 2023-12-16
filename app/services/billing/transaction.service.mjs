@@ -28,6 +28,13 @@ export const get = async (id) => {
     });
 };
 
+export const getByInvoice = async (invoiceId) => {
+    return await Transaction.findOne({
+        invoice: invoiceId,
+        status: { $in: ["pending", "completed"] },
+    });
+};
+
 export const getByAuthority = async (authority) => {
     return await Transaction.findOne({ authorityCode: authority });
 };

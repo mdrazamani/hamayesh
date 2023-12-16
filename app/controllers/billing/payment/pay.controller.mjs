@@ -3,7 +3,10 @@ import { get as getGetway } from "../../../services/billing/gateway.service.mjs"
 import { get as getInvoice } from "../../../services/billing/invoice.service.mjs";
 import axios from "axios";
 import APIError from "../../../../utils/errors.mjs";
-import { create } from "../../../services/billing/transaction.service.mjs";
+import {
+    create,
+    getByInvoice,
+} from "../../../services/billing/transaction.service.mjs";
 import { justAdmin } from "../../../../utils/justAdmin.mjs";
 import {
     createBody,
@@ -22,7 +25,7 @@ export const payController = async (req, res, next) => {
         if (!gatewayId || !invoiceId) {
             throw new APIError({
                 message: getMessage("missing_required_parameters"),
-                status: 400,
+                status: 422,
             });
         }
 
@@ -34,14 +37,22 @@ export const payController = async (req, res, next) => {
         if (!gateway || !invoice) {
             throw new APIError({
                 message: getMessage("gateway_or_invoice_not_found"),
-                status: 404,
+                status: 422,
             });
         }
 
         if (invoice?.paymentStatus && invoice?.paymentStatus === "completed") {
             throw new APIError({
                 message: getMessage("The_invoice_has_already_been_paid"),
-                status: 401,
+                status: 422,
+            });
+        }
+
+        const transactionCount = await getByInvoice(invoiceId);
+        if (transactionCount && transactionCount._id) {
+            throw new APIError({
+                message: getMessage("The_invoice_has_already_been_paid"),
+                status: 422,
             });
         }
 
