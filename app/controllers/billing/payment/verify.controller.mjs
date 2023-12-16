@@ -97,7 +97,6 @@ export const verifyController = async (req, res, next) => {
             }
         } catch (error) {
             await updateTransaction(transaction._id, {
-                refId: transCode,
                 status: "failed",
             });
             invoice.paymentStatus = "failed";
