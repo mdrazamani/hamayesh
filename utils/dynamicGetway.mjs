@@ -103,9 +103,7 @@ export const checkVerify = async (slug, response) => {
             transaction.status !== "pending"
         ) {
             throw new APIError({
-                message: getMessage(
-                    "peyment.Dishonest_clown_you_thought_we_were_buying"
-                ),
+                message: getMessage("peyment.You_thought_you_were_clever"),
                 status: 422,
             });
         }
