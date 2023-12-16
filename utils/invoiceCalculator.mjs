@@ -366,7 +366,7 @@ export const invoiceCalculator = async (data) => {
 
         return {
             subTotalPrice: validateNumber(subTotal),
-            total: validateNumber(total),
+            total: Math.floor(validateNumber(total)),
             allDiscounts: validateNumber(allDiscounts),
             discountType: validateNumber(discountType),
             discountGlobal: validateNumber(discountGlobal),

@@ -101,13 +101,7 @@ export const checkVerify = async (slug, response) => {
         if (code == 101) return false;
     } else if (slug === "pay") {
         const status = response.data.status;
-        if (status !== 1) {
-            throw new APIError({
-                message: "Payment failed",
-                status: 401,
-            });
-        }
-
+        if (status !== 1) return false;
         const transaction = await getByRefId(response.data.transId);
         if (
             transaction &&
