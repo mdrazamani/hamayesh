@@ -1,4 +1,6 @@
 import { getByRefId } from "../app/services/billing/transaction.service.mjs";
+import { getMessage } from "../config/i18nConfig.mjs";
+import APIError from "./errors.mjs";
 
 export const createBody = (slug, data) => {
     if (slug === "pay") {
@@ -102,7 +104,12 @@ export const checkVerify = async (slug, response) => {
             transaction._id &&
             transaction.status !== "pending"
         ) {
-            return false;
+            throw new APIError({
+                message: getMessage(
+                    "Dishonest_clown_you_thought_we_were_buying"
+                ),
+                status: 422,
+            });
         }
         if (status == 1) return true;
     } else {

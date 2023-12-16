@@ -247,5 +247,11 @@
 	"judging not found": "داوری یافت نشد.",
 	"missing_required_parameters": "پارامترهای موردنیاز از دست رفته است.",
 	"Error updating billing user": "خطا در به‌روزرسانی کاربر برای صورتحساب",
-	"The_invoice_has_already_been_paid": "این فاکتور از قبل پرداخت شده است."
+	"The_invoice_has_already_been_paid": "این فاکتور از قبل پرداخت شده است.",
+
+	"peyment": {
+		"success": "پرداخت موفقیت",
+		"faild": "پرداخت ناموفق",
+		"Dishonest_clown_you_thought_we_were_buying": "بی ناموس دلقک فکر کردی ما خریم!"
+	}
 }

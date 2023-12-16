@@ -24,7 +24,7 @@ export const verifyController = async (req, res, next) => {
         if (!transaction) {
             throw new APIError({
                 message: "Transaction not found",
-                status: 404,
+                status: 422,
             });
         }
 
@@ -36,14 +36,14 @@ export const verifyController = async (req, res, next) => {
         if (!gateway || !invoice) {
             throw new APIError({
                 message: "Getway or Invoice not found",
-                status: 404,
+                status: 422,
             });
         }
 
         if (invoice?.paymentStatus && invoice?.paymentStatus === "completed") {
             throw new APIError({
                 message: getMessage("The_invoice_has_already_been_paid"),
-                status: 401,
+                status: 422,
             });
         }
 
@@ -76,7 +76,7 @@ export const verifyController = async (req, res, next) => {
                     invoice.articleNumber
                 );
 
-                res.respond(constants.OK, getMessage("success.success"), {
+                res.respond(constants.OK, getMessage("peyment.success"), {
                     status: true,
                     transactionId: transCode,
                     lang,
@@ -89,7 +89,7 @@ export const verifyController = async (req, res, next) => {
                 invoice.paymentStatus = "failed";
                 invoice.save();
 
-                res.respond(constants.OK, getMessage("success.success"), {
+                res.respond(constants.OK, getMessage("peyment.faild"), {
                     status: false,
                     transactionId: transCode,
                     lang,
@@ -102,7 +102,7 @@ export const verifyController = async (req, res, next) => {
             invoice.paymentStatus = "failed";
             invoice.save();
 
-            res.respond(constants.OK, getMessage("success.success"), {
+            res.respond(constants.OK, getMessage("peyment.faild"), {
                 status: false,
                 transactionId: null,
                 lang,
