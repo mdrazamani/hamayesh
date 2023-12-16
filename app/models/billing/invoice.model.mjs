@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Organizer from "../organizer.model.mjs";
 
 const invoiceSchema = new mongoose.Schema(
     {
