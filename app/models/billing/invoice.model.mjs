@@ -68,6 +68,7 @@ invoiceSchema.set("toJSON", {
 });
 
 invoiceSchema.set("toObject", { virtuals: true });
+invoiceSchema.set("toJSON", { virtuals: true });
 invoiceSchema.virtual("organizer", {
     get: async function () {
         try {
