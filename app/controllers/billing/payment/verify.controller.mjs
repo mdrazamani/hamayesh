@@ -58,9 +58,9 @@ export const verifyController = async (req, res, next) => {
 
         try {
             const response = await axios.post(gateway.api.verify.uri, body);
-            const result = await checkVerify(gateway?.slug, response);
-            const transCode = transId(gateway?.slug, response);
-            // console.log("createPath: ", createPath("../views/payment/pay"));
+            const result =
+                (await checkVerify(gateway?.slug, response)) || false;
+            const transCode = transId(gateway?.slug, response) || null;
 
             if (result) {
                 await updateTransaction(transaction._id, {
