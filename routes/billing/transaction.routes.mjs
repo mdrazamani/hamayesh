@@ -2,7 +2,7 @@
 import express from "express";
 import { dynamicValidate } from "../../utils/validate.mjs";
 
-import { authenticateJWT } from "../../app/middlewares/auth.middleware.mjs";
+import { authenticateJWT, authorizeRole } from "../../app/middlewares/auth.middleware.mjs";
 
 // import { transactionValidationSchema } from "../../app/validations/billing/transaction.validation.mjs";
 import { deleteController } from "../../app/controllers/billing/transaction/delete.controller.mjs";
@@ -38,7 +38,14 @@ const router = express.Router();
  *       200:
  *         description: Transaction deleted successfully.
  */
-router.delete("/:id", authenticateJWT, deleteController);
+router.delete(
+    "/:id",
+    authenticateJWT,
+    authorizeRole({
+        admin: "", // Full access
+    }),
+    deleteController
+);
 
 /**
  * @swagger
