@@ -4,6 +4,9 @@ import Transaction from "../../models/billing/transaction.model.mjs";
 const populateOptions = [
     {
         path: "invoice",
+        populate: {
+            path: "user",
+        },
     },
     {
         path: "gateway",
