@@ -12,7 +12,6 @@ import {
     createVerifyBody,
     transId,
 } from "../../../../utils/dynamicGetway.mjs";
-import { loadLanguageSetting } from "../../../../config/readLang.mjs";
 import constants from "../../../../utils/constants.mjs";
 import { getMessage } from "../../../../config/i18nConfig.mjs";
 
@@ -47,8 +46,6 @@ export const verifyController = async (req, res, next) => {
             });
         }
 
-        let lang = loadLanguageSetting();
-
         const createBody = {
             privateCode: gateway.privateCode,
             tokenCode: token,
@@ -79,7 +76,7 @@ export const verifyController = async (req, res, next) => {
                 res.respond(constants.OK, getMessage("peyment.success"), {
                     status: true,
                     transactionId: transCode,
-                    lang,
+                    invoice,
                 });
             } else {
                 await updateTransaction(transaction._id, {
@@ -92,7 +89,7 @@ export const verifyController = async (req, res, next) => {
                 res.respond(constants.OK, getMessage("peyment.faild"), {
                     status: false,
                     transactionId: transCode,
-                    lang,
+                    invoice,
                 });
             }
         } catch (error) {
@@ -105,7 +102,7 @@ export const verifyController = async (req, res, next) => {
             res.respond(constants.OK, getMessage("peyment.faild"), {
                 status: false,
                 transactionId: null,
-                lang,
+                invoice,
             });
         }
     } catch (error) {
