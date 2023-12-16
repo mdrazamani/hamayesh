@@ -91,9 +91,8 @@ export const createVerifyBody = (slug, data) => {
 export const checkVerify = async (slug, response) => {
     if (slug === "zarinpal") {
         const code = response.data.data.code;
-        if (code !== 100 && code !== 101) return false;
-        if (code == 100) return true;
-        if (code == 101) return false;
+        if (code !== 100) return false;
+        return true;
     } else if (slug === "pay") {
         const status = response.data.status;
         if (status !== 1) return false;
