@@ -86,11 +86,15 @@ export const verifyController = async (req, res, next) => {
                 invoice.paymentStatus = "failed";
                 invoice.save();
 
-                res.respond(constants.OK, getMessage("peyment.faild"), {
-                    status: false,
-                    transactionId: transCode,
-                    invoice,
-                });
+                res.respond(
+                    constants.BAD_REQUEST,
+                    getMessage("peyment.faild"),
+                    {
+                        status: false,
+                        transactionId: transCode,
+                        invoice,
+                    }
+                );
             }
         } catch (error) {
             await updateTransaction(transaction._id, {
@@ -99,7 +103,7 @@ export const verifyController = async (req, res, next) => {
             invoice.paymentStatus = "failed";
             invoice.save();
 
-            res.respond(constants.OK, getMessage("peyment.faild"), {
+            res.respond(constants.BAD_REQUEST, getMessage("peyment.faild"), {
                 status: false,
                 transactionId: null,
                 invoice,
