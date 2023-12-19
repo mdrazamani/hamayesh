@@ -67,143 +67,29 @@ invoiceSchema.set("toJSON", {
     },
 });
 
-invoiceSchema
-    .virtual("organizer")
-    .get(function () {
-        return {
-            name: this.og_name,
-            descriptio: this.og_description,
-            logo: this.og_logo,
-            details: this.og_details,
-        };
-    })
-    .set(async function (v) {
-        const main = await Organizer.findOne({ isMain: true })
-            .select(
-                "name description logo details.address details.emails details.phoneNumbers"
-            )
-            .populate([
-                {
-                    path: "details.address.state",
-                    model: "State",
-                    select: "state -_id",
-                },
-                {
-                    path: "details.address.city",
-                    model: "City",
-                    select: "city -_id",
-                },
-            ])
-            .exec();
+invoiceSchema.set("toObject", { virtuals: true });
+invoiceSchema.set("toJSON", { virtuals: true });
+invoiceSchema.virtual("organizer").get(async function () {
+    const main = await Organizer.findOne({ isMain: true })
+        .select(
+            "name description logo details.address details.emails details.phoneNumbers"
+        )
+        .populate([
+            {
+                path: "details.address.state",
+                model: "State",
+                select: "state -_id",
+            },
+            {
+                path: "details.address.city",
+                model: "City",
+                select: "city -_id",
+            },
+        ])
+        .exec();
 
-        if (main) {
-            this.set({
-                og_name: main?.name,
-                og_description: main?.description,
-                og_logo: main?.logo,
-                og_details: {
-                    address: `${main?.details?.address?.state}-${main?.details?.address?.city} ${main?.details?.address?.address}`,
-                    email:
-                        main?.details?.emails.length > 0
-                            ? main?.details?.emails[0]
-                            : null,
-                    phoneNumber:
-                        main?.details?.phoneNumbers.length > 0
-                            ? main?.details?.phoneNumbers[0]
-                            : null,
-                },
-            });
-        } else {
-            this.set(null);
-        }
-    });
-
-// invoiceSchema.set("toObject", { virtuals: true });
-// invoiceSchema.set("toJSON", { virtuals: true });
-// invoiceSchema.virtual("organizer").get(async function () {
-//     try {
-//         const main = await Organizer.findOne({ isMain: true })
-//             .select(
-//                 "name description logo details.address details.emails details.phoneNumbers"
-//             )
-//             .populate([
-//                 {
-//                     path: "details.address.state",
-//                     model: "State",
-//                     select: "state -_id",
-//                 },
-//                 {
-//                     path: "details.address.city",
-//                     model: "City",
-//                     select: "city -_id",
-//                 },
-//             ])
-//             .exec();
-
-//         if (main) {
-//             return {
-//                 name: main?.name,
-//                 description: main?.description,
-//                 logo: main?.logo,
-//                 details: {
-//                     address: `${main?.details?.address?.state}-${main?.details?.address?.city} ${main?.details?.address?.address}`,
-//                     email:
-//                         main?.details?.emails.length > 0
-//                             ? main?.details?.emails[0]
-//                             : null,
-//                     phoneNumber:
-//                         main?.details?.phoneNumbers.length > 0
-//                             ? main?.details?.phoneNumbers[0]
-//                             : null,
-//                 },
-//             };
-//         } else {
-//             return null;
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         throw error;
-//     }
-// });
-
-// const main = await Organizer.findOne({ isMain: true })
-//     .select(
-//         "name description logo details.address details.emails details.phoneNumbers"
-//     )
-//     .populate([
-//         {
-//             path: "details.address.state",
-//             model: "State",
-//             select: "state -_id",
-//         },
-//         {
-//             path: "details.address.city",
-//             model: "City",
-//             select: "city -_id",
-//         },
-//     ])
-//     .exec();
-
-// if (main) {
-//     return {
-//         name: main?.name,
-//         description: main?.description,
-//         logo: main?.logo,
-//         details: {
-//             address: `${main?.details?.address?.state}-${main?.details?.address?.city} ${main?.details?.address?.address}`,
-//             email:
-//                 main?.details?.emails.length > 0
-//                     ? main?.details?.emails[0]
-//                     : null,
-//             phoneNumber:
-//                 main?.details?.phoneNumbers.length > 0
-//                     ? main?.details?.phoneNumbers[0]
-//                     : null,
-//         },
-//     };
-// } else {
-//     return null;
-// }
+    return `${main?.details?.address?.state.state}-${main?.details?.address?.city.city} ${main?.details?.address?.address}`;
+});
 
 const generateInvoiceNumber = () => {
     const length = Math.random() > 0.5 ? 8 : 9;
