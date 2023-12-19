@@ -52,14 +52,17 @@
         "page_number": "شماره صفحه",
         "page_integer": "شماره صفحه باید عدد صحیح باشد",
         "page_min": "حداقل شماره صفحه",
+
         "pageSize_number": "شماره اندازه صفحه",
         "pageSize_integer": "اندازه صفحه باید عدد صحیح باشد",
         "pageSize_min": "حداقل اندازه صفحه",
         "pageSize_max": "حداکثر اندازه صفحه",
+
         "items_per_page_number": "تعداد آیتم‌ها در هر صفحه باید یک عدد باشد",
         "items_per_page_integer": "تعداد آیتم‌ها در هر صفحه باید یک عدد صحیح باشد",
         "items_per_page_min": "تعداد آیتم‌ها در هر صفحه حداقل باید {#limit} باشد",
         "items_per_page_max": "تعداد آیتم‌ها در هر صفحه حداکثر باید {#limit} باشد",
+
         "password_confirmation_match": "تاییدیه رمز عبور با رمز عبور مطابقت ندارد",
         "first_name_required": "نام الزامی است",
         "last_name_required": "نام خانوادگی الزامی است",
@@ -133,10 +136,12 @@
         "invalid_linkedin_url": "آدرس لینکدین نامعتبر است",
         "invalid_whatsapp_url": "آدرس واتساپ نامعتبر است",
         "invalid_telegram_url": "آدرس تلگرام نامعتبر است",
+
         "role_id_required": "شناسه نقش الزامی است",
         "role_name_required": "نام نقش الزامی است",
         "role_name_min": "حداقل طول نام نقش {#limit} کاراکتر است",
         "role_name_max": "حداکثر طول نام نقش {#limit} کاراکتر است",
+
         "password_confirmation_required": "تأیید گذرواژه الزامی است",
         "invalid_user_id": "شناسه کاربری نامعتبر است",
         "user_required": "کاربر الزامی است",
@@ -147,6 +152,7 @@
         "type_required": "نوع الزامی است",
         "invalid_referee": "داور نامعتبر است",
         "referees_invalid": "داوران نامعتبر هستند",
+
         "start_required": "تاریخ شروع الزامی است",
         "invalid_category": "دسته نامعتبر است",
         "invalid_userId": "شناسه کاربری نامعتبر است",
@@ -194,15 +200,15 @@
         "either_amount_or_percent": "لطفاً یا مقدار یا درصد را وارد کنید",
         "referee_invalid": "داور نامعتبر است",
         "filePath": "آدرس فایل نامعتبر است",
-        "token_string": "validation.token_string",
-        "gateway_required": "validation.gateway_required",
-        "gateway_string": "validation.gateway_string",
-        "gateway_invalid_format": "validation.gateway_invalid_format",
-        "invoice_required": "validation.invoice_required",
-        "invoice_string": "validation.invoice_string",
-        "invoice_invalid_format": "validation.invoice_invalid_format",
-        "userId_string": "validation.userId_string",
-        "userId_invalid_format": "validation.userId_invalid_format"
+        "token_string": "توکن باید یک رشته باشد",
+        "gateway_required": "درگاه الزامی می باشد",
+        "gateway_string": "درگاه باید از نوع رشته باشد",
+        "gateway_invalid_format": "فرمت درگاه نادرست است",
+        "invoice_required": "فاکتور الزامی است",
+        "invoice_string": "فاکتور باید از نوع رشته باشد",
+        "invoice_invalid_format": "فرمت فاکتور نادرست است",
+        "userId_string": "userId باید از نوع رشته باشد",
+        "userId_invalid_format": "فرمت userId نادرست است"
     },
     "success": {
         "success": "عملیات موفق آمیز بود",
@@ -236,8 +242,10 @@
     "errprs": {
         "user_not_found": "کاربر پیدا نشد!"
     },
+
     "No files associated with this article": "هیچ فایلی به این مقاله ارتباط ندارد.",
     "User not found": "کاربر یافت نشد.",
+
     "A category cannot be its own parent.": "یک دسته نمی‌تواند خود والد خود باشد.",
     "A category cannot set one of its children as its parent.": "یک دسته نمی‌تواند یکی از فرزندان خود را به عنوان والد انتخاب کند.",
     "sasasasas": "sasasasas",
@@ -249,6 +257,7 @@
     "missing_required_parameters": "پارامترهای موردنیاز از دست رفته است.",
     "Error updating billing user": "خطا در به‌روزرسانی کاربر برای صورتحساب",
     "The_invoice_has_already_been_paid": "این فاکتور از قبل پرداخت شده است.",
+
     "peyment": {
         "success": "پرداخت موفقیت",
         "faild": "پرداخت ناموفق",
