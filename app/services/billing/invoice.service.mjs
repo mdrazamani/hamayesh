@@ -24,6 +24,22 @@ const populateOptions = [
         model: "discount",
         select: `_id amount percent type code expiresAt`,
     },
+
+    {
+        path: "organizer",
+        model: "Organizer",
+        select: `fa.name en.name logo details`,
+        populate: [
+            {
+                path: "details.address.state",
+                model: "State",
+            },
+            {
+                path: "details.address.city",
+                model: "City",
+            },
+        ],
+    },
 ]; //-__v
 
 export const create = async (data) => {

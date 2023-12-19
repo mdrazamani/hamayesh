@@ -54,6 +54,10 @@ const invoiceSchema = new mongoose.Schema(
             enum: ["pending", "completed", "failed"],
             default: "pending",
         },
+        organizer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Organizer",
+        },
     },
     { timestamps: true }
 );
@@ -67,29 +71,8 @@ invoiceSchema.set("toJSON", {
     },
 });
 
+// Ensure that the virtual is applied to the schema
 invoiceSchema.set("toObject", { virtuals: true });
-invoiceSchema.set("toJSON", { virtuals: true });
-invoiceSchema.virtual("organizer").get(async function () {
-    const main = await Organizer.findOne({ isMain: true })
-        .select(
-            "name description logo details.address details.emails details.phoneNumbers"
-        )
-        .populate([
-            {
-                path: "details.address.state",
-                model: "State",
-                select: "state -_id",
-            },
-            {
-                path: "details.address.city",
-                model: "City",
-                select: "city -_id",
-            },
-        ])
-        .exec();
-
-    return `${main?.details?.address?.state.state}-${main?.details?.address?.city.city} ${main?.details?.address?.address}`;
-});
 
 const generateInvoiceNumber = () => {
     const length = Math.random() > 0.5 ? 8 : 9;
@@ -103,10 +86,21 @@ const generateInvoiceNumber = () => {
 };
 
 invoiceSchema.pre("save", async function (next) {
-    if (!this.invoiceNumber) {
-        this.invoiceNumber = generateInvoiceNumber();
+    try {
+        if (!this.invoiceNumber) {
+            this.invoiceNumber = generateInvoiceNumber();
+        }
+
+        // Find the isMain organizer from the Organizer collection
+        const mainOrganizer = await Organizer.findOne({ isMain: true });
+
+        // Set the organizer field in the Invoice document
+        this.organizer = mainOrganizer._id;
+
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
 });
 const Invoice = mongoose.model("invoice", invoiceSchema);
 
