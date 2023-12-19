@@ -103,42 +103,6 @@ const getInvoiceItems = (items) => {
     };
 };
 
-// export const updateDiscount = async (data) => {
-//     const { codes, invoiceId, userId } = data;
-//     const invoice = await get(invoiceId);
-//     let discountP = 0;
-//     if (!invoice && !invoice?._id) {
-//         throw new APIError({
-//             message: getMessage("your_invoice_not_found"),
-//             status: 404,
-//         });
-//     }
-
-//     const { uniqueItemTypes, itemList } = getInvoiceItems(invoice?.items);
-
-//     const discounts_main = await applyDiscount(codes, userId);
-//     const discounts_type = await applyDiscount(codes, userId, uniqueItemTypes);
-//     const discounts_rule = await applyDiscount(codes, userId, [], itemList);
-
-//     const discounts = [...discounts_main, ...discounts_type, ...discounts_rule];
-
-//     if (discounts.length) {
-//         discountP += await discountsCalculator(discounts, invoice?.total);
-//     }
-
-//     if (!discountP) {
-//         throw new APIError({
-//             message: getMessage("your_dsicount_code_not_found"),
-//             status: 404,
-//         });
-//     }
-
-//     return update(invoiceId, {
-//         total: invoice?.total - discountP,
-//         discountPrice: invoice?.discountPrice + discountP,
-//     });
-// };
-
 export const updateDiscount = async (data) => {
     const { codes, invoiceId, userId } = data;
 

@@ -1,5 +1,3 @@
-// userService.mjs
-
 import { getMessage } from "../../config/i18nConfig.mjs";
 import crudFactory from "../../utils/crudFactory.mjs";
 import APIError from "../../utils/errors.mjs";
@@ -7,15 +5,7 @@ import Axie from "../models/axie.model.mjs";
 import constants from "../../utils/constants.mjs";
 import { loadLanguageSetting } from "../../config/readLang.mjs";
 
-// const lang = loadLanguageSetting();
-
 export const create = async (data) => {
-    // if (data.parent) {
-    //     console.log(Object(data.parent));
-    //     const parent = await Axie.findOne({ _id: data.parent });
-    //     data.level = parent.level + 1;
-    // }
-
     return await crudFactory.create(Axie)(data);
 };
 
@@ -58,15 +48,34 @@ export const getAllGrouped = async (options) => {
                 },
             },
             {
-                $unwind: "$children",
+                $unwind: {
+                    path: "$children",
+                    preserveNullAndEmptyArrays: true,
+                },
             },
+
             {
                 $match: {
                     $expr: {
-                        $eq: ["$children.parent", "$_id"],
+                        $cond: {
+                            if: { $ifNull: ["$children", false] },
+                            then: {
+                                $and: [
+                                    { $eq: ["$children.parent", "$_id"] },
+                                    { $ifNull: ["$children", true] },
+                                ],
+                            },
+                            else: {
+                                $or: [
+                                    { $eq: ["$children.parent", "$_id"] },
+                                    { $ifNull: ["$children", true] },
+                                ],
+                            },
+                        },
                     },
                 },
             },
+
             {
                 $sort: {
                     "children.createdAt": -1,
@@ -107,6 +116,7 @@ export const getAllGrouped = async (options) => {
                             ],
                         },
                     },
+
                     children: { $push: "$children" },
                 },
             },
@@ -171,13 +181,43 @@ export const getAllGrouped = async (options) => {
                     },
                 },
             },
+
             {
                 $project: {
                     title: 1,
                     description: 1,
+                    // children: {
+                    //     $cond: {
+                    //         if: { $ne: [{ $size: "$children" }, 0] },
+                    //         then: "$children",
+                    //         else: "$$REMOVE",
+                    //     },
+                    // },
+
                     children: {
                         $cond: {
-                            if: { $ne: [{ $size: "$children" }, 0] },
+                            if: {
+                                $and: [
+                                    { $ne: [{ $size: "$children" }, 0] },
+                                    {
+                                        $ne: [
+                                            { $arrayElemAt: ["$children", 0] },
+                                            null,
+                                        ],
+                                    },
+                                    {
+                                        $ne: [
+                                            {
+                                                $arrayElemAt: [
+                                                    "$children.level",
+                                                    0,
+                                                ],
+                                            },
+                                            null,
+                                        ],
+                                    },
+                                ],
+                            },
                             then: "$children",
                             else: "$$REMOVE",
                         },
