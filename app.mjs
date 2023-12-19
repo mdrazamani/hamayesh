@@ -26,6 +26,8 @@ import { resetAndSaveDailyVisits } from "./jobs/dailyVisit.task.mjs";
 import bodyParser from "body-parser";
 import { state } from "./utils/visits.mjs";
 import { languageMiddleware } from "./app/middlewares/languageMiddleware.mjs";
+import { invoiceRemover } from "./jobs/invoiceRemove.task.mjs";
+import { transactionRemover } from "./jobs/transactionRemove.task.mjs";
 // import { setupEmailNotificationJobs } from "./jobs/refereeResult.task.mjs";
 
 const { json, urlencoded } = bodyParser;
@@ -155,6 +157,8 @@ app.use("/api/v1", logEvent, routes);
 app.use(ConvertError); // Make sure to use ConvertError before ErrorHandler in middleware stack
 app.use(ErrorHandler);
 
+invoiceRemover();
+transactionRemover();
 // setupEmailNotificationJobs();
 
 const port = PORT || 8000;
