@@ -157,8 +157,8 @@ app.use("/api/v1", logEvent, routes);
 app.use(ConvertError); // Make sure to use ConvertError before ErrorHandler in middleware stack
 app.use(ErrorHandler);
 
-await invoiceRemover();
-await transactionRemover();
+// await invoiceRemover();
+// await transactionRemover();
 // setupEmailNotificationJobs();
 
 const port = PORT || 8000;
